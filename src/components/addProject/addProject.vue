@@ -1,0 +1,424 @@
+<template>
+<div id="addProject">
+  <div class="title">
+    <my-title :title="'客户需求'"></my-title>
+  </div>
+  <div>
+    <scroll ref="scroll" class="list" :beforeScroll="true" @beforeScroll="beforeScroll">
+      <div>
+        <div class="select-list">
+          <div class="sof-hint">
+            <p>温馨提示： 带 <span> * </span> 号是必填项</p>
+          </div>
+          <div class="item-bg">
+            <div class="item-50">
+              <div>
+                <label>省:
+                  <span> * </span><br/>
+                  <select name="" class="select">
+                    <option value="1">全部</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div class="item-50">
+              <div>
+                <label>市:
+                  <span> * </span><br/>
+                  <select name="" class="select">
+                    <option value="1">全部</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="item-bg">
+            <div class="item-50">
+              <div>
+                <label>区:
+                  <span>  </span><br/>
+                  <select name="" class="select">
+                    <option value="1">全部</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div class="item-50">
+              <div>
+                <label>板块:
+                  <span>  </span><br/>
+                  <select name="" class="select">
+                    <option value="1">全部</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="item-bg">
+            <div class="item-100">
+              <div>
+                <label>总面积:
+                  <span>  </span>
+                  <div class="item-input">
+                    <input type="text/submit/hidden/button/etc" ref="userInput5" name=""  placeholder="平方">  平方 ~
+                    <input type="text/submit/hidden/button/etc" ref="userInput5" name=""  placeholder="平方">  平方
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="item-bg">
+            <div class="item-50">
+              <div>
+                <label>最高预算:
+                  <span> </span><br/>
+                  <input type="text/submit/hidden/button/etc" ref="userInput5" name=""  placeholder="金额">  万元
+                </label>
+              </div>
+            </div>
+            <div class="item-50">
+              <div>
+                <label>物业类型:
+                  <span>  </span><br/>
+                  <select name="" class="select">
+                    <option value="1">住宅</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="item-bg">
+            <div class="item-50">
+              <div>
+                <label>首付比例:
+                  <span> </span><br/>
+                  <select name="" class="select">
+                    <option :value ="item.value" v-for="(item, index) in ratio" :key="index">{{item.value}}</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div class="item-50">
+              <div>
+                <label>户型:
+                  <span>  </span><br/>
+                  <select name="" class="select-50">
+                    <option value="1">一</option>
+                    <option value="1">二</option>
+                    <option value="1">三</option>
+                    <option value="1">四</option>
+                    <option value="1">五</option>
+                    <option value="1">六</option>
+                    <option value="1">七</option>
+                    <option value="1">八</option>
+                    <option value="1">九</option>
+                  </select> 室 &nbsp;
+                  <select name="" class="select-50">
+                    <option value="1">一</option>
+                    <option value="1">二</option>
+                    <option value="1">三</option>
+                    <option value="1">四</option>
+                    <option value="1">五</option>
+                    <option value="1">六</option>
+                    <option value="1">七</option>
+                    <option value="1">八</option>
+                    <option value="1">九</option>
+                  </select> 厅
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="item-bg">
+            <div class="item-100">
+              <div>
+                <p>户籍:</p>
+                <div class="radio">
+                  <label><span class="pay_list_c1 on"><input name="Fruit" type="radio" value="" class="radioclass" /></span>&nbsp; 本地 </label>
+                  <label><input name="Fruit" type="radio" value="" />&nbsp; 外地 </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item-bg">
+            <div class="item-100">
+              <div>
+                <p>楼层:</p>
+                <div class="radio">
+                  <label><input name="Fruit" type="radio" value="" />&nbsp; 高层 </label>
+                  <label><input name="Fruit" type="radio" value="" />&nbsp; 中层 </label>
+                  <label><input name="Fruit" type="radio" value="" />&nbsp; 低层 </label>
+                  <label><input name="Fruit" type="radio" value="" />&nbsp; 无要求 </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item-bg">
+            <div class="item-50">
+              <div>
+                <label>社保:
+                  <span> </span><br/>
+                  <select name="" class="select">
+                    <option value="1">无</option>
+                    <option value="1">1年</option>
+                    <option value="1">2年</option>
+                    <option value="1">3年</option>
+                    <option value="1">4年</option>
+                    <option value="1">5年</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div class="item-50">
+              <div>
+                <label>装修:
+                  <span>  </span><br/>
+                  <select name="" class="select">
+                    <option value="1">毛坯</option>
+                    <option value="1">精装</option>
+                    <option value="1">简装</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="user-send">
+          <a type="button" class="btn send"  :disabled="!disabled" :class="disabled === true ? 'btn' : 'disabled'" @click.stop.prevent="send">提交</a>
+        </div>
+      </div>
+    </scroll>
+  </div>
+</div>
+</template>
+
+<script>
+import MyTitle from 'base/title/title'
+import Scroll from 'base/scroll/scroll'
+import $api from 'api'
+export default {
+  name: 'addProject',
+  data () {
+    return {
+      ratio: [{
+        label: '10%',
+        value: '10%'
+      }, {
+        label: '20%',
+        value: '20%'
+      }, {
+        label: '30%',
+        value: '30%'
+      }, {
+        label: '40%',
+        value: '40%'
+      }, {
+        label: '50%',
+        value: '50%'
+      }, {
+        label: '60%',
+        value: '60%'
+      }, {
+        label: '70%',
+        value: '70%'
+      }, {
+        label: '80%',
+        value: '80%'
+      }, {
+        label: '90%',
+        value: '90%'
+      }, {
+        label: '100%',
+        value: '100%'
+      }],
+      disabled: true
+    }
+  },
+  created () {
+    $api.get('/pro/getwuye').then(res => {
+      console.log(res)
+    })
+  },
+  methods: {
+    send (e) {
+      console.log(e.target)
+    },
+    reset () {
+      this.province = ''
+      this.city = ''
+      this.district = ''
+      this.plate = ''
+      this.area = ''
+      this.price = ''
+      this.loans = ''
+      this.type = ''
+      this.proportion = ''
+      this.nativePlace = ''
+      this.time = ''
+      this.textarea = ''
+    },
+    beforeScroll () {}
+  },
+  components: {
+    MyTitle,
+    Scroll
+  }
+}
+</script>
+
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  #addProject
+    font-size: $font-size-large
+    position: fixed
+    width: 100%
+    bottom: 0
+    height: 100%
+    z-index: 10000
+    background: #eee
+    font-size: $font-size-medium
+    .title
+      position: fixed
+      z-index: 10002
+      width: 100%
+      text-align: center
+      line-height: 40px
+      font-size: $font-size-large-x
+      color: white
+      top: 0
+    .sof-hint
+      span
+        color: red
+    .list
+      position: fixed
+      top: 0
+      bottom: 55px
+      width: 100%
+      padding-top: 50px
+      .select-list
+        box-sizing: border-box
+        margin: 10px
+        .item-bg
+          background: #fff
+          margin-bottom: 5px
+        .item-50
+          display: inline-block
+          width: 48%
+          box-sizing: border-box
+          padding: 10px
+          >div
+            width: 100%
+            border-radius: 3px
+            box-sizing: border-box
+            >label
+              color: #333
+              line-height: 30px
+              span
+                color: red
+              .select
+                width: 100%
+                height: 40px
+                line-height: 40px
+                border-radius: 4px
+                border: 1px solid #ccc
+                color: #666
+              .select-50
+                width: 30%
+                height: 40px
+                border-radius: 4px
+                border: 1px solid #ccc
+                color: #666
+              >input
+                border: 1px solid #ccc
+                width:70%
+                height: 40px
+                line-height: 40px
+                border-radius: 4px
+                &::placeholder
+                  padding-left: 10px
+                  font-size: $font-size-small
+        .item-100
+          display: inline-block
+          width: 100%
+          box-sizing: border-box
+          padding: 10px
+          >div
+            width: 100%
+            border-radius: 3px
+            box-sizing: border-box
+            >p
+              line-height: 30px
+            .radio
+              label
+                vertical-align:middle
+                margin-right: 5px
+                box-sizing: border-box
+                color: #666
+                input[type=radio]
+                  display: inline-block
+                  vertical-align: middle
+                  width: 20px
+                  height: 20px
+                  appearance: none
+                  background-color: transparent
+                  border: 0
+                  outline: 0 !important
+                  line-height: 20px
+                  color: #d8d8d8
+                  &:after
+                    content: ""
+                    display:block
+                    width: 20px
+                    height: 20px
+                    border-radius: 50%
+                    text-align: center
+                    line-height: 14px
+                    font-size: 16px
+                    color: #fff
+                    border: 2px solid #ddd
+                    background-color: #fff
+                    box-sizing:border-box
+                  &:checked:after
+                    content: "L"
+                    transform:matrix(-0.766044,-0.642788,-0.642788,0.766044,0,0)
+                    border-color: #37AF6E
+                    background-color: #37AF6E
+            label
+              line-height: 40px
+              span
+                color: red
+              .item-input
+                input
+                  width: 30%
+                  border: 1px solid #ccc
+                  height: 40px
+                  border-radius: 4px
+                  &::placeholder
+                    padding-left: 10px
+                    font-size: $font-size-small
+      .user-send
+        padding: 15px
+        text-align: right
+        margin: 10px
+        .btn
+          display: inline-block
+          text-align: center
+          line-height: 35px
+          width: 100%
+          border: none
+          height: 35px
+          border-radius: 4px
+          color: #fff
+        .send
+          background: #e5672c
+        .default
+          background: #fff
+          border: 1px solid #ccc
+          color: #e5672c
+        .disabled
+          background: #FF4949
+          border: none
+          border-color: #FF4949
+          border-radius: 4px
+          color: white
+          font-size: $font-size-medium
+</style>

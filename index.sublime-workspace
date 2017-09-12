@@ -1,0 +1,668 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"getU",
+				"getUserInfoFail〔function〕"
+			],
+			[
+				"getUs",
+				"getUserInfoRequest〔function〕"
+			],
+			[
+				"error",
+				"errorMsg"
+			],
+			[
+				"GET",
+				"GET_USER_INFO_FAIL"
+			],
+			[
+				"GETU",
+				"GET_USER_INFO_SUCCESS"
+			],
+			[
+				"rea",
+				"relative〔value〕"
+			],
+			[
+				"re",
+				"relative〔value〕"
+			],
+			[
+				"f",
+				"fixed"
+			],
+			[
+				"reques",
+				"requestObj〔variable〕"
+			],
+			[
+				"requ",
+				"requestObj〔variable〕"
+			],
+			[
+				"request",
+				"requestObj"
+			],
+			[
+				"data",
+				"dataStr"
+			],
+			[
+				"inn",
+				"innerHeight"
+			],
+			[
+				"map",
+				"mapGetters"
+			],
+			[
+				"setI",
+				"setItem"
+			],
+			[
+				"em",
+				"emailFlag"
+			],
+			[
+				"att",
+				"getAttribute〔function〕"
+			],
+			[
+				"borde",
+				"border-box〔value〕"
+			],
+			[
+				"inl",
+				"inline-block〔value〕"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"getE",
+				"getElementById〔function〕"
+			],
+			[
+				"V",
+				"Vuex"
+			],
+			[
+				"add",
+				"addNum"
+			],
+			[
+				"class",
+				"classes"
+			],
+			[
+				"tex",
+				"text-align: 〔property〕"
+			],
+			[
+				"chi",
+				"childItem"
+			],
+			[
+				"cons",
+				"console.log"
+			],
+			[
+				"fun",
+				"function〔keyword〕"
+			],
+			[
+				"con",
+				"content〔variable〕"
+			],
+			[
+				"us",
+				"userName"
+			],
+			[
+				"va",
+				"value1"
+			],
+			[
+				"se",
+				"selectData"
+			],
+			[
+				"b",
+				"bottom"
+			],
+			[
+				"padd",
+				"padding-top"
+			],
+			[
+				"bo",
+				"border-box"
+			],
+			[
+				"ab",
+				"absolute"
+			],
+			[
+				"he",
+				"height"
+			],
+			[
+				"q",
+				"querys"
+			],
+			[
+				"tr",
+				"transition"
+			],
+			[
+				"show",
+				"showTypeList"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"in",
+				"inline-block"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/components/addProject/addProject.vue",
+			"settings":
+			{
+				"buffer_size": 12620,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "package",
+		"selected_items":
+		[
+			[
+				"package",
+				"Package Control: Remove Package"
+			],
+			[
+				"packagei",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Install Package Control"
+			]
+		],
+		"width": 528.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import  urllib.request,os;pf='Package Control.sublime-package';ipp=sublime.installed_packages_path();urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler()));open(os.path.join(ipp,pf),'wb').write(urllib.request.urlopen('http://sublime.wbond.net/'+pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/F/myProject/customerNeed",
+		"/F/myProject/jingjiren/config",
+		"/F/myProject/jingjiren/dist",
+		"/F/myProject/jingjiren/dist/static",
+		"/F/myProject/jingjiren/dist/static/js",
+		"/F/myProject/jingjiren/src",
+		"/F/myProject/jingjiren/src/api",
+		"/F/myProject/jingjiren/src/base",
+		"/F/myProject/jingjiren/src/base/recommend-list",
+		"/F/myProject/jingjiren/src/common",
+		"/F/myProject/jingjiren/src/components",
+		"/F/myProject/jingjiren/src/components/bannerDetail",
+		"/F/myProject/jingjiren/src/components/details",
+		"/F/myProject/jingjiren/src/components/disc",
+		"/F/myProject/jingjiren/src/components/houseDetails",
+		"/F/myProject/jingjiren/src/components/housePrice",
+		"/F/myProject/yifangyijia/src",
+		"/F/myProject/yifangyijia/src/components",
+		"/F/myProject/yifangyijia/src/components/details"
+	],
+	"file_history":
+	[
+		"/F/myProject/jingjiren/src/api/housePrice.js",
+		"/F/myProject/jingjiren/src/components/housePrice/housePrice.vue",
+		"/F/myProject/jingjiren/src/api/config.js",
+		"/F/myProject/jingjiren/src/base/recommend-list/recommend-list.vue",
+		"/F/myProject/jingjiren/config/index.js",
+		"/F/myProject/react-dev-template/src/pages/NotFound/NotFound.js",
+		"/F/myProject/react-dev-template/src/components/App/APP.js",
+		"/F/myProject/react-dev-template/src/components/Nav/Nav.js",
+		"/F/myProject/react-dev-template/src/index.js",
+		"/F/myProject/react-dev-template/src/router/router.js",
+		"/C/Users/Administrator/AppData/Roaming/Sublime Text 3/Packages/User/JsFormat.sublime-settings",
+		"/C/Users/Administrator/AppData/Roaming/Sublime Text 3/Packages/User/JSCS-Formatter.sublime-settings",
+		"/C/Users/Administrator/AppData/Roaming/Sublime Text 3/Packages/User/Babel.sublime-settings",
+		"/C/Users/Administrator/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/F/myProject/react-dev-template/webpack.common.config.js",
+		"/F/myProject/react-dev-template/webpack.dev.config.js",
+		"/F/myProject/react-dev-template/webpack.config.js",
+		"/F/myProject/react-dev-template/src/redux/reducers/counter.js",
+		"/F/myProject/react-dev-template/src/redux/reducers.js",
+		"/F/myProject/react-dev-template/src/redux/store.js",
+		"/F/myProject/react-dev-template/src/pages/UserInfo/UserInfo.js",
+		"/F/myProject/react-dev-template/src/redux/testRedux.js",
+		"/F/myProject/react-dev-template/src/pages/Counter/Counter.js",
+		"/F/myProject/react-dev-template/src/redux/actions/userInfo.js",
+		"/F/myProject/react-dev-template/src/redux/middleware/promiseMiddleware.js",
+		"/F/myProject/react-dev-template/src/redux/reducers/userInfo.js",
+		"/F/myProject/react-dev-template/src/redux/actions/counter.js",
+		"/F/myProject/react-dev-template/src/index.html",
+		"/F/myProject/react-dev-template/package.json",
+		"/F/myProject/react-dev-template/src/pages/Home/Home.js",
+		"/F/myProject/react-dev-template/.babelrc",
+		"/F/myProject/react-dev-template/src/pages/Page1/Page1.js",
+		"/F/myProject/react-dev-template/src/router/Bundle.js",
+		"/F/myProject/react-dev-template/src/pages/Page1/Page1.css",
+		"/F/myProject/react-dev-template/dist/api/user.json",
+		"/F/myProject/customerNeed/src/api/index.js",
+		"/F/myProject/customerNeed/src/components/addProject/addProject.vue",
+		"/F/myProject/customerNeed/src/components/recommendList/recommendList.vue",
+		"/F/myProject/react-dev-template/dist/bundle.js",
+		"/F/myProject/react-dev-template/dist/index.html",
+		"/F/myProject/react-dev-template/src/component/Hello/Hello.js",
+		"/F/myProject/jingjiren/src/components/recommendList/recommendList.vue",
+		"/F/myProject/customerNeed/src/base/pop-box/pop-box.vue",
+		"/F/myProject/customerNeed/src/api/recommendList.js",
+		"/F/myProject/customerNeed/src/common/stylus/mixin.styl",
+		"/F/myProject/customerNeed/src/components/details/details.vue",
+		"/F/myProject/customerNeed/src/App.vue",
+		"/F/myProject/customerNeed/src/config/utils.js",
+		"/F/myProject/yifangyijia/src/components/recommendList/recommendList.vue",
+		"/F/myProject/customerNeed/build/dev-server.js",
+		"/F/myProject/customerNeed/src/config/rem.js",
+		"/F/myProject/customerNeed/src/config/fetch.js",
+		"/F/myProject/customerNeed/src/api/addProject.js",
+		"/C/Users/Administrator/Desktop/index.js",
+		"/C/Users/Administrator/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Administrator/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/F/myProject/myjs/src/script/main.js",
+		"/F/myProject/customerNeed/src/router/index.js",
+		"/F/myProject/customerNeed/src/config/env.js",
+		"/F/myProject/customerNeed/src/main.js",
+		"/F/myProject/myjs/rem.js",
+		"/F/myProject/vue2-elm/src/config/fetch.js",
+		"/F/myProject/myjs/env.js",
+		"/F/myProject/myjs/fetch.js",
+		"/F/myProject/myjs/utils.js",
+		"/C/Users/Administrator/AppData/Local/Temp/Rar$DRa0.960/style.css",
+		"/F/myProject/jingjiren/src/common/stylus/icon.styl",
+		"/F/myProject/jingjiren/src/router/index.js",
+		"/F/myProject/jingjiren/src/components/houseDetails/houseDetails.vue",
+		"/F/myProject/jingjiren/src/base/house-price-list/house-price-list.vue",
+		"/F/myProject/jingjiren/src/api/houseDetail.js",
+		"/F/myProject/jingjiren/src/api/recommendList.js",
+		"/F/myProject/jingjiren/src/base/scroll-to/scroll-to.vue",
+		"/F/myProject/sof-project/src/components/index/index/switch/switch.vue",
+		"/F/myProject/three/index.html",
+		"/F/myProject/three/test.html",
+		"/F/myProject/sof-project/src/components/index/phone-manage/QualityAnalysis/subpage/phonalyzr.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/PhoneResult/subpage/projectType.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/PhoneResult/subpage/ProjectIntention.vue",
+		"/F/myProject/sof-project/src/components/index/analysis/ProjectList/index.vue",
+		"/F/myProject/sof-project/src/components/index/analysis/HotMap/index.vue",
+		"/F/myProject/sof-project/src/components/index/analysis/AddReport/index.vue",
+		"/F/myProject/sof-project/src/components/leftMenu/LeftMenu.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/index.vue",
+		"/F/myProject/sof-project/src/components/header/Header.vue",
+		"/F/myProject/three/js/lesson1.js",
+		"/F/myProject/sof-project/build/webpack.base.conf.js",
+		"/F/myProject/sof-project/build/webpack.dev.conf.js",
+		"/F/myProject/sof-project/build/webpack.prod.conf.js",
+		"/F/myProject/sof-project/build/utils.js",
+		"/F/myProject/sof-project/build/vue-loader.conf.js",
+		"/F/myProject/sof-project/build/dev-server.js",
+		"/F/myProject/sof-project/build/dev-client.js",
+		"/F/myProject/sof-project/build/check-versions.js",
+		"/F/myProject/sof-project/build/build.js",
+		"/F/myProject/sof-project/src/main.js",
+		"/F/myProject/sof-project/index.html",
+		"/F/myProject/sof-project/src/components/index/phone-manage/QualityAnalysis/QualityAnalysis.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/QualityAnalysis/subpage/thisWeek.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/QualityAnalysis/subpage/speechAnalysis.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/QualityAnalysis/subpage/phonalyzrChild/phonalyzrChild.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/PhoneResult/phoneResult.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/PhoneList/phoneList.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/DataSearch/DataSearch.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/DataSearch/DataSearchContrast.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/ConditionSearch/search.vue",
+		"/F/myProject/sof-project/src/components/index/index/index.vue",
+		"/F/myProject/sof-project/src/components/index/analysis/ReportList/index.vue",
+		"/F/myProject/sof-project/src/components/index/analysis/ReportList/itemCharts.vue",
+		"/F/myProject/sof-project/src/components/index/analysis/AddProjectList/index.vue",
+		"/F/myProject/sof-project/src/components/index/phone-manage/PhoneResult/subpage/TypeIntention.vue",
+		"/F/myProject/sof-project/package.json",
+		"/F/myProject/sof-project/src/config/api.js",
+		"/F/myProject/vuex-test/index.html",
+		"/F/myProject/vuex-test/src/main.js",
+		"/F/myProject/vuex-test/build/webpack.base.conf.js",
+		"/F/myProject/sof-project/src/components/login/login.vue",
+		"/F/myProject/sof-project/src/util/user.js",
+		"/F/myProject/sof-project/src/store/rootState.js",
+		"/F/myProject/sof-project/src/components/index/index/middle/middle.vue",
+		"/F/myProject/sof-project/src/router/index.js",
+		"/F/myProject/sof-project/src/App.vue",
+		"/F/myProject/sof-project/src/assets/js/mixin.js",
+		"/F/myProject/sof-project/config/index.js",
+		"/F/myProject/20170822/vue.html",
+		"/F/myProject/sof-project/src/components/index/phone-manage/contrastTable/contrastTable.vue",
+		"/F/myProject/jingjiren/src/main.js",
+		"/F/myProject/jingjiren/index.html"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 96.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"item-100",
+			"item-input",
+			"radio",
+			"sof-hint",
+			"select-50",
+			"厅",
+			"室",
+			"item-100",
+			"层",
+			"item-bg",
+			"select-list",
+			"item-bg",
+			":value=\"area\"",
+			"area",
+			"v-model=\"area\"",
+			"1",
+			"tem-50",
+			"user-send",
+			";",
+			";  ",
+			"item-input",
+			"填写总面积",
+			"item-50",
+			"&nbsp;",
+			"item-50",
+			"select-list",
+			"=> ",
+			" =>",
+			"NotFound",
+			"component",
+			"devServer",
+			"GET_USER_INFO_FAIL",
+			"applyMiddleware",
+			"Compoent",
+			"actions",
+			"selectType",
+			"selectTypeIndex",
+			"selectTypeList",
+			"getTypeList",
+			"selectType",
+			"selectTypeList",
+			"showCityList",
+			"showPopBox",
+			"selectType",
+			"select-type-index",
+			"selectTypeIndex",
+			"pop-list-child",
+			"selectProvinceList",
+			"selectdistrictlist",
+			"selectCity",
+			"childCitylistHasMore",
+			"_getdistrictlist",
+			"selectCity",
+			"data",
+			"selectProvince",
+			"selectProvinceList",
+			"pop-city-list",
+			"provincelist",
+			"pop-city-child",
+			"show-type-list",
+			"provinceActive",
+			"getTypeList",
+			"provincelist",
+			"`",
+			"${http}",
+			"axios",
+			"provincelist",
+			"$color-background",
+			"></",
+			"add-project",
+			"router-fade",
+			"housePrice",
+			"==",
+			"\t\t\t\t\t",
+			"\t\t\t\t\t\t",
+			"\t\t\t\t\t\t\t",
+			"\t\t\t\t\t\t",
+			"\t\t\t\t\t",
+			"\t\t\t\t",
+			"\t\t\t",
+			"\t\t\t\t\t",
+			"\t\t\t",
+			"\t\t\t\t",
+			"\t\t\t",
+			"\t\t\t\t",
+			"\t\t\t",
+			"\t\t",
+			"\t\t\t\t",
+			"\t\t\t",
+			"\t\t",
+			"\t\t\t",
+			"\t\t\t\t",
+			"\t\t\t",
+			"\t\t",
+			"\t",
+			"\t\t",
+			"\t\t\t\t\t\t\t",
+			"\t\t\t\t\t\t",
+			"\t\t\t\t\t",
+			"\t\t\t\t",
+			"\t\t\t",
+			"\t\t",
+			";",
+			"webpack is good",
+			"a",
+			"disabled",
+			"user-send",
+			"userInput",
+			"etc\"",
+			"/etc\"",
+			"module",
+			"directive",
+			"select-list",
+			"： ",
+			"省",
+			"let",
+			"http",
+			"}",
+			"{",
+			"scroll-top-show",
+			"search-tex",
+			"search",
+			"search-back",
+			"back",
+			"toOnePrice",
+			"projectMsg",
+			"detail",
+			"bannerDetail"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/components/addProject/addProject.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12620,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10201,
+								10201
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5801.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "index.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"demo",
+				"daily\\src\\component\\demo.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 373.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
