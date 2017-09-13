@@ -16,6 +16,12 @@ const AddProject = (resolve) => {
   })
 }
 
+const DemandDetail = (resolve) => {
+  import('components/demandDetail/demandetail').then((module) => {
+    resolve(module)
+  })
+}
+
 export default [
   {
     path: '/',
@@ -32,5 +38,9 @@ export default [
     path: '/detail/:pro',
     name: 'detail',
     component: Details
+  }, {
+    path: '/demandetail/:id/:status',
+    name: 'demandetail',
+    component: DemandDetail
   }
 ]
