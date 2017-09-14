@@ -2,7 +2,7 @@
   <div>
     <div class="project-list" v-if="!!projectList.length">
         <ul class="item">
-          <li v-for="item in projectList">
+          <li v-for="(item, index) in projectList">
             <div class="title">
               <p>需求单编号：<span> {{item.needsid}} </span></p>
               <p>共有<span> {{item.user_count == null ? '0' : item.user_count}} </span>人响应<span> {{item.project_count == null ? '0' : item.project_count}} </span>个项目</p>
@@ -32,14 +32,14 @@
               <p>发布时间：<span>{{item.createtime}}</span></p>
             </div>
             <div class="bottom">
-              <a class="btn add" @click="goUrlPath(item.needsid)" :class="addProject === '' ? 'noshow' : ''">{{addProject}}</a>
+              <a class="btn add" @click="goUrlPath(item.needsid, index)" :class="addProject === '' ? 'noshow' : ''">{{addProject}}</a>
               <a class="btn" @click="showPath(item.needsid)" :class="selectBtn === '' ? 'noshow' : ''">{{selectBtn}}</a>
             </div>
           </li>
         </ul>
       </div>
       <div v-else class="no-project-list">
-        <p>暂无所查询项目</p>
+        <p>暂无项目</p>
       </div>
   </div>
 </template>
@@ -121,8 +121,9 @@
       }
     },
     methods: {
-      goUrlPath (path) {
+      goUrlPath (path, index) {
         if (this.addProject === '停止') {
+          this.$emit('stop', {path, index})
           return
         }
         this.$router.push(`/demandetail/${path}/${this.addProjectUrl}`)
