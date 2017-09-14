@@ -4,7 +4,12 @@
     <my-title :title="'详情页'"></my-title>
   </div>
   <div class="scrolls">
-    <scroll ref="scroll" class="list" :data="scrolldata">
+    <scroll 
+    ref="scroll" 
+    class="list" 
+    :data="scrolldata"
+    :pullup="pullup"
+    @scrollToEnd="scrollToEnd">
       <div >
         <div class="demand">
           <div class="titles"><span class="icon"></span>需求：</div>
@@ -32,7 +37,7 @@
               <input type="checkbox"  :disabled="item.belong" :id="item.id" v-model="item.state"  @click="alocked(item)"/>
             </div>
           </div>
-          <img height="150" width="100%" :src="'http://sofmanager.fangsir007.com/image/' + item.img"  @click="details(item.id)"/>
+          <img height="150" width="100%"  v-lazy="'http://sofmanager.fangsir007.com/image/' + item.img"  @click="details(item.id)"/>
           <div class="listfoot">
             <div class="left">
               <div class="leftt lefttop">
@@ -47,7 +52,12 @@
             </div>
           </div>
         </div>
-       
+       <div v-if="lodaingicon">
+         <Loading></Loading>
+       </div>
+       <div v-if="bottoms" class="bottoms">
+         已经到底部啦
+       </div>
       </div>
     </scroll>
      <div class="submit" v-if="estate != 1">
@@ -61,6 +71,7 @@
 import {getlist, addResponse} from 'api/demandetail'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
 export default {
   data () {
     return {
@@ -70,12 +81,17 @@ export default {
       needs: '',
       stas: 0,
       id: this.$route.params.id,
-      estate: this.$route.params.status
+      estate: this.$route.params.status,
+      pullup: true,
+      pagenum: 0,
+      lodaingicon: true,
+      bottoms: false
     }
   },
   components: {
     MyTitle,
-    Scroll
+    Scroll,
+    Loading
   },
   created () {
     this._getlist()
@@ -85,17 +101,19 @@ export default {
   methods: {
     _getlist () {
       var that = this
-      getlist(this.id, this.estate).then((res) => {
+      getlist(this.id, this.estate, this.pagenum, 10).then((res) => {
         if (res.code === 0) {
+          that.lodaingicon = false
           that.scrolldata = res.data.list
           that.needs = res.data.needs
+          this.pagenum++
         } else {
         }
       }).catch(() => {
       })
     },
     alocked (item) {
-      if (item.state) {
+      if (!item.state) {
         this.ids.push(item.id)
       } else {
         this.ids.forEach((i, index) => {
@@ -127,6 +145,26 @@ export default {
     },
     details (val) {
       window.location.href = '/recommendList#/detail/' + val
+    },
+    scrollToEnd () {
+      var that = this
+      this.lodaingicon = true
+      getlist(this.id, this.estate, this.pagenum, 10).then((res) => {
+        if (res.code === 0) {
+          that.lodaingicon = false
+          if (res.data) {
+            for (var i = 0; i < res.data.list.length; i++) {
+              that.scrolldata.push(res.data.list[i])
+            }
+            that.pagenum++
+          } else {
+            that.bottoms = true
+            that.pullup = false
+          }
+        } else {
+        }
+      }).catch(() => {
+      })
     }
   }
 }
@@ -227,6 +265,11 @@ export default {
               background-size:100% 100%
               margin-right: 12px
               vertical-align: middle
+        .bottoms
+          text-align:center
+          line-height: 20px
+          font-size: $font-size-small
+          color: $color-text-l
         .lists
           background: #fff
           padding: 0 10px 10px 10px
