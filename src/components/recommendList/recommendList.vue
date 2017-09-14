@@ -2,25 +2,27 @@
 <div id="componentList">
   <div class="title">
     <my-title :title="'需求列表'"></my-title>
-    <ul class="xiangying-top">
-      <li v-for="(item, index) in itemTop" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
-    </ul>
-    <ul class="xiangying-center">
-      <li v-for="item in itemTopText">
-        <p>{{item.name}}</p>
-        <p>{{item.count}}</p>
-      </li>
-    </ul>
-    <div class="item-center">
-      <ul>
-        <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" v-for="(i, index) in itemCenter">{{i.type}}</li>
+    <div ref="itemSelectTitle" class="title-all-sclect">
+      <ul class="item-list-show xiangying-top">
+        <li v-for="(item, index) in itemTop" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
       </ul>
-      <span ref="itemCenterActiveSpan"></span>
-    </div>
-    <div class="item-bottom">
+      <ul class="item-list-show xiangying-center">
+        <li v-for="item in itemTopText">
+          <p>{{item.name}}</p>
+          <p>{{item.count}}</p>
+        </li>
+      </ul>
+      <div class="item-center">
         <ul>
-          <li v-for="(item, index) in itemSelectType" :class="itemSelectTypeActive === index ? 'active' : ''" @click="selectTypeList(item, index)"><span>{{item.type}}</span> <i :class="[itemSelectTypeActive === index ? 'icon-back-down': 'icon-back-up']"></i></li>
+          <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" v-for="(i, index) in itemCenter">{{i.type}}</li>
         </ul>
+        <span ref="itemCenterActiveSpan"></span>
+      </div>
+      <div class="item-bottom">
+          <ul>
+            <li v-for="(item, index) in itemSelectType" :class="itemSelectTypeActive === index ? 'active' : ''" @click="selectTypeList(item, index)"><span>{{item.type}}</span> <i :class="[itemSelectTypeActive === index ? 'icon-back-down': 'icon-back-up']"></i></li>
+          </ul>
+      </div>
     </div>
   </div>
   <div class="top">
@@ -82,17 +84,27 @@
         </pop-box>
   </div>
   <div>
-    <scroll ref="scroll" class="list">
+    <scroll
+      ref="scroll"
+      :listenScroll="true"
+      @scroll="recommendScroll"
+      class="list"
+      :pullup="true"
+      :data="showProjectList"
+      @scrollToEnd="searchMore">
       <div>
-        <RecommendList :projectList="['1', '2', '3']" :userId="userId" :userShowEvent="userShowEvent"></RecommendList>
+        <RecommendList :projectList="showProjectList" :userId="userId" :userShowEvent="userShowEvent"></RecommendList>
       </div>
     </scroll>
+  </div>
+  <div class="add-needs" v-if="userId === 2">
+    <router-link to="/addProject" class="add">添加需求</router-link>
   </div>
 </div>
 </template>
 
 <script>
-import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, getNeedsName } from 'api/recommendList'
+import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, getNeedsName, setNeedsItem } from 'api/recommendList'
 import Loading from 'base/loading/loading'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
@@ -101,7 +113,7 @@ import RecommendList from 'base/recommend-list/recommend-list'
 export default {
   data () {
     return {
-      userId: 1,
+      userId: -1,
       userShowEvent: '未响应',
       itemCenter: ['我的响应', '已响应', '未响应'],
       itemTop: ['今日响应', '本周响应', '本月响应'],
@@ -125,9 +137,9 @@ export default {
       }],
       childCitylist: [],
       districtList: [],
-      provinceActive: 0,
-      cityActive: 0,
-      districtlistActive: 0,
+      provinceActive: '',
+      cityActive: '',
+      districtlistActive: '',
       childCitylistHasMore: false,
       districtListHasMore: false,
       projectMsg: true,
@@ -137,12 +149,12 @@ export default {
       typeListWuye: [],
       selectPrice: [{
         name: '全部',
-        allPricemax: 'all',
-        allPricemin: 'all'
+        allPricemax: '全部',
+        allPricemin: '全部'
       }, {
         name: '100万以下',
         allPricemax: '100',
-        allPricemin: 'all'
+        allPricemin: '全部'
       }, {
         name: '100万-300万',
         allPricemax: '300',
@@ -153,11 +165,15 @@ export default {
         allPricemin: '300'
       }, {
         name: '500万以上',
-        allPricemax: 'all',
+        allPricemax: '全部',
         allPricemin: '500'
       }],
-      selectTypeIndex: 0,
-      jurisdictiont: -1
+      selectTypeIndex: -1,
+      jurisdictiont: -1,
+      needsName: 2,
+      start: 0,
+      length: 10,
+      showProjectList: []
     }
   },
   created () {
@@ -167,6 +183,13 @@ export default {
     this._getTypeList()
   },
   methods: {
+    recommendScroll (pos) {
+      // console.log(pos)
+    },
+    searchMore () {
+      this.start++
+      this._getAllSelectNeedsItem(this.start)
+    },
     itemActive (val, index) {
       this.itemSelectType = [{
         type: '区域'
@@ -175,17 +198,49 @@ export default {
       }, {
         type: '物业类型'
       }]
+      this.allPricemin = ''
+      this.allPricemax = ''
+      this.type = ''
+      this.provinceActive = ''
+      this.cityActive = ''
+      this.districtlistActive = ''
+      this.childCitylist = []
+      this.districtList = []
+      this.selectTypeIndex = -1
+      this.needsName = val.code
       this.userShowEvent = val.type
       this.showCitysList = false
       this.showTypeList = false
+      this.start = 0
       this.itemCenterActive = index
-      this.$refs.itemCenterActiveSpan.style.left = index * 33.33 + '%'
+      const data = {
+        timecode: this.itemTopIndex,
+        start: 0,
+        length: this.length,
+        replycode: this.needsName
+      }
+      this._setNeedsItem(data)
     },
     selectTop (val, index) {
       this.itemTopIndex = index + 1
       this._getTimeData(this.itemTopIndex)
       this.itemTopActive = index
+      this.start = 0
       console.log(this.itemTopIndex)
+      const data = {
+        timecode: this.itemTopIndex,
+        start: 0,
+        length: this.length,
+        replycode: this.needsName
+      }
+      this.itemSelectType = [{
+        type: '区域'
+      }, {
+        type: '总价'
+      }, {
+        type: '物业类型'
+      }]
+      this._setNeedsItem(data)
     },
     selectTypeList (val, index) {
       this.itemSelectTypeActive = index
@@ -194,18 +249,16 @@ export default {
         setTimeout(() => {
           this.showCitysList = true
         }, 20)
+        return
+      } else if (index === 1) {
+        this.typeList = this.selectPrice
       } else {
-        if (val.type === '总价') {
-          this.typeList = this.selectPrice
-        } else if (val.type === '物业类型') {
-          this.typeList = this.typeListWuye
-        }
-        this.showCitysList = false
-        setTimeout(() => {
-          this.showTypeList = true
-        }, 20)
+        this.typeList = this.typeListWuye
       }
-      console.log(this.provincelist)
+      this.showCitysList = false
+      setTimeout(() => {
+        this.showTypeList = true
+      }, 20)
     },
     showCityList () {},
     showPopBox () {},
@@ -249,6 +302,9 @@ export default {
       this.district = item === '全部' ? 'all' : item
     },
     selectProvinceList () {
+      console.log(this.provinceActive)
+      console.log(this.cityActive)
+      console.log(this.districtlistActive)
       if (this.districtlistActive !== '') {
         if (this.districtlistActive === '全部') {
           this.itemSelectType[this.itemSelectTypeActive].type = this.cityActive
@@ -283,9 +339,10 @@ export default {
       this._getProjectList()
       this.showCitysList = false
       this.projectMsg = false
+      this._getAllSelectNeedsItem(0)
     },
     selectType (item, index) {
-      console.log(item.name)
+      console.log(this.itemSelectTypeActive)
       if (item.name === '全部') {
         if (this.itemSelectTypeActive === 1) {
           this.itemSelectType[this.itemSelectTypeActive].type = '总价'
@@ -307,11 +364,15 @@ export default {
       if (item.type) {
         this.type = item.type
       }
+      console.log(this.allPricemin)
+      console.log(this.allPricemax)
+      console.log(this.type)
       this.projectList = []
       this.start = 0
       this.query = ''
       this.projectName = 'all'
       this.projectMsg = false
+      this._getAllSelectNeedsItem()
       setTimeout(() => {
         this.showTypeList = false
         this.$refs.scroll.enable()
@@ -333,12 +394,14 @@ export default {
       getTypeList().then(res => {
         res.data.forEach((item, i) => {
           this.typeListWuye.push({
-            name: item
+            name: item,
+            type: item
           })
         })
       })
       this.typeListWuye.unshift({
-        name: '全部'
+        name: '全部',
+        type: '全部'
       })
     },
     _getProvincelist () {
@@ -409,12 +472,45 @@ export default {
           }]
         }
       })
+      const data = {
+        timecode: this.itemTopIndex,
+        start: this.start,
+        length: this.length,
+        replycode: 2
+      }
+      this._setNeedsItem(data)
       this._getTimeData(this.itemTopIndex)
       this._getNeedsName()
     },
     _getTimeData (index) {
       getTimeData(index).then(res => {
         this.itemTopText = res.data
+      })
+    },
+    _setNeedsItem (data) {
+      setNeedsItem(data).then(res => {
+        if (res.code === 0) {
+          this.showProjectList = res.data
+        }
+      })
+    },
+    _getAllSelectNeedsItem (start) {
+      const data = {
+        timecode: this.itemTopIndex,
+        replycode: this.needsName,
+        prov: this.provinceActive === '全部' ? '' : this.provinceActive,
+        city: this.cityActive === '全部' ? '' : this.cityActive,
+        district: this.districtlistActive === '全部' ? '' : this.districtlistActive,
+        minprice: this.allPricemin === '全部' ? '' : this.allPricemin,
+        maxprice: this.allPricemax === '全部' ? '' : this.allPricemax,
+        type: this.type === '全部' ? '' : this.type,
+        start: start,
+        length: this.length
+      }
+      setNeedsItem(data).then(res => {
+        if (res.code === 0) {
+          this.showProjectList.concat(res.data)
+        }
       })
     }
   },
@@ -440,6 +536,21 @@ export default {
     z-index: 10000
     background: #eee
     font-size: $font-size-medium
+    .add-needs
+      z-index: 99999
+      position:fixed
+      bottom: 0
+      width: 100%
+      .add
+        display: inline-block
+        text-align: center
+        line-height: 35px
+        width: 100%
+        border: none
+        height: 35px
+        border-radius: 4px
+        background: #e5672c
+        color: #fff
     .title
       position: fixed
       z-index: 10002
@@ -449,10 +560,12 @@ export default {
       color: white
       top: 0
       background: #eee
-      >ul
+      .title-all-sclect
+        position: relative
+      .item-list-show
         display: flex
         background: #fff
-        padding: 13px 0
+        padding: 8px 0
         li
           color: black
           font-size: $font-size-medium
@@ -469,6 +582,7 @@ export default {
       .xiangying-top
         background: #f28666
         padding:0 5px 5px 5px
+        margin-top: -7px
         li
           line-height: 35px
           border: 1px solid #fff
@@ -489,10 +603,9 @@ export default {
       .xiangying-center
         display: flex
         justify-content: space-around
-        height: 34px
         li
           border: none
-          height: 34px
+          height: 25px
           p
             height: 17px
       .item-center
@@ -593,8 +706,8 @@ export default {
         color: white
     .list
       position: fixed
-      top: 183px
-      bottom: 75px
+      top: 153px
+      bottom: 110px
       width: 100%
       padding-top: 50px
 </style>

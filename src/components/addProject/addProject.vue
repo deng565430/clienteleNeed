@@ -248,7 +248,7 @@ export default {
       startArea: '',
       endArea: '',
       theHeightBudget: '',
-      tenementType: '全部',
+      tenementType: '',
       tenementTypeList: [],
       proportion: '',
       houseHome: '',
@@ -275,12 +275,12 @@ export default {
         this.$refs.confirm.show()
         return
       }
-      if (this.startArea === '') {
+      if (this._trim(this.startArea) === '') {
         this.confirmText = '请输入总面积范围'
         this.$refs.confirm.show()
         return
       }
-      if (this.endArea === '') {
+      if (this._trim(this.endArea) === '') {
         this.confirmText = '请输入总面积范围'
         this.$refs.confirm.show()
         return
@@ -295,8 +295,8 @@ export default {
         city: this.city,
         district: this.district ? this.district : null,
         clientcount: this.clientcount ? this.clientcount : null,
-        tart_area: this.startArea ? this.startArea : null,
-        end_area: this.endArea ? this.endArea : null,
+        start_area: this._trim(this.startArea) ? this._trim(this.startArea) : null,
+        end_area: this._trim(this.endArea) ? this._trim(this.endArea) : null,
         price: this.theHeightBudget ? this.theHeightBudget : null,
         type: this.tenementType ? this.tenementType : null,
         scale: this.proportion ? this.proportion : null,
@@ -356,6 +356,9 @@ export default {
       getTypeList().then(res => {
         this.tenementTypeList = res.data
       })
+    },
+    _trim(str) {
+      return str.replace(/(^\s+)|(\s+$)/g, '')
     }
   },
   components: {

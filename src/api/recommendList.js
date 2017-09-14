@@ -52,3 +52,9 @@ export function getNeedsName (num) {
 
   return $api.get(url)
 }
+
+export function setNeedsItem (data) {
+  const url = '/needs/getneedsitem'
+
+  return $api.post(url, data)
+}
