@@ -2,14 +2,18 @@
 <div id="componentList">
   <div class="title">
     <my-title :title="'需求列表'"></my-title>
-    <ul>
-      <li>共有<span> 18 </span>个需求</li>
-      <li>已响应<span> 9 </span>个</li>
-      <li>未响应<span> 9 </span>个</li>
+    <ul class="xiangying-top">
+      <li v-for="(item, index) in itemTop" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
+    </ul>
+    <ul class="xiangying-center">
+      <li v-for="item in itemTopText">
+        <p>{{item.name}}</p>
+        <p>{{item.count}}</p>
+      </li>
     </ul>
     <div class="item-center">
       <ul>
-        <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" v-for="(i, index) in itemCenter">{{i}}</li>
+        <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" v-for="(i, index) in itemCenter">{{i.type}}</li>
       </ul>
       <span ref="itemCenterActiveSpan"></span>
     </div>
@@ -80,50 +84,7 @@
   <div>
     <scroll ref="scroll" class="list">
       <div>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
-        <p>内容</p>
+        <RecommendList :projectList="['1', '2', '3']" :userId="userId" :userShowEvent="userShowEvent"></RecommendList>
       </div>
     </scroll>
   </div>
@@ -131,22 +92,29 @@
 </template>
 
 <script>
-import { getProvincelist, getDistirctlist, getCitylist } from 'api/recommendList'
+import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, getNeedsName } from 'api/recommendList'
 import Loading from 'base/loading/loading'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
 import PopBox from 'base/pop-box/pop-box'
+import RecommendList from 'base/recommend-list/recommend-list'
 export default {
   data () {
     return {
-      itemCenter: ['已响应', '未响应'],
+      userId: 1,
+      userShowEvent: '未响应',
+      itemCenter: ['我的响应', '已响应', '未响应'],
+      itemTop: ['今日响应', '本周响应', '本月响应'],
+      itemTopIndex: 1,
+      itemTopText: [],
+      itemTopActive: 0,
       itemCenterActive: 0,
       itemSelectType: [{
         type: '区域'
       }, {
-        type: '价格'
+        type: '总价'
       }, {
-        type: '时间'
+        type: '物业类型'
       }],
       itemSelectTypeActive: -1,
       showCitysList: false,
@@ -166,78 +134,71 @@ export default {
       districtListHasMoreTxt: '',
       childCitylistHasMoreTxt: '',
       typeList: [],
+      typeListWuye: [],
       selectPrice: [{
         name: '全部',
         allPricemax: 'all',
         allPricemin: 'all'
       }, {
         name: '100万以下',
-        allPricemax: '100万元',
+        allPricemax: '100',
         allPricemin: 'all'
       }, {
         name: '100万-300万',
-        allPricemax: '300万元',
-        allPricemin: '100万'
+        allPricemax: '300',
+        allPricemin: '100'
       }, {
         name: '300万-500万',
-        allPricemax: '500万元',
-        allPricemin: '300万元'
+        allPricemax: '500',
+        allPricemin: '300'
       }, {
         name: '500万以上',
         allPricemax: 'all',
-        allPricemin: '500万元'
+        allPricemin: '500'
       }],
-      selectTime: [{
-        name: '全部',
-        pricemax: 'all',
-        pricemin: 'all'
-      }, {
-        name: '一天前',
-        pricemax: '10000元',
-        pricemin: 'all'
-      }, {
-        name: '两天前',
-        pricemax: '30000元',
-        pricemin: '10000元'
-      }, {
-        name: '三天前',
-        pricemax: '50000元',
-        pricemin: '30000元'
-      }, {
-        name: '一周前',
-        pricemax: '80000元',
-        pricemin: '50000元'
-      }, {
-        name: '一个月前',
-        pricemax: 'all',
-        pricemin: '80000元'
-      }],
-      selectTypeIndex: 0
+      selectTypeIndex: 0,
+      jurisdictiont: -1
     }
   },
   created () {
+    this._getUserbyid()
+    this._getJurisdictiont()
     this._getProvincelist()
+    this._getTypeList()
   },
   methods: {
     itemActive (val, index) {
+      this.itemSelectType = [{
+        type: '区域'
+      }, {
+        type: '总价'
+      }, {
+        type: '物业类型'
+      }]
+      this.userShowEvent = val.type
       this.showCitysList = false
       this.showTypeList = false
       this.itemCenterActive = index
-      this.$refs.itemCenterActiveSpan.style.left = index * 50 + '%'
+      this.$refs.itemCenterActiveSpan.style.left = index * 33.33 + '%'
+    },
+    selectTop (val, index) {
+      this.itemTopIndex = index + 1
+      this._getTimeData(this.itemTopIndex)
+      this.itemTopActive = index
+      console.log(this.itemTopIndex)
     },
     selectTypeList (val, index) {
+      this.itemSelectTypeActive = index
       if (index === 0) {
         this.showTypeList = false
-        this.itemSelectTypeActive = index
         setTimeout(() => {
           this.showCitysList = true
         }, 20)
       } else {
-        console.log(val.type)
-        if (val.type === '价格') {
+        if (val.type === '总价') {
           this.typeList = this.selectPrice
-        } else {
-          this.typeList = this.selectTime
+        } else if (val.type === '物业类型') {
+          this.typeList = this.typeListWuye
         }
         this.showCitysList = false
         setTimeout(() => {
@@ -288,6 +249,27 @@ export default {
       this.district = item === '全部' ? 'all' : item
     },
     selectProvinceList () {
+      if (this.districtlistActive !== '') {
+        if (this.districtlistActive === '全部') {
+          this.itemSelectType[this.itemSelectTypeActive].type = this.cityActive
+        } else {
+          this.itemSelectType[this.itemSelectTypeActive].type = this.districtlistActive
+        }
+      } else if (this.cityActive !== '') {
+        if (this.cityActive === '全部') {
+          this.itemSelectType[this.itemSelectTypeActive].type = this.provinceActive
+        } else {
+          this.itemSelectType[this.itemSelectTypeActive].type = this.cityActive
+        }
+      } else if (this.provinceActive !== '') {
+        if (this.provinceActive === '全部') {
+          this.itemSelectType[this.itemSelectTypeActive].type = '区域'
+        } else {
+          this.itemSelectType[this.itemSelectTypeActive].type = this.provinceActive
+        }
+      } else {
+        this.itemSelectType[this.itemSelectTypeActive].type = '区域'
+      }
       this.districtListHasMore = false
       this.childCitylistHasMore = false
       this.districtListHasMoreTxt = ''
@@ -303,6 +285,17 @@ export default {
       this.projectMsg = false
     },
     selectType (item, index) {
+      console.log(item.name)
+      if (item.name === '全部') {
+        if (this.itemSelectTypeActive === 1) {
+          this.itemSelectType[this.itemSelectTypeActive].type = '总价'
+        } else if (this.itemSelectTypeActive === 2) {
+          this.itemSelectType[this.itemSelectTypeActive].type = '物业类型'
+        }
+      } else {
+        this.itemSelectType[this.itemSelectTypeActive].type = item.name
+      }
+      this.selectTypeIndex = index
       if (item.allPricemax) {
         this.allPricemin = item.allPricemin
         this.allPricemax = item.allPricemax
@@ -319,11 +312,34 @@ export default {
       this.query = ''
       this.projectName = 'all'
       this.projectMsg = false
-      this.selectTypeIndex = index
       setTimeout(() => {
         this.showTypeList = false
         this.$refs.scroll.enable()
       }, 20)
+    },
+    _getNeedsName () {
+      getNeedsName().then(res => {
+        console.log(res)
+      })
+    },
+    _getJurisdictiont () {
+      getJurisdictiont().then(res => {
+        if (res.code === 0) {
+          this.jurisdictiont = res.data.user.roleid
+        }
+      })
+    },
+    _getTypeList () {
+      getTypeList().then(res => {
+        res.data.forEach((item, i) => {
+          this.typeListWuye.push({
+            name: item
+          })
+        })
+      })
+      this.typeListWuye.unshift({
+        name: '全部'
+      })
     },
     _getProvincelist () {
       if (this.provincelist.length > 1) {
@@ -357,13 +373,57 @@ export default {
         this.districtList.unshift('全部')
       })
     },
-    _getProjectList () {}
+    _getProjectList () {},
+    async _getUserbyid () {
+      await getUserbyid().then(res => {
+        this.userId = res.data.user.roleid
+        if (this.userId === 1) { // 源泽
+          this.itemCenter = [{
+            type: '未响应',
+            code: 2
+          }, {
+            type: '我的响应',
+            code: 4
+          }, {
+            type: '所有响应',
+            code: 5
+          }]
+        } else if (this.userId === 2) { // 经纪人
+          this.itemCenter = [{
+            type: '未响应',
+            code: 2
+          }, {
+            type: '已响应',
+            code: 1
+          }, {
+            type: '已停止',
+            code: 3
+          }]
+        } else { // 0 案场
+          this.itemCenter = [{
+            type: '未响应',
+            code: 2
+          }, {
+            type: '我的响应',
+            code: 4
+          }]
+        }
+      })
+      this._getTimeData(this.itemTopIndex)
+      this._getNeedsName()
+    },
+    _getTimeData (index) {
+      getTimeData(index).then(res => {
+        this.itemTopText = res.data
+      })
+    }
   },
   components: {
     MyTitle,
     Scroll,
     PopBox,
-    Loading
+    Loading,
+    RecommendList
   }
 }
 </script>
@@ -392,50 +452,78 @@ export default {
       >ul
         display: flex
         background: #fff
-        padding: 20px 0
+        padding: 13px 0
         li
           color: black
           font-size: $font-size-medium
           border-right: 1px solid #e56e37
           width: 33%
-          span
-            color: #e56e37
+          p
+            line-height:15px
+            color: #666
+            &:last-child
+              font-weight: 600
+              color: black
           &:last-child
             border-right: none
+      .xiangying-top
+        background: #f28666
+        padding:0 5px 5px 5px
+        li
+          line-height: 35px
+          border: 1px solid #fff
+          box-sizing: border-box
+          color: #fff
+          font-size: $font-size-medium-x
+          &:first-child
+            border-radius: 4px 0 0 4px
+          &:nth-child(2)
+            border-left: none
+            border-right: none
+          &:last-child
+            border-right: 1px solid #fff
+            border-radius: 0 4px 4px 0
+        .top-active
+          background: #fff
+          color: #f28666
+      .xiangying-center
+        display: flex
+        justify-content: space-around
+        height: 34px
+        li
+          border: none
+          height: 34px
+          p
+            height: 17px
       .item-center
         position: relative
         ul
           display: flex
-          margin: 10px 0
+          margin-top: 5px
           background: #fff
           color: black
+          border-bottom:1px solid #eee
           li
             width: 50%
-            line-height: 50px
-            font-size: $font-size-medium-x
+            line-height: 35px
+            font-size: $font-size-medium
             color: #333
-            transition: all .3s
           .active
+            box-sizing: border-box
             color: #e5672c
-        >span
-          width: 50%
-          position: absolute
-          top: 48px
-          transition: all .3s
-          left: 0
-          border: 1px solid #e5672c
+            border-bottom: 2px solid #e5672c
       .item-bottom
         ul
           display: flex
-          margin: 10px 20px
           background: #fff
           color: black
           justify-content: space-around
-          border: 1px solid #ccc
-          border-radius: 4px
+          border-bottom: 1px solid #eee
           li
             color: #333
-            font-size: $font-size-medium-x
+            width: 33.33%
+            font-size: $font-size-medium
+            transition: all .3s
             line-height: 40px
             text-align: center
             i
@@ -505,8 +593,8 @@ export default {
         color: white
     .list
       position: fixed
-      top: 177px
-      bottom: 55px
+      top: 183px
+      bottom: 75px
       width: 100%
       padding-top: 50px
 </style>

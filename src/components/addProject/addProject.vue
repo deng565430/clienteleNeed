@@ -15,8 +15,9 @@
               <div>
                 <label>省:
                   <span> * </span><br/>
-                  <select name="" class="select">
-                    <option value="1">全部</option>
+                  <select name="" class="select" v-model="province" @change="selectProvince">
+                    <option value="全部" selected="selected">全部</option>
+                    <option :value="item" v-for="item in provinceList">{{item}}</option>
                   </select>
                 </label>
               </div>
@@ -25,8 +26,9 @@
               <div>
                 <label>市:
                   <span> * </span><br/>
-                  <select name="" class="select">
-                    <option value="1">全部</option>
+                  <select name="" class="select" v-model="city" @change="selectCity">
+                    <option value="全部" selected="selected">全部</option>
+                    <option :value="item" v-for="item in cityList">{{item}}</option>
                   </select>
                 </label>
               </div>
@@ -37,19 +39,18 @@
               <div>
                 <label>区:
                   <span>  </span><br/>
-                  <select name="" class="select">
-                    <option value="1">全部</option>
+                  <select name="" class="select" v-model="district" @change="selectDistrict">
+                    <option value="全部" selected="selected">全部</option>
+                    <option :value="item" v-for="item in districtList">{{item}}</option>
                   </select>
                 </label>
               </div>
             </div>
             <div class="item-50">
               <div>
-                <label>板块:
+                <label>客户数量:
                   <span>  </span><br/>
-                  <select name="" class="select">
-                    <option value="1">全部</option>
-                  </select>
+                  <input type="text/submit/hidden/button/etc" name="" v-model="clientcount"  placeholder="填写人数"> 人
                 </label>
               </div>
             </div>
@@ -58,10 +59,10 @@
             <div class="item-100">
               <div>
                 <label>总面积:
-                  <span>  </span>
+                  <span> * </span>
                   <div class="item-input">
-                    <input type="text/submit/hidden/button/etc" ref="userInput5" name=""  placeholder="平方">  平方 ~
-                    <input type="text/submit/hidden/button/etc" ref="userInput5" name=""  placeholder="平方">  平方
+                    <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="startArea"  placeholder="平方">  平方米 ~
+                    <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="endArea" placeholder="平方">  平方米
                   </div>
                 </label>
               </div>
@@ -71,17 +72,18 @@
             <div class="item-50">
               <div>
                 <label>最高预算:
-                  <span> </span><br/>
-                  <input type="text/submit/hidden/button/etc" ref="userInput5" name=""  placeholder="金额">  万元
+                  <span> * </span><br/>
+                  <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额">  万元
                 </label>
               </div>
             </div>
             <div class="item-50">
               <div>
                 <label>物业类型:
-                  <span>  </span><br/>
-                  <select name="" class="select">
-                    <option value="1">住宅</option>
+                  <span> * </span><br/>
+                  <select name="" class="select" v-model="tenementType">
+                    <option value="全部">全部</option>
+                    <option :value="item" v-for="item in tenementTypeList">{{item}}</option>
                   </select>
                 </label>
               </div>
@@ -92,8 +94,8 @@
               <div>
                 <label>首付比例:
                   <span> </span><br/>
-                  <select name="" class="select">
-                    <option :value ="item.value" v-for="(item, index) in ratio" :key="index">{{item.value}}</option>
+                  <select name="" class="select" v-model="proportion">
+                    <option :value ="item.value" v-for="(item, index) in ratio" :key="index">{{item.value}} %</option>
                   </select>
                 </label>
               </div>
@@ -102,27 +104,27 @@
               <div>
                 <label>户型:
                   <span>  </span><br/>
-                  <select name="" class="select-50">
-                    <option value="1">一</option>
-                    <option value="1">二</option>
-                    <option value="1">三</option>
-                    <option value="1">四</option>
-                    <option value="1">五</option>
-                    <option value="1">六</option>
-                    <option value="1">七</option>
-                    <option value="1">八</option>
-                    <option value="1">九</option>
+                  <select name="" class="select-50" v-model="houseHome">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
                   </select> 室 &nbsp;
-                  <select name="" class="select-50">
-                    <option value="1">一</option>
-                    <option value="1">二</option>
-                    <option value="1">三</option>
-                    <option value="1">四</option>
-                    <option value="1">五</option>
-                    <option value="1">六</option>
-                    <option value="1">七</option>
-                    <option value="1">八</option>
-                    <option value="1">九</option>
+                  <select name="" class="select-50" v-model="houseHall">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
                   </select> 厅
                 </label>
               </div>
@@ -133,8 +135,8 @@
               <div>
                 <p>户籍:</p>
                 <div class="radio">
-                  <label><span class="pay_list_c1 on"><input name="Fruit" type="radio" value="" class="radioclass" /></span>&nbsp; 本地 </label>
-                  <label><input name="Fruit" type="radio" value="" />&nbsp; 外地 </label>
+                  <label><span class="pay_list_c1 on"><input name="Fruit1" type="radio" value="1" class="radioclass" v-model="register"/></span>&nbsp; 本地 </label>
+                  <label><input name="Fruit1" type="radio" value="2"  v-model="register"/>&nbsp; 外地 </label>
                 </div>
               </div>
             </div>
@@ -144,10 +146,10 @@
               <div>
                 <p>楼层:</p>
                 <div class="radio">
-                  <label><input name="Fruit" type="radio" value="" />&nbsp; 高层 </label>
-                  <label><input name="Fruit" type="radio" value="" />&nbsp; 中层 </label>
-                  <label><input name="Fruit" type="radio" value="" />&nbsp; 低层 </label>
-                  <label><input name="Fruit" type="radio" value="" />&nbsp; 无要求 </label>
+                  <label><input name="Fruit" type="radio" value="10001"  v-model="floor"/>&nbsp; 无要求 </label>
+                  <label><input name="Fruit" type="radio" value="10002"  v-model="floor"/>&nbsp; 低层 </label>
+                  <label><input name="Fruit" type="radio" value="10003"  v-model="floor"/>&nbsp; 中层 </label>
+                  <label><input name="Fruit" type="radio" value="10004" v-model="floor"/>&nbsp; 高层 </label>
                 </div>
               </div>
             </div>
@@ -157,13 +159,13 @@
               <div>
                 <label>社保:
                   <span> </span><br/>
-                  <select name="" class="select">
-                    <option value="1">无</option>
+                  <select name="" class="select" v-model="social">
+                    <option value="0">无</option>
                     <option value="1">1年</option>
-                    <option value="1">2年</option>
-                    <option value="1">3年</option>
-                    <option value="1">4年</option>
-                    <option value="1">5年</option>
+                    <option value="2">2年</option>
+                    <option value="3">3年</option>
+                    <option value="4">4年</option>
+                    <option value="5">5年</option>
                   </select>
                 </label>
               </div>
@@ -172,10 +174,10 @@
               <div>
                 <label>装修:
                   <span>  </span><br/>
-                  <select name="" class="select">
+                  <select name="" class="select" v-model="fitment">
                     <option value="1">毛坯</option>
-                    <option value="1">精装</option>
-                    <option value="1">简装</option>
+                    <option value="2">简装</option>
+                    <option value="3">精装</option>
                   </select>
                 </label>
               </div>
@@ -188,79 +190,178 @@
       </div>
     </scroll>
   </div>
+  <div>
+    <confirm ref="confirm" :text="confirmText"></confirm>
+  </div>
 </div>
 </template>
 
 <script>
+import { getProvincelist, getDistirctlist, getCitylist, getTypeList, sendProject } from 'api/addProject'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
-import $api from 'api'
+import Confirm from 'base/confirm/confirm'
 export default {
   name: 'addProject',
   data () {
     return {
+      confirmText: '请填写完整',
       ratio: [{
-        label: '10%',
-        value: '10%'
+        label: '10',
+        value: '10'
       }, {
-        label: '20%',
-        value: '20%'
+        label: '20',
+        value: '20'
       }, {
-        label: '30%',
-        value: '30%'
+        label: '30',
+        value: '30'
       }, {
-        label: '40%',
-        value: '40%'
+        label: '40',
+        value: '40'
       }, {
-        label: '50%',
-        value: '50%'
+        label: '50',
+        value: '50'
       }, {
-        label: '60%',
-        value: '60%'
+        label: '60',
+        value: '60'
       }, {
-        label: '70%',
-        value: '70%'
+        label: '70',
+        value: '70'
       }, {
-        label: '80%',
-        value: '80%'
+        label: '80',
+        value: '80'
       }, {
-        label: '90%',
-        value: '90%'
+        label: '90',
+        value: '90'
       }, {
-        label: '100%',
-        value: '100%'
+        label: '100',
+        value: '100'
       }],
-      disabled: true
+      disabled: true,
+      province: '全部',
+      provinceList: [],
+      city: '全部',
+      cityList: [],
+      district: '全部',
+      districtList: [],
+      clientcount: '',
+      startArea: '',
+      endArea: '',
+      theHeightBudget: '',
+      tenementType: '全部',
+      tenementTypeList: [],
+      proportion: '',
+      houseHome: '',
+      houseHall: '',
+      register: '',
+      floor: '',
+      social: '',
+      fitment: ''
     }
   },
   created () {
-    $api.get('/pro/getwuye').then(res => {
-      console.log(res)
-    })
+    this._getProvincelist()
+    this._getTypeList()
   },
   methods: {
     send (e) {
-      console.log(e.target)
+      if (this.province === '全部') {
+        this.confirmText = '请选择 省'
+        this.$refs.confirm.show()
+        return
+      }
+      if (this.city === '全部') {
+        this.confirmText = '请选择 市'
+        this.$refs.confirm.show()
+        return
+      }
+      if (this.startArea === '') {
+        this.confirmText = '请输入总面积范围'
+        this.$refs.confirm.show()
+        return
+      }
+      if (this.endArea === '') {
+        this.confirmText = '请输入总面积范围'
+        this.$refs.confirm.show()
+        return
+      }
+      if (this.theHeightBudget === '') {
+        this.confirmText = '输入最高预算'
+        this.$refs.confirm.show()
+        return
+      }
+      const data = {
+        prov: this.province,
+        city: this.city,
+        district: this.district ? this.district : null,
+        clientcount: this.clientcount ? this.clientcount : null,
+        tart_area: this.startArea ? this.startArea : null,
+        end_area: this.endArea ? this.endArea : null,
+        price: this.theHeightBudget ? this.theHeightBudget : null,
+        type: this.tenementType ? this.tenementType : null,
+        scale: this.proportion ? this.proportion : null,
+        room: this.houseHome ? this.houseHome : null,
+        hall: this.houseHall ? this.houseHall : null,
+        census: this.register ? this.register : null,
+        floor: this.floor ? this.floor : null,
+        ensure: this.social ? this.social : null,
+        decoration: this.fitment ? this.fitment : null
+      }
+      sendProject(data).then(res => {
+        if (res.code === 0) {
+          this.confirmText = '成功, 三秒之后跳到需求列表！'
+          this.$refs.confirm.show()
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 3000)
+        } else {
+          this.confirmText = res.msg ? res.msg : '服务器内部错误！'
+          this.$refs.confirm.show()
+        }
+      })
+      console.log(data)
     },
-    reset () {
-      this.province = ''
-      this.city = ''
-      this.district = ''
-      this.plate = ''
-      this.area = ''
-      this.price = ''
-      this.loans = ''
-      this.type = ''
-      this.proportion = ''
-      this.nativePlace = ''
-      this.time = ''
-      this.textarea = ''
+    confirmClear() {},
+    confirmBtnText() {},
+    selectProvince() {
+      console.log(this.province)
+      this.city = '全部'
+      this.district = '全部'
+      this.cityList = []
+      if (this.province === '' || this.province == null) {
+        return
+      }
+      getCitylist(this.province).then(res => {
+        this.cityList = res.data
+      })
     },
-    beforeScroll () {}
+    selectCity () {
+      this.districtList = []
+      this.district = '全部'
+      if (this.city === '全部') {
+        return
+      }
+      getDistirctlist(this.province, this.city).then(res => {
+        this.districtList = res.data
+      })
+    },
+    selectDistrict () {},
+    beforeScroll () {},
+    _getProvincelist () {
+      getProvincelist().then(res => {
+        this.provinceList = res.data
+      })
+    },
+    _getTypeList () {
+      getTypeList().then(res => {
+        this.tenementTypeList = res.data
+      })
+    }
   },
   components: {
     MyTitle,
-    Scroll
+    Scroll,
+    Confirm
   }
 }
 </script>
@@ -316,22 +417,20 @@ export default {
                 color: red
               .select
                 width: 100%
-                height: 40px
-                line-height: 40px
+                height: 30px
                 border-radius: 4px
                 border: 1px solid #ccc
                 color: #666
               .select-50
                 width: 30%
-                height: 40px
+                height: 30px
                 border-radius: 4px
                 border: 1px solid #ccc
                 color: #666
               >input
                 border: 1px solid #ccc
                 width:70%
-                height: 40px
-                line-height: 40px
+                height: 30px
                 border-radius: 4px
                 &::placeholder
                   padding-left: 10px
@@ -390,7 +489,7 @@ export default {
                 input
                   width: 30%
                   border: 1px solid #ccc
-                  height: 40px
+                  height: 30px
                   border-radius: 4px
                   &::placeholder
                     padding-left: 10px

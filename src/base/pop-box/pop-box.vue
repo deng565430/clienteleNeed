@@ -32,7 +32,7 @@
       this.touch = {}
     },
     mounted() {
-      this.$refs.showType.style.top = this.posTop + 200 + 'px'
+      this.$refs.showType.style.top = this.posTop + 210 + 'px'
     },
     components: {
       Scroll

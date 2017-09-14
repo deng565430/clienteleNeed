@@ -28,3 +28,27 @@ export function getCitylist (data) {
 
   return $api.post(url)
 }
+
+export function getJurisdictiont (data) {
+  const url = '/user/getUserbyid'
+
+  return $api.get(url)
+}
+
+export function getUserbyid () {
+  const url = '/user/getUserbyid'
+
+  return $api.get(url)
+}
+
+export function getTimeData (num) {
+  const url = `/needs/getneedsreply/${num}`
+
+  return $api.get(url)
+}
+
+export function getNeedsName (num) {
+  const url = `/needs/getneedsname`
+
+  return $api.get(url)
+}
