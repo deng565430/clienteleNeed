@@ -1,5 +1,8 @@
 <template>
 <div id="componentList">
+<div>
+    <confirm ref="confirm" :text="confirmText"></confirm>
+  </div>
   <div class="title">
     <my-title :title="'需求列表'"></my-title>
     <div ref="itemSelectTitle" class="title-all-sclect">
@@ -93,7 +96,11 @@
       :data="showProjectList"
       @scrollToEnd="searchMore">
       <div>
-        <RecommendList :projectList="showProjectList" :userId="userId" :userShowEvent="userShowEvent"></RecommendList>
+        <RecommendList :projectList="showProjectList" :userId="userId" :userShowEvent="userShowEvent" @stop="stop"></RecommendList>
+        <loading v-show="hasMore" title=""></loading>
+        <div v-show="!hasMore" class="no-result-wrapper">
+          <p>{{noResultWrapper}}</p>
+        </div>
       </div>
     </scroll>
   </div>
@@ -104,16 +111,20 @@
 </template>
 
 <script>
-import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, getNeedsName, setNeedsItem } from 'api/recommendList'
+import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, getNeedsName, setNeedsItem, stopNeeds } from 'api/recommendList'
 import Loading from 'base/loading/loading'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
 import PopBox from 'base/pop-box/pop-box'
 import RecommendList from 'base/recommend-list/recommend-list'
+import Confirm from 'base/confirm/confirm'
 export default {
   data () {
     return {
       userId: -1,
+      hasMore: false,
+      noResultWrapper: '',
+      confirmText: '',
       userShowEvent: '未响应',
       itemCenter: ['我的响应', '已响应', '未响应'],
       itemTop: ['今日响应', '本周响应', '本月响应'],
@@ -189,6 +200,19 @@ export default {
     searchMore () {
       this.start++
       this._getAllSelectNeedsItem(this.start)
+    },
+    stop (data) {
+      console.log(data)
+      stopNeeds(data.path).then(res => {
+        if (res.code === 0) {
+          this.isDisableIndex = data.index
+          this.showProjectList = this.showProjectList.filter((item, index) => {
+            return data.index !== index
+          })
+        }
+        this.confirmText = res.msg
+        this.$refs.confirm.show()
+      })
     },
     itemActive (val, index) {
       this.itemSelectType = [{
@@ -495,6 +519,10 @@ export default {
       })
     },
     _getAllSelectNeedsItem (start) {
+      if (!this.showProjectList.length) {
+        return
+      }
+      this.hasMore = true
       const data = {
         timecode: this.itemTopIndex,
         replycode: this.needsName,
@@ -509,6 +537,13 @@ export default {
       }
       setNeedsItem(data).then(res => {
         if (res.code === 0) {
+          this.hasMore = false
+          if (res.data.length < 10) {
+            this.noResultWrapper = '没有更多了'
+          }
+          if (res.data.length === 0) {
+            return
+          }
           this.showProjectList.concat(res.data)
         }
       })
@@ -519,7 +554,8 @@ export default {
     Scroll,
     PopBox,
     Loading,
-    RecommendList
+    RecommendList,
+    Confirm
   }
 }
 </script>
@@ -533,11 +569,10 @@ export default {
     width: 100%
     bottom: 0
     height: 100%
-    z-index: 10000
     background: #eee
     font-size: $font-size-medium
     .add-needs
-      z-index: 99999
+      z-index: 99
       position:fixed
       bottom: 0
       width: 100%
@@ -553,7 +588,7 @@ export default {
         color: #fff
     .title
       position: fixed
-      z-index: 10002
+      z-index: 800
       width: 100%
       text-align: center
       font-size: $font-size-large-x
@@ -706,8 +741,13 @@ export default {
         color: white
     .list
       position: fixed
-      top: 153px
-      bottom: 110px
+      top: 155px
+      bottom: 120px
       width: 100%
       padding-top: 50px
+      .no-result-wrapper
+        text-align: center
+        z-index: 800
+        p
+          line-height: 30px
 </style>

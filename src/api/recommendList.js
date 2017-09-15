@@ -58,3 +58,9 @@ export function setNeedsItem (data) {
 
   return $api.post(url, data)
 }
+
+export function stopNeeds (data) {
+  const url = `/needs/stopneeds/${data}`
+
+  return $api.post(url)
+}
