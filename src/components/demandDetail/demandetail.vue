@@ -67,7 +67,7 @@
       <div class="submits"  @click="submit">提交</div>
     </div>
     <div >
-      <Confirm :text="text" ref="confirm" @confirm="confirm"></Confirm>
+      <Confirm :text="text" ref="confirm"></Confirm>
     </div>
   </div>
   
@@ -109,6 +109,7 @@ export default {
     $route () {
       if (this.$route.params.status) {
         this.estate = this.$route.params.status
+        this._getlist()
       }
     }
   },
@@ -159,6 +160,7 @@ export default {
           if (res.code === 0) {
             this.text = '添加成功'
             this.$refs.confirm.showFlag = true
+            this._getlist()
           } else {
             this.text = '添加失败'
             this.$refs.confirm.showFlag = true
@@ -168,9 +170,6 @@ export default {
           this.$refs.confirm.showFlag = true
         })
       }
-    },
-    confirm () {
-      this._getlist()
     },
     baobei (val) {
       window.location.href = '/recommend?id=' + val
