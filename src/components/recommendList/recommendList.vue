@@ -96,7 +96,7 @@
       :data="showProjectList"
       @scrollToEnd="searchMore">
       <div>
-        <RecommendList :projectList="showProjectList" :userId="userId" :userShowEvent="userShowEvent" @stop="stop"></RecommendList>
+        <RecommendList :projectList="showProjectList" :userId="userId" :userShowEvent="userShowEvent" @stop="stop" :btnDefault="btnDefault"></RecommendList>
         <loading v-show="hasMore" title=""></loading>
         <div v-show="!hasMore" class="no-result-wrapper">
           <p>{{noResultWrapper}}</p>
@@ -123,6 +123,7 @@ export default {
     return {
       userId: -1,
       hasMore: false,
+      btnDefault: '',
       noResultWrapper: '',
       confirmText: '',
       userShowEvent: '未响应',
@@ -246,7 +247,6 @@ export default {
       this._getTimeData(this.itemTopIndex)
       this.itemTopActive = index
       this.start = 0
-      console.log(this.itemTopIndex)
       const data = {
         timecode: this.itemTopIndex,
         start: 0,
@@ -463,6 +463,7 @@ export default {
       await getUserbyid().then(res => {
         this.userId = res.data.user.roleid
         if (this.userId === 1) { // 源泽
+          this.btnDefault = '未响应'
           this.itemCenter = [{
             type: '未响应',
             code: 2
@@ -474,6 +475,7 @@ export default {
             code: 5
           }]
         } else if (this.userId === 2) { // 经纪人
+          this.btnDefault = '未响应'
           this.itemCenter = [{
             type: '未响应',
             code: 2
@@ -485,6 +487,7 @@ export default {
             code: 3
           }]
         } else { // 0 案场
+          this.btnDefault = '去响应'
           this.itemCenter = [{
             type: '未响应',
             code: 2
@@ -527,7 +530,15 @@ export default {
       }
       setNeedsItem(data).then(res => {
         if (res.code === 0) {
+          const userEvent = this._setUserEvent()
+          res.data.forEach((item, index) => {
+            res.data[index].addProject = userEvent.addProject
+            res.data[index].addProjectUrl = userEvent.addProjectUrl
+            res.data[index].selectBtn = userEvent.selectBtn
+            res.data[index].selectBtnUrl = userEvent.selectBtnUrl
+          })
           this.showProjectList = res.data
+          console.log(this.showProjectList)
         }
       })
     },
@@ -558,9 +569,68 @@ export default {
           if (res.data.length === 0) {
             return
           }
+          const userEvent = this._setUserEvent()
+          res.data.forEach((item, index) => {
+            res.data[index].addProject = userEvent.addProject
+            res.data[index].addProjectUrl = userEvent.addProjectUrl
+            res.data[index].selectBtn = userEvent.selectBtn
+            res.data[index].selectBtnUrl = userEvent.selectBtnUrl
+          })
           this.showProjectList = this.showProjectList.concat(res.data)
         }
       })
+    },
+    _setUserEvent () {
+      let addProject = ''
+      let addProjectUrl = 0
+      let selectBtn = ''
+      let selectBtnUrl = 0
+      if (this.userId === 1) { // 源泽
+        if (this.needsName === 2) {
+          addProject = '去响应'
+          addProjectUrl = 2
+          selectBtn = ''
+        } else if (this.needsName === 4) {
+          addProject = '追加响应'
+          addProjectUrl = 3
+          selectBtn = '查看响应'
+          selectBtnUrl = 1
+        } else if (this.needsName === 5) {
+          addProject = '追加响应'
+          addProjectUrl = 3
+          selectBtn = '查看响应'
+          selectBtnUrl = 1
+        }
+      } else if (this.userId === 2) { // 经纪人
+        if (this.needsName === 2) {
+          addProject = '停止'
+          selectBtn = ''
+        } else if (this.needsName === 1) {
+          addProject = '停止'
+          selectBtn = '查看响应'
+          selectBtnUrl = 1
+        } else if (this.needsName === 3) {
+          addProject = ''
+          selectBtn = ''
+        }
+      } else {
+        if (this.needsName === 2) { // 案场
+          addProject = '去响应'
+          addProjectUrl = 2
+          selectBtn = ''
+        } else if (this.needsName === 4) {
+          addProject = '追加响应'
+          addProjectUrl = 3
+          selectBtn = '查看响应'
+          selectBtnUrl = 1
+        }
+      }
+      return {
+        addProject,
+        addProjectUrl,
+        selectBtn,
+        selectBtnUrl
+      }
     }
   },
   components: {
@@ -758,7 +828,7 @@ export default {
     .list
       position: fixed
       top: 155px
-      bottom: 120px
+      bottom: 130px
       width: 100%
       padding-top: 50px
       .no-result-wrapper

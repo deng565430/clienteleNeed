@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="project-list" v-if="!!projectList.length">
+    <div>
+      <div class="project-list" v-if="!!projectList.length">
         <ul class="item">
           <li v-for="(item, index) in projectList">
             <div class="title">
@@ -32,14 +33,9 @@
               <p>发布时间：<span>{{item.createtime}}</span></p>
             </div>
             <div class="bottom">
-              <div v-if="item.isstop === 0">
-                <a class="btn add" v-if="addProject !== ''" @click="goUrlPath(item.needsid, index)">{{addProject}}</a>
-              </div>
-              <div v-else>
-                <a>已停止</a>
-              </div>
-              <div v-if="item.isstop === 0"><a class="btn"  v-if="selectBtn !== ''" @click="showPath(item.needsid)">{{selectBtn}}</a></div>
-
+              <a class="btn add" v-if="item.isstop === 0" @click="goUrlPath(item.needsid, index, item.addProjectUrl, item.addProject)" :class="item.addProject === '' ? 'noshow' : (item.isstop === 0 ? '' : 'noshow')">{{item.addProject}}</a>
+              <a v-else>已停止</a>
+              <a class="btn"  v-if="item.isstop === 0" @click="showPath(item.needsid, item.selectBtnUrl)" :class="item.selectBtn === '' ? 'noshow' : ''">{{item.selectBtn}}</a>
             </div>
           </li>
         </ul>
@@ -47,6 +43,7 @@
       <div v-else class="no-project-list">
         <p>暂无项目</p>
       </div>
+    </div>
   </div>
 </template>
 
@@ -74,69 +71,19 @@
         selectBtnUrl: 1
       }
     },
-    created () {
-      setTimeout(() => {
-        this.addProject = this.userId === 1 ? '去响应' : (this.userId === 2 ? '停止' : (this.userId === 0 ? '去响应' : ''))
-        this.addProjectUrl = this.userId === 1 ? 2 : (this.userId === 2 ? '' : (this.userId === 0 ? 2 : ''))
-        this.selectBtn = this.userId === 1 ? '' : (this.userId === 2 ? '' : (this.userId === 0 ? '' : ''))
-        this.selectBtnUrl = this.userId === 1 ? 2 : (this.userId === 2 ? '' : (this.userId === 0 ? '' : ''))
-      }, 20)
-    },
-    watch: {
-      userShowEvent (newVal) {
-        if (this.userId === 1) { // 源泽
-          if (newVal === '未响应') {
-            this.addProject = '去响应'
-            this.addProjectUrl = 2
-            this.selectBtn = ''
-          } else if (newVal === '我的响应') {
-            this.addProject = '追加响应'
-            this.addProjectUrl = 3
-            this.selectBtn = '查看响应'
-            this.selectBtnUrl = 1
-          } else if (newVal === '所有响应') {
-            this.addProject = '追加响应'
-            this.addProjectUrl = 3
-            this.selectBtn = '查看响应'
-            this.selectBtnUrl = 1
-          }
-        } else if (this.userId === 2) { // 经纪人
-          if (newVal === '未响应') {
-            this.addProject = '停止'
-            this.selectBtn = ''
-          } else if (newVal === '已响应') {
-            this.addProject = '停止'
-            this.selectBtn = '查看响应'
-            this.selectBtnUrl = 1
-          } else if (newVal === '已停止') {
-            this.addProject = ''
-            this.selectBtn = ''
-          }
-        } else {
-          if (newVal === '未响应') { // 案场
-            this.addProject = '去响应'
-            this.addProjectUrl = 2
-            this.selectBtn = ''
-          } else if (newVal === '我的响应') {
-            this.addProject = '追加响应'
-            this.addProjectUrl = 3
-            this.selectBtn = '查看响应'
-            this.selectBtnUrl = 1
-          }
-        }
-      }
-    },
+    created () {},
+    watch: {},
     methods: {
-      goUrlPath (path, index) {
-        if (this.addProject === '停止') {
+      goUrlPath (path, index, url, type) {
+        if (type === '停止') {
           this.projectList[index].isstop = 1
           this.$emit('stop', {path, index})
           return
         }
-        this.$router.push(`/demandetail/${path}/${this.addProjectUrl}`)
+        this.$router.push(`/demandetail/${path}/${url}`)
       },
-      showPath (path) {
-        this.$router.push(`/demandetail/${path}/${this.selectBtnUrl}`)
+      showPath (path, url) {
+        this.$router.push(`/demandetail/${path}/${url}`)
       }
     }
   }
@@ -202,10 +149,6 @@
         text-align: right
         padding: 0 10px 10px
         height: 30px
-        display: flex
-        justify-content: flex-end
-        >div:last-child
-          margin-left: 5px
         .btn
           display: inline-block
           text-align: center
