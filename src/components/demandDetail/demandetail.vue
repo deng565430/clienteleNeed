@@ -58,6 +58,9 @@
        <div v-if="bottoms" class="bottoms">
          已经到底部啦
        </div>
+       <div v-if="results" class="bottoms">
+         暂无查询结果
+       </div>
       </div>
     </scroll>
      <div class="submit" v-if="estate != 1">
@@ -85,7 +88,8 @@ export default {
       pullup: true,
       pagenum: 0,
       lodaingicon: true,
-      bottoms: false
+      bottoms: false,
+      results: false
     }
   },
   components: {
@@ -104,9 +108,13 @@ export default {
       getlist(this.id, this.estate, this.pagenum, 10).then((res) => {
         if (res.code === 0) {
           that.lodaingicon = false
-          that.scrolldata = res.data.list
-          that.needs = res.data.needs
-          this.pagenum++
+          if (res.data) {
+            that.scrolldata = res.data.list
+            that.needs = res.data.needs
+            this.pagenum++
+          } else {
+            this.results = true
+          }
         } else {
         }
       }).catch(() => {
@@ -267,7 +275,7 @@ export default {
               vertical-align: middle
         .bottoms
           text-align:center
-          line-height: 20px
+          line-height: 30px
           font-size: $font-size-small
           color: $color-text-l
         .lists
