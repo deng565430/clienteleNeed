@@ -309,11 +309,11 @@ export default {
       }
       sendProject(data).then(res => {
         if (res.code === 0) {
-          this.confirmText = '成功, 三秒之后跳到需求列表！'
+          this.confirmText = '添加成功！'
           this.$refs.confirm.show()
           setTimeout(() => {
             this.$router.push('/')
-          }, 3000)
+          }, 500)
         } else {
           this.confirmText = res.msg ? res.msg : '服务器内部错误！'
           this.$refs.confirm.show()

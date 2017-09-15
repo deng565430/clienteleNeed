@@ -4,12 +4,6 @@ const RecommendList = (resolve) => {
   })
 }
 
-const Details = (resolve) => {
-  import('components/details/details').then((module) => {
-    resolve(module)
-  })
-}
-
 const AddProject = (resolve) => {
   import('components/addProject/addProject').then((module) => {
     resolve(module)
@@ -34,10 +28,6 @@ export default [
     path: '/addProject',
     name: 'addProject',
     component: AddProject
-  }, {
-    path: '/detail/:pro',
-    name: 'detail',
-    component: Details
   }, {
     path: '/demandetail/:id/:status',
     name: 'demandetail',

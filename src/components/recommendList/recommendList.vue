@@ -514,6 +514,7 @@ export default {
     },
     _setNeedsItem (data) {
       this.noResultWrapper = ''
+      this.showProjectList = []
       if (!data) {
         data = {
           timecode: this.itemTopIndex,
@@ -538,7 +539,6 @@ export default {
             res.data[index].selectBtnUrl = userEvent.selectBtnUrl
           })
           this.showProjectList = res.data
-          console.log(this.showProjectList)
         }
       })
     },
@@ -586,16 +586,16 @@ export default {
       let selectBtn = ''
       let selectBtnUrl = 0
       if (this.userId === 1) { // 源泽
-        if (this.needsName === 2) {
+        if (this.needsName === 2) { // 未响应
           addProject = '去响应'
           addProjectUrl = 2
           selectBtn = ''
-        } else if (this.needsName === 4) {
+        } else if (this.needsName === 4) { // 我的响应
           addProject = '追加响应'
           addProjectUrl = 3
           selectBtn = '查看响应'
           selectBtnUrl = 1
-        } else if (this.needsName === 5) {
+        } else if (this.needsName === 5) { // 所有响应
           addProject = '追加响应'
           addProjectUrl = 3
           selectBtn = '查看响应'

@@ -1,9 +1,7 @@
 <template>
   <div id="app" @touchmove.prevent>
   	<transition name="router-fade" mode="out-in">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+      <router-view></router-view>
     </transition>
   </div>
 </template>
