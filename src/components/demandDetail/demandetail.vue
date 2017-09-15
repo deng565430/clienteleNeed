@@ -34,7 +34,7 @@
           <div class="listTitle">
             <div>{{item.title}}</div>
             <div v-if="estate != 1">
-              <input type="checkbox"  :disabled="item.belong" :id="item.id" v-model="item.state"  @click="alocked(item)"/>
+              <input type="checkbox" class="checkbos"  :disabled="item.belong" :id="item.id" v-model="item.state"  @click="alocked(item)"/>
             </div>
           </div>
           <img height="150" width="100%"  v-lazy="'http://sofmanager.fangsir007.com/image/' + item.img"  @click="details(item.id)"/>
@@ -311,8 +311,8 @@ export default {
             justify-content:space-between
             .checkbos
               display: inline-block
-              width: 16px
-              height: 16px
+              width: 18px
+              height: 13px
               border-radius: 3px
               border: 1px solid #aaaaaa
           .listfoot
