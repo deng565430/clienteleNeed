@@ -17,7 +17,7 @@
             <span class="tags" v-if="needs.prov">{{needs.prov}}</span>
             <span class="tags" v-if="needs.city">{{needs.city}}</span>
             <span class="tags" v-if="needs.district">{{needs.district}}</span>
-            <span class="tags" v-if="needs.clientcount">{{needs.clientcount}}</span>
+            <span class="tags" v-if="needs.clientcount">客户数量{{needs.clientcount}}人</span>
             <span class="tags" v-if="needs.start_area">{{needs.start_area}}-{{needs.end_area}}㎡</span>
             <span class="tags" v-if="needs.price">{{needs.price}}万元</span>
             <span class="tags" v-if="needs.type">{{needs.type}}</span>
