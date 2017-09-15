@@ -312,7 +312,7 @@ export default {
             .checkbos
               display: inline-block
               width: 18px
-              height: 13px
+              height: 18px
               border-radius: 3px
               border: 1px solid #aaaaaa
           .listfoot
