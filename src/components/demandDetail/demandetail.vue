@@ -10,7 +10,7 @@
     :data="scrolldata"
     :pullup="pullup"
     @scrollToEnd="scrollToEnd">
-      <div >
+      <div>
         <div class="demand">
           <div class="titles"><span class="icon"></span>需求：</div>
           <div class="dcontent">
@@ -66,7 +66,11 @@
      <div class="submit" v-if="estate != 1">
       <div class="submits"  @click="submit">提交</div>
     </div>
+    <div >
+      <Confirm :text="text" ref="confirm" @confirm="confirm"></Confirm>
+    </div>
   </div>
+  
 </div>
 </template>
 
@@ -75,6 +79,7 @@ import {getlist, addResponse} from 'api/demandetail'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
+import Confirm from 'base/confirm/confirm'
 export default {
   data () {
     return {
@@ -89,16 +94,27 @@ export default {
       pagenum: 0,
       lodaingicon: true,
       bottoms: false,
-      results: false
+      results: false,
+      text: '',
+      confirms: false
     }
   },
   components: {
     MyTitle,
     Scroll,
-    Loading
+    Loading,
+    Confirm
+  },
+  watch: {
+    $route () {
+      if (this.$route.params.status) {
+        this.estate = this.$route.params.status
+      }
+    }
   },
   created () {
     this._getlist()
+    console.log(this.estate)
   },
   mounted () {
   },
@@ -111,13 +127,16 @@ export default {
           if (res.data) {
             that.scrolldata = res.data.list
             that.needs = res.data.needs
-            this.pagenum++
           } else {
             this.results = true
           }
         } else {
+          this.text = '暂无数据'
+          this.$refs.confirm.showFlag = true
         }
       }).catch(() => {
+        this.text = '服务出错'
+        this.$refs.confirm.showFlag = true
       })
     },
     alocked (item) {
@@ -125,7 +144,6 @@ export default {
         this.ids.push(item.id)
       } else {
         this.ids.forEach((i, index) => {
-          console.log(i, index)
           if (i === item.id) {
             this.ids.splice(index, 1)
           }
@@ -134,19 +152,25 @@ export default {
     },
     submit () {
       if (this.ids.length === 0) {
-        alert('未选择项目！')
+        this.text = '未选择项目'
+        this.$refs.confirm.showFlag = true
       } else {
         addResponse(this.id, this.ids, this.estate).then((res) => {
           if (res.code === 0) {
-            alert('添加成功！')
-            this._getlist()
+            this.text = '添加成功'
+            this.$refs.confirm.showFlag = true
           } else {
-            alert('请登录！')
+            this.text = '添加失败'
+            this.$refs.confirm.showFlag = true
           }
         }).catch(() => {
-          alert('服务出错！')
+          this.text = '服务出错'
+          this.$refs.confirm.showFlag = true
         })
       }
+    },
+    confirm () {
+      this._getlist()
     },
     baobei (val) {
       window.location.href = '/recommend?id=' + val
@@ -157,7 +181,7 @@ export default {
     scrollToEnd () {
       var that = this
       this.lodaingicon = true
-      getlist(this.id, this.estate, this.pagenum, 10).then((res) => {
+      getlist(this.id, this.estate, this.pagenum + 1, 10).then((res) => {
         if (res.code === 0) {
           that.lodaingicon = false
           if (res.data) {
@@ -167,7 +191,7 @@ export default {
             that.pagenum++
           } else {
             that.bottoms = true
-            that.pullup = false
+            this.pullup = false
           }
         } else {
         }
@@ -239,7 +263,7 @@ export default {
       .list
         position: fixed
         top: 0
-        bottom: 55px
+        bottom: 105px
         width: 100%
         padding-top: 0
         .demand
