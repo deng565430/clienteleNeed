@@ -32,8 +32,14 @@
               <p>发布时间：<span>{{item.createtime}}</span></p>
             </div>
             <div class="bottom">
-              <a class="btn add" @click="goUrlPath(item.needsid, index)" :class="addProject === '' ? 'noshow' : ''">{{addProject}}</a>
-              <a class="btn" @click="showPath(item.needsid)" :class="selectBtn === '' ? 'noshow' : ''">{{selectBtn}}</a>
+              <div v-if="item.isstop === 0">
+                <a class="btn add" v-if="addProject !== ''" @click="goUrlPath(item.needsid, index)">{{addProject}}</a>
+              </div>
+              <div v-else>
+                <a>已停止</a>
+              </div>
+              <div v-if="item.isstop === 0"><a class="btn"  v-if="selectBtn !== ''" @click="showPath(item.needsid)">{{selectBtn}}</a></div>
+
             </div>
           </li>
         </ul>
@@ -74,7 +80,7 @@
         this.addProjectUrl = this.userId === 1 ? 2 : (this.userId === 2 ? '' : (this.userId === 0 ? 2 : ''))
         this.selectBtn = this.userId === 1 ? '' : (this.userId === 2 ? '' : (this.userId === 0 ? '' : ''))
         this.selectBtnUrl = this.userId === 1 ? 2 : (this.userId === 2 ? '' : (this.userId === 0 ? '' : ''))
-      }, 200)
+      }, 20)
     },
     watch: {
       userShowEvent (newVal) {
@@ -123,6 +129,7 @@
     methods: {
       goUrlPath (path, index) {
         if (this.addProject === '停止') {
+          this.projectList[index].isstop = 1
           this.$emit('stop', {path, index})
           return
         }
@@ -150,6 +157,7 @@
         margin: 0 10px
         border-radius: 4px
         margin-bottom: 10px
+        overflow: hidden
       .title
         padding: 0 10px
         background: #dcdcdc
@@ -194,6 +202,10 @@
         text-align: right
         padding: 0 10px 10px
         height: 30px
+        display: flex
+        justify-content: flex-end
+        >div:last-child
+          margin-left: 5px
         .btn
           display: inline-block
           text-align: center

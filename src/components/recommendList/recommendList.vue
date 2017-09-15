@@ -7,10 +7,10 @@
     <my-title :title="'需求列表'"></my-title>
     <div ref="itemSelectTitle" class="title-all-sclect">
       <ul class="item-list-show xiangying-top">
-        <li v-for="(item, index) in itemTop" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
+        <li v-for="(item, index) in itemTop" :key="index" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
       </ul>
       <ul class="item-list-show xiangying-center">
-        <li v-for="item in itemTopText">
+        <li v-for="(item,index) in itemTopText" :key="index">
           <p>{{item.name}}</p>
           <p>{{item.count}}</p>
         </li>
@@ -205,13 +205,9 @@ export default {
       console.log(data)
       stopNeeds(data.path).then(res => {
         if (res.code === 0) {
-          this.isDisableIndex = data.index
-          this.showProjectList = this.showProjectList.filter((item, index) => {
-            return data.index !== index
-          })
+          this.confirmText = res.msg
+          this.$refs.confirm.show()
         }
-        this.confirmText = res.msg
-        this.$refs.confirm.show()
       })
     },
     itemActive (val, index) {
@@ -363,7 +359,7 @@ export default {
       this._getProjectList()
       this.showCitysList = false
       this.projectMsg = false
-      this._getAllSelectNeedsItem(0)
+      this._setNeedsItem()
     },
     selectType (item, index) {
       console.log(this.itemSelectTypeActive)
@@ -396,9 +392,11 @@ export default {
       this.query = ''
       this.projectName = 'all'
       this.projectMsg = false
-      this._getAllSelectNeedsItem()
+      this.showProjectList = []
+      this._setNeedsItem()
       setTimeout(() => {
         this.showTypeList = false
+        this.selectTypeIndex = -1
         this.$refs.scroll.enable()
       }, 20)
     },
@@ -512,6 +510,21 @@ export default {
       })
     },
     _setNeedsItem (data) {
+      this.noResultWrapper = ''
+      if (!data) {
+        data = {
+          timecode: this.itemTopIndex,
+          replycode: this.needsName,
+          prov: this.provinceActive === '全部' ? '' : this.provinceActive,
+          city: this.cityActive === '全部' ? '' : this.cityActive,
+          district: this.districtlistActive === '全部' ? '' : this.districtlistActive,
+          minprice: this.allPricemin === '全部' ? '' : this.allPricemin,
+          maxprice: this.allPricemax === '全部' ? '' : this.allPricemax,
+          type: this.type === '全部' ? '' : this.type,
+          start: this.start,
+          length: this.length
+        }
+      }
       setNeedsItem(data).then(res => {
         if (res.code === 0) {
           this.showProjectList = res.data
@@ -519,6 +532,7 @@ export default {
       })
     },
     _getAllSelectNeedsItem (start) {
+      this.noResultWrapper = ''
       if (!this.showProjectList.length) {
         return
       }
@@ -544,7 +558,7 @@ export default {
           if (res.data.length === 0) {
             return
           }
-          this.showProjectList.concat(res.data)
+          this.showProjectList = this.showProjectList.concat(res.data)
         }
       })
     }
@@ -580,7 +594,9 @@ export default {
         display: inline-block
         text-align: center
         line-height: 35px
-        width: 100%
+        width: 96%
+        margin: 0 2%
+        box-sizing: border-box
         border: none
         height: 35px
         border-radius: 4px
