@@ -34,11 +34,11 @@
           <div class="listTitle">
             <div>{{item.title}}</div>
             <div v-if="estate != 1">
-              <input type="checkbox" class="checkbos"  :disabled="item.belong" :id="item.id" v-model="item.state"  @click="alocked(item)"/>
+              <input type="checkbox" class="checkbos" ref="checkboxs" :disabled="item.belong" :id="item.id" v-model="item.state"  @click="alocked(item, index)"/>
             </div>
           </div>
           <img height="150" width="100%"  v-lazy="'http://sofmanager.fangsir007.com/image/' + item.img"  @click="details(item.id)"/>
-          <div class="listfoot">
+          <div class="listfoot" v-if="!item.username">
             <div class="left">
               <div class="leftt lefttop">
                 <span v-if="item.area">{{item.area}}</span> 
@@ -51,7 +51,12 @@
               <div class="rightbtn" :id="item.id" @click="baobei(item.id)">快速报备</div>
             </div>
           </div>
+          <div class="phone" v-if="item.username">
+            <div class="pleft">推荐人：<span>{{item.username}}</span></div>
+            <div class="pright">电话：<a :href="'tel:' + item.phone">{{item.phone}}</a></div>
+          </div>
         </div>
+        
        <div v-if="lodaingicon">
          <Loading></Loading>
        </div>
@@ -75,7 +80,7 @@
 </template>
 
 <script>
-import {getlist, addResponse} from 'api/demandetail'
+import {getlist, addResponse} from 'api/demandetail' /* , addResponse */
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
@@ -96,7 +101,8 @@ export default {
       bottoms: false,
       results: false,
       text: '',
-      confirms: false
+      confirms: false,
+      checkednum: []
     }
   },
   components: {
@@ -132,7 +138,8 @@ export default {
             this.results = true
           }
         } else {
-          this.text = '暂无数据'
+          that.lodaingicon = false
+          this.text = '用户未登录'
           this.$refs.confirm.showFlag = true
         }
       }).catch(() => {
@@ -140,18 +147,26 @@ export default {
         this.$refs.confirm.showFlag = true
       })
     },
-    alocked (item) {
+    alocked (item, index) {
       if (!item.state) {
         this.ids.push(item.id)
+        this.checkednum.push(index)
       } else {
         this.ids.forEach((i, index) => {
           if (i === item.id) {
             this.ids.splice(index, 1)
+            this.checkednum.splice(index, 1)
           }
         })
       }
     },
     submit () {
+      console.log(this.checkednum)
+      console.log(this.$refs)
+      this.checkednum.forEach((i) => {
+        this.$refs.checkboxs[i].disabled = true
+        console.log(this.$refs.checkboxs[i].disabled)
+      })
       if (this.ids.length === 0) {
         this.text = '未选择项目'
         this.$refs.confirm.showFlag = true
@@ -160,7 +175,10 @@ export default {
           if (res.code === 0) {
             this.text = '添加成功'
             this.$refs.confirm.showFlag = true
-            this._getlist()
+            this.checkednum.forEach((i) => {
+              this.$refs.checkboxs[i].disabled = true
+              console.log(this.$refs.checkboxs[i].disabled)
+            })
           } else {
             this.text = '添加失败'
             this.$refs.confirm.showFlag = true
@@ -315,6 +333,12 @@ export default {
               height: 18px
               border-radius: 3px
               border: 1px solid #aaaaaa
+          .phone
+            display: flex
+            font-size: 16px
+            justify-content:space-between
+            a
+             color:#ef7a00
           .listfoot
             display: flex
             font-size: 14px
