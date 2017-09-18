@@ -320,11 +320,12 @@ export default {
       })
     },
     confirm (data) {
-      console.log(data)
       if (data) {
         this.refresh = false
-        this.$router.push({path: '/recommend/', query: {isRefresh: true}})
-        window.location.reload()
+        this.$router.push('/')
+        setTimeout(() => {
+          window.location.reload()
+        }, 20)
       }
     },
     confirmClear() {},

@@ -5,7 +5,7 @@
         <ul class="item">
           <li v-for="(item, index) in projectList">
             <div class="title">
-              <p>需求单编号：<span> {{item.needsid}} </span></p>
+              <p>编号：<span> {{item.needsid}} </span></p>
               <p>共有<span> {{item.user_count == null ? '0' : item.user_count}} </span>人响应<span> {{item.project_count == null ? '0' : item.project_count}} </span>个项目</p>
             </div>
             <div class="top">
@@ -34,7 +34,7 @@
             </div>
             <div class="bottom">
               <a class="btn add" v-if="item.isstop === 0" @click="goUrlPath(item.needsid, index, item.addProjectUrl, item.addProject)" :class="item.addProject === '' ? 'noshow' : (item.isstop === 0 ? '' : 'noshow')">{{item.addProject}}</a>
-              <a v-else>已停止</a>
+              <a v-else class="stop">已停止</a>
               <a class="btn"  v-if="item.isstop === 0" @click="showPath(item.needsid, item.selectBtnUrl)" :class="item.selectBtn === '' ? 'noshow' : ''">{{item.selectBtn}}</a>
             </div>
           </li>
@@ -163,4 +163,7 @@
           color: #fff
         .noshow
           display: none
+        .stop
+          line-height: 30px
+          color: red
 </style>
