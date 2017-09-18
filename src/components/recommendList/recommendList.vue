@@ -5,24 +5,9 @@
   </div>
   <div class="title">
     <my-title :title="'需求列表'"></my-title>
-<<<<<<< Updated upstream
     <div ref="itemSelectTitle" class="title-all-sclect">
       <ul class="item-list-show xiangying-top">
         <li v-for="(item, index) in itemTop" :key="index" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
-=======
-    <ul class="xiangying-top">
-      <li v-for="(item, index) in itemTop" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
-    </ul>
-    <ul class="xiangying-center">
-      <li v-for="item in itemTopText">
-        <p>{{item.name}}</p>
-        <p>{{item.count}}</p>
-      </li>
-    </ul>
-    <div class="item-center">
-      <ul>
-        <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" v-for="(i, index) in itemCenter">{{i.type}}</li>
->>>>>>> Stashed changes
       </ul>
       <ul class="item-list-show xiangying-center">
         <li v-for="(item,index) in itemTopText" :key="index">
@@ -111,15 +96,11 @@
       :data="showProjectList"
       @scrollToEnd="searchMore">
       <div>
-<<<<<<< Updated upstream
         <RecommendList :projectList="showProjectList" :userId="userId" :userShowEvent="userShowEvent" @stop="stop" :btnDefault="btnDefault"></RecommendList>
         <loading v-show="hasMore" title=""></loading>
         <div v-show="!hasMore" class="no-result-wrapper">
           <p>{{noResultWrapper}}</p>
         </div>
-=======
-        <RecommendList :projectList="['1', '2', '3']" :userId="userId" :userShowEvent="userShowEvent"></RecommendList>
->>>>>>> Stashed changes
       </div>
     </scroll>
   </div>
@@ -130,17 +111,12 @@
 </template>
 
 <script>
-<<<<<<< Updated upstream
 import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, getNeedsName, setNeedsItem, stopNeeds } from 'api/recommendList'
-=======
-import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, getNeedsName } from 'api/recommendList'
->>>>>>> Stashed changes
 import Loading from 'base/loading/loading'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
 import PopBox from 'base/pop-box/pop-box'
 import RecommendList from 'base/recommend-list/recommend-list'
-<<<<<<< Updated upstream
 import Confirm from 'base/confirm/confirm'
 export default {
   data () {
@@ -150,12 +126,6 @@ export default {
       btnDefault: '',
       noResultWrapper: '',
       confirmText: '',
-=======
-export default {
-  data () {
-    return {
-      userId: 1,
->>>>>>> Stashed changes
       userShowEvent: '未响应',
       itemCenter: ['我的响应', '已响应', '未响应'],
       itemTop: ['今日响应', '本周响应', '本月响应'],
@@ -196,11 +166,7 @@ export default {
       }, {
         name: '100万以下',
         allPricemax: '100',
-<<<<<<< Updated upstream
         allPricemin: '全部'
-=======
-        allPricemin: 'all'
->>>>>>> Stashed changes
       }, {
         name: '100万-300万',
         allPricemax: '300',
@@ -211,7 +177,6 @@ export default {
         allPricemin: '300'
       }, {
         name: '500万以上',
-<<<<<<< Updated upstream
         allPricemax: '全部',
         allPricemin: '500'
       }],
@@ -221,28 +186,17 @@ export default {
       start: 0,
       length: 10,
       showProjectList: []
-=======
-        allPricemax: 'all',
-        allPricemin: '500'
-      }],
-      selectTypeIndex: 0,
-      jurisdictiont: -1
->>>>>>> Stashed changes
     }
   },
   created () {
     this._getUserbyid()
     this._getJurisdictiont()
     this._getProvincelist()
-<<<<<<< Updated upstream
     this._getTypeList()/*
     if (window.localStorage) {
       console.log(window.localStorage.getItem('isRefresh'))
     }
     console.log(this.$route) */
-=======
-    this._getTypeList()
->>>>>>> Stashed changes
   },
   methods: {
     recommendScroll (pos) {
@@ -269,7 +223,6 @@ export default {
       }, {
         type: '物业类型'
       }]
-<<<<<<< Updated upstream
       this.allPricemin = ''
       this.allPricemax = ''
       this.type = ''
@@ -280,14 +233,11 @@ export default {
       this.districtList = []
       this.selectTypeIndex = -1
       this.needsName = val.code
-=======
->>>>>>> Stashed changes
       this.userShowEvent = val.type
       this.showCitysList = false
       this.showTypeList = false
       this.start = 0
       this.itemCenterActive = index
-<<<<<<< Updated upstream
       const data = {
         timecode: this.itemTopIndex,
         start: 0,
@@ -295,15 +245,11 @@ export default {
         replycode: this.needsName
       }
       this._setNeedsItem(data)
-=======
-      this.$refs.itemCenterActiveSpan.style.left = index * 33.33 + '%'
->>>>>>> Stashed changes
     },
     selectTop (val, index) {
       this.itemTopIndex = index + 1
       this._getTimeData(this.itemTopIndex)
       this.itemTopActive = index
-<<<<<<< Updated upstream
       this.start = 0
       const data = {
         timecode: this.itemTopIndex,
@@ -319,9 +265,6 @@ export default {
         type: '物业类型'
       }]
       this._setNeedsItem(data)
-=======
-      console.log(this.itemTopIndex)
->>>>>>> Stashed changes
     },
     selectTypeList (val, index) {
       this.itemSelectTypeActive = index
@@ -334,19 +277,7 @@ export default {
       } else if (index === 1) {
         this.typeList = this.selectPrice
       } else {
-<<<<<<< Updated upstream
         this.typeList = this.typeListWuye
-=======
-        if (val.type === '总价') {
-          this.typeList = this.selectPrice
-        } else if (val.type === '物业类型') {
-          this.typeList = this.typeListWuye
-        }
-        this.showCitysList = false
-        setTimeout(() => {
-          this.showTypeList = true
-        }, 20)
->>>>>>> Stashed changes
       }
       this.showCitysList = false
       setTimeout(() => {
@@ -395,12 +326,9 @@ export default {
       this.district = item === '全部' ? 'all' : item
     },
     selectProvinceList () {
-<<<<<<< Updated upstream
       console.log(this.provinceActive)
       console.log(this.cityActive)
       console.log(this.districtlistActive)
-=======
->>>>>>> Stashed changes
       if (this.districtlistActive !== '') {
         if (this.districtlistActive === '全部') {
           this.itemSelectType[this.itemSelectTypeActive].type = this.cityActive
@@ -438,11 +366,7 @@ export default {
       this._setNeedsItem()
     },
     selectType (item, index) {
-<<<<<<< Updated upstream
       console.log(this.itemSelectTypeActive)
-=======
-      console.log(item.name)
->>>>>>> Stashed changes
       if (item.name === '全部') {
         if (this.itemSelectTypeActive === 1) {
           this.itemSelectType[this.itemSelectTypeActive].type = '总价'
@@ -472,11 +396,8 @@ export default {
       this.query = ''
       this.projectName = 'all'
       this.projectMsg = false
-<<<<<<< Updated upstream
       this.showProjectList = []
       this._setNeedsItem()
-=======
->>>>>>> Stashed changes
       setTimeout(() => {
         this.showTypeList = false
         this.selectTypeIndex = -1
@@ -484,13 +405,7 @@ export default {
       }, 20)
     },
     _getNeedsName () {
-<<<<<<< Updated upstream
       getNeedsName().then()
-=======
-      getNeedsName().then(res => {
-        console.log(res)
-      })
->>>>>>> Stashed changes
     },
     _getJurisdictiont () {
       getJurisdictiont().then(res => {
@@ -503,22 +418,14 @@ export default {
       getTypeList().then(res => {
         res.data.forEach((item, i) => {
           this.typeListWuye.push({
-<<<<<<< Updated upstream
             name: item,
             type: item
-=======
-            name: item
->>>>>>> Stashed changes
           })
         })
       })
       this.typeListWuye.unshift({
-<<<<<<< Updated upstream
         name: '全部',
         type: '全部'
-=======
-        name: '全部'
->>>>>>> Stashed changes
       })
     },
     _getProvincelist () {
@@ -558,10 +465,7 @@ export default {
       await getUserbyid().then(res => {
         this.userId = res.data.user.roleid
         if (this.userId === 1) { // 源泽
-<<<<<<< Updated upstream
           this.btnDefault = '未响应'
-=======
->>>>>>> Stashed changes
           this.itemCenter = [{
             type: '未响应',
             code: 2
@@ -573,10 +477,7 @@ export default {
             code: 5
           }]
         } else if (this.userId === 2) { // 经纪人
-<<<<<<< Updated upstream
           this.btnDefault = '未响应'
-=======
->>>>>>> Stashed changes
           this.itemCenter = [{
             type: '未响应',
             code: 2
@@ -588,10 +489,7 @@ export default {
             code: 3
           }]
         } else { // 0 案场
-<<<<<<< Updated upstream
           this.btnDefault = '去响应'
-=======
->>>>>>> Stashed changes
           this.itemCenter = [{
             type: '未响应',
             code: 2
@@ -601,7 +499,6 @@ export default {
           }]
         }
       })
-<<<<<<< Updated upstream
       const data = {
         timecode: this.itemTopIndex,
         start: this.start,
@@ -609,8 +506,6 @@ export default {
         replycode: 2
       }
       this._setNeedsItem(data)
-=======
->>>>>>> Stashed changes
       this._getTimeData(this.itemTopIndex)
       this._getNeedsName()
     },
@@ -618,7 +513,6 @@ export default {
       getTimeData(index).then(res => {
         this.itemTopText = res.data
       })
-<<<<<<< Updated upstream
     },
     _setNeedsItem (data) {
       this.noResultWrapper = ''
@@ -739,8 +633,6 @@ export default {
         selectBtn,
         selectBtnUrl
       }
-=======
->>>>>>> Stashed changes
     }
   },
   components: {
@@ -748,12 +640,8 @@ export default {
     Scroll,
     PopBox,
     Loading,
-<<<<<<< Updated upstream
     RecommendList,
     Confirm
-=======
-    RecommendList
->>>>>>> Stashed changes
   }
 }
 </script>
@@ -800,11 +688,7 @@ export default {
       .item-list-show
         display: flex
         background: #fff
-<<<<<<< Updated upstream
         padding: 8px 0
-=======
-        padding: 13px 0
->>>>>>> Stashed changes
         li
           color: black
           font-size: $font-size-medium
@@ -821,10 +705,7 @@ export default {
       .xiangying-top
         background: #f28666
         padding:0 5px 5px 5px
-<<<<<<< Updated upstream
         margin-top: -7px
-=======
->>>>>>> Stashed changes
         li
           line-height: 35px
           border: 1px solid #fff
@@ -845,16 +726,9 @@ export default {
       .xiangying-center
         display: flex
         justify-content: space-around
-<<<<<<< Updated upstream
         li
           border: none
           height: 25px
-=======
-        height: 34px
-        li
-          border: none
-          height: 34px
->>>>>>> Stashed changes
           p
             height: 17px
       .item-center
@@ -955,13 +829,8 @@ export default {
         color: white
     .list
       position: fixed
-<<<<<<< Updated upstream
       top: 155px
       bottom: 130px
-=======
-      top: 183px
-      bottom: 75px
->>>>>>> Stashed changes
       width: 100%
       padding-top: 50px
       .no-result-wrapper

@@ -1,6 +1,5 @@
 <template>
   <div>
-<<<<<<< Updated upstream
     <div>
       <div class="project-list" v-if="!!projectList.length">
         <ul class="item">
@@ -8,19 +7,10 @@
             <div class="title">
               <p>需求单编号：<span> {{item.needsid}} </span></p>
               <p>共有<span> {{item.user_count == null ? '0' : item.user_count}} </span>人响应<span> {{item.project_count == null ? '0' : item.project_count}} </span>个项目</p>
-=======
-    <div class="project-list">
-        <ul class="item">
-          <li v-for="item in projectList">
-            <div class="title">
-              <p>需求单编号：<span> 001 </span></p>
-              <p>共有<span> 5 </span>人响应<span> 8 </span>个项目</p>
->>>>>>> Stashed changes
             </div>
             <div class="top">
               <div>
                 <p>地区</p>
-<<<<<<< Updated upstream
                 <p class="color">{{item.city}}</p>
               </div>
               <div>
@@ -46,32 +36,6 @@
               <a class="btn add" v-if="item.isstop === 0" @click="goUrlPath(item.needsid, index, item.addProjectUrl, item.addProject)" :class="item.addProject === '' ? 'noshow' : (item.isstop === 0 ? '' : 'noshow')">{{item.addProject}}</a>
               <a v-else class="stop">已停止</a>
               <a class="btn"  v-if="item.isstop === 0" @click="showPath(item.needsid, item.selectBtnUrl)" :class="item.selectBtn === '' ? 'noshow' : ''">{{item.selectBtn}}</a>
-=======
-                <p class="color">浦东新区</p>
-              </div>
-              <div>
-                <p>面积</p>
-                <p class="color">350平米</p>
-              </div>
-              <div>
-                <p>预算</p>
-                <p class="color">3-5万/平米</p>
-              </div>
-              <div>
-                <p>物业类型</p>
-                <p class="color">别墅</p>
-              </div>
-            </div>
-            <div class="middle">
-              <p>响应项目名：<span>东鼎名人府邸</span><span>东鼎名人府邸</span><span>东鼎名人府邸</span></p>
-            </div>
-            <div class="middle">
-              <p>发布时间：<span>12/11 10:23</span></p>
-            </div>
-            <div class="bottom">
-              <router-link tag="li" :to="`/demandetail/1/${addProjectUrl}`" class="btn add" :class="addProject === '' ? 'noshow' : ''">{{addProject}}</router-link>
-              <router-link tag="li" :to="`/demandetail/1/${selectBtnUrl}`" class="btn"  :class="selectBtn === '' ? 'noshow' : ''">{{selectBtn}}</router-link>
->>>>>>> Stashed changes
             </div>
           </li>
         </ul>
@@ -101,61 +65,10 @@
     },
     data () {
       return {
-<<<<<<< Updated upstream
         addProject: '',
         selectBtn: '',
         addProjectUrl: 1,
         selectBtnUrl: 1
-=======
-        addProject: this.userId === 1 ? '' : (this.userId === 2 ? '停止' : (this.userId === 3 ? '响应' : '')),
-        selectBtn: this.userId === 1 ? '匹配项目' : (this.userId === 2 ? '' : (this.userId === 3 ? '' : '')),
-        addProjectUrl: 1,
-        selectBtnUrl: 1
-      }
-    },
-    watch: {
-      userShowEvent (newVal) {
-        if (this.userId === 1) { // 源泽
-          if (newVal === '未响应') {
-            this.addProject = ''
-            this.selectBtn = '去响应'
-            this.selectBtnUrl = 2
-          } else if (newVal === '我的响应') {
-            this.addProject = '追加响应'
-            this.addProjectUrl = 3
-            this.selectBtn = '查看响应'
-            this.selectBtnUrl = 1
-          } else if (newVal === '所有响应') {
-            this.addProject = '追加响应'
-            this.addProjectUrl = 3
-            this.selectBtn = '查看响应'
-            this.selectBtnUrl = 1
-          }
-        } else if (this.userId === 2) { // 经纪人
-          if (newVal === '未响应') {
-            this.addProject = '停止'
-            this.selectBtn = ''
-          } else if (newVal === '已响应') {
-            this.addProject = '停止'
-            this.selectBtn = '查看响应'
-            this.selectBtnUrl = 1
-          } else if (newVal === '已停止') {
-            this.addProject = ''
-            this.selectBtn = ''
-          }
-        } else {
-          if (newVal === '未响应') { // 案场
-            this.addProject = '去响应'
-            this.addProjectUrl = 2
-            this.selectBtn = ''
-          } else if (newVal === '我的响应') {
-            this.addProject = '追加响应'
-            this.addProjectUrl = 3
-            this.selectBtn = '查看响应'
-            this.selectBtnUrl = 1
-          }
-        }
->>>>>>> Stashed changes
       }
     },
     created () {},
@@ -179,13 +92,10 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
-<<<<<<< Updated upstream
   .no-project-list
     p
       line-height: 40px
       text-align: center
-=======
->>>>>>> Stashed changes
   .project-list
     .item
       margin-top: 10px
@@ -194,10 +104,7 @@
         margin: 0 10px
         border-radius: 4px
         margin-bottom: 10px
-<<<<<<< Updated upstream
         overflow: hidden
-=======
->>>>>>> Stashed changes
       .title
         padding: 0 10px
         background: #dcdcdc
@@ -241,10 +148,7 @@
       .bottom
         text-align: right
         padding: 0 10px 10px
-<<<<<<< Updated upstream
         height: 30px
-=======
->>>>>>> Stashed changes
         .btn
           display: inline-block
           text-align: center
@@ -259,10 +163,7 @@
           color: #fff
         .noshow
           display: none
-<<<<<<< Updated upstream
         .stop
           line-height: 30px
           color: red
-=======
->>>>>>> Stashed changes
 </style>

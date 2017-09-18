@@ -47,7 +47,6 @@ export function getTimeData (num) {
   return $api.get(url)
 }
 
-<<<<<<< Updated upstream
 export function setNeedsItem (data) {
   const url = '/needs/getneedsitem'
 
@@ -58,10 +57,4 @@ export function stopNeeds (data) {
   const url = `/needs/stopneeds/${data}`
 
   return $api.post(url)
-=======
-export function getNeedsName (num) {
-  const url = `/needs/getneedsname`
-
-  return $api.get(url)
->>>>>>> Stashed changes
 }

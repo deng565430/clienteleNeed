@@ -32,11 +32,7 @@
       this.touch = {}
     },
     mounted() {
-<<<<<<< Updated upstream
       this.$refs.showType.style.top = this.posTop + 190 + 'px'
-=======
-      this.$refs.showType.style.top = this.posTop + 210 + 'px'
->>>>>>> Stashed changes
     },
     components: {
       Scroll
