@@ -47,12 +47,6 @@ export function getTimeData (num) {
   return $api.get(url)
 }
 
-export function getNeedsName (num) {
-  const url = `/needs/getneedsname`
-
-  return $api.get(url)
-}
-
 export function setNeedsItem (data) {
   const url = '/needs/getneedsitem'
 

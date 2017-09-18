@@ -320,6 +320,7 @@ export default {
       })
     },
     confirm (data) {
+      console.log(data)
       if (data) {
         this.refresh = false
         this.$router.push('/')
