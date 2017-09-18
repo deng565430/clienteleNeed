@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, getNeedsName, setNeedsItem, stopNeeds } from 'api/recommendList'
+import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, setNeedsItem, stopNeeds } from 'api/recommendList'
 import Loading from 'base/loading/loading'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
@@ -404,9 +404,6 @@ export default {
         this.$refs.scroll.enable()
       }, 20)
     },
-    _getNeedsName () {
-      getNeedsName().then()
-    },
     _getJurisdictiont () {
       getJurisdictiont().then(res => {
         if (res.code === 0) {
@@ -507,7 +504,6 @@ export default {
       }
       this._setNeedsItem(data)
       this._getTimeData(this.itemTopIndex)
-      this._getNeedsName()
     },
     _getTimeData (index) {
       getTimeData(index).then(res => {
