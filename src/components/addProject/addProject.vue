@@ -324,9 +324,9 @@ export default {
       if (data) {
         this.refresh = false
         this.$router.push('/')
-        setTimeout(() => {
+        /* setTimeout(() => {
           window.location.reload()
-        }, 20)
+        }, 20) */
       }
     },
     confirmClear() {},
