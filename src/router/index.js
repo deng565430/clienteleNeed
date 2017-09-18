@@ -19,10 +19,12 @@ const DemandDetail = (resolve) => {
 export default [
   {
     path: '/',
-    component: RecommendList
-  }, {
-    path: '/recommend',
     component: RecommendList,
+    meta: { keepAlive: true }
+  }, {
+    path: '/recommend/',
+    component: RecommendList,
+    meta: { keepAlive: true },
     name: 'recommendList'
   }, {
     path: '/addProject',

@@ -192,7 +192,11 @@ export default {
     this._getUserbyid()
     this._getJurisdictiont()
     this._getProvincelist()
-    this._getTypeList()
+    this._getTypeList()/*
+    if (window.localStorage) {
+      console.log(window.localStorage.getItem('isRefresh'))
+    }
+    console.log(this.$route) */
   },
   methods: {
     recommendScroll (pos) {
@@ -401,9 +405,7 @@ export default {
       }, 20)
     },
     _getNeedsName () {
-      getNeedsName().then(res => {
-        console.log(res)
-      })
+      getNeedsName().then()
     },
     _getJurisdictiont () {
       getJurisdictiont().then(res => {

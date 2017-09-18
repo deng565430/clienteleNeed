@@ -50,7 +50,7 @@
               <div>
                 <label>客户数量:
                   <span>  </span><br/>
-                  <input type="text/submit/hidden/button/etc" name="" v-model="clientcount"  placeholder="填写人数"> 人
+                  <input type="text" name="" v-model="clientcount"  placeholder="填写人数"> 人
                 </label>
               </div>
             </div>
@@ -58,13 +58,13 @@
           <div class="item-bg">
             <div class="item-100">
               <div>
-                <label>总面积:
+                <div class="item-area">总面积:
                   <span> * </span>
                   <div class="item-input">
-                    <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="startArea"  placeholder="平方">  平方米 ~
-                    <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="endArea" placeholder="平方">  平方米
+                    <input type="text" name="startArea" v-model="startArea"  placeholder="输入数字">  平方米 ~
+                    <input type="text" name="startArea" v-model="endArea" placeholder="输入数字">  平方米
                   </div>
-                </label>
+                </div>
               </div>
             </div>
           </div>
@@ -73,7 +73,7 @@
               <div>
                 <label>最高预算:
                   <span> * </span><br/>
-                  <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额">  万元
+                  <input type="text" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额">  万元
                 </label>
               </div>
             </div>
@@ -102,7 +102,7 @@
             </div>
             <div class="item-50">
               <div>
-                <label>户型:
+                <div class="item-houseHome">户型:
                   <span>  </span><br/>
                   <select name="" class="select-50" v-model="houseHome">
                     <option value="1">1</option>
@@ -126,7 +126,7 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                   </select> 厅
-                </label>
+                </div>
               </div>
             </div>
           </div>
@@ -191,7 +191,7 @@
     </scroll>
   </div>
   <div>
-    <confirm ref="confirm" :text="confirmText"></confirm>
+    <confirm ref="confirm" :text="confirmText" :refresh="refresh" @confirm="confirm"></confirm>
   </div>
 </div>
 </template>
@@ -238,6 +238,7 @@ export default {
         value: '100'
       }],
       disabled: true,
+      refresh: false,
       province: '全部',
       provinceList: [],
       city: '全部',
@@ -309,22 +310,26 @@ export default {
       }
       sendProject(data).then(res => {
         if (res.code === 0) {
-          this.confirmText = '添加成功！'
+          this.refresh = true
+          this.confirmText = '添加成功'
           this.$refs.confirm.show()
-          setTimeout(() => {
-            this.$router.push('/')
-          }, 500)
         } else {
           this.confirmText = res.msg ? res.msg : '服务器内部错误！'
           this.$refs.confirm.show()
         }
       })
+    },
+    confirm (data) {
       console.log(data)
+      if (data) {
+        this.refresh = false
+        this.$router.push({path: '/recommend/', query: {isRefresh: true}})
+        window.location.reload()
+      }
     },
     confirmClear() {},
     confirmBtnText() {},
     selectProvince() {
-      console.log(this.province)
       this.city = '全部'
       this.district = '全部'
       this.cityList = []
@@ -438,6 +443,31 @@ export default {
                 &::placeholder
                   padding-left: 10px
                   font-size: $font-size-small
+            .item-houseHome
+              color: #333
+              line-height: 30px
+              span
+                color: red
+              .select
+                width: 100%
+                height: 30px
+                border-radius: 4px
+                border: 1px solid #ccc
+                color: #666
+              .select-50
+                width: 30%
+                height: 30px
+                border-radius: 4px
+                border: 1px solid #ccc
+                color: #666
+              >input
+                border: 1px solid #ccc
+                width:70%
+                height: 30px
+                border-radius: 4px
+                &::placeholder
+                  padding-left: 10px
+                  font-size: $font-size-small
         .item-100
           display: inline-block
           width: 100%
@@ -484,7 +514,7 @@ export default {
                     transform:matrix(-0.766044,-0.642788,-0.642788,0.766044,0,0)
                     border-color: #37AF6E
                     background-color: #37AF6E
-            label
+            .item-area
               line-height: 40px
               span
                 color: red

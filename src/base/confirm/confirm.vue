@@ -28,6 +28,10 @@
       cancelBtnText: {
         type: String,
         default: '取消'
+      },
+      refresh: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -48,7 +52,7 @@
       },
       confirm() {
         this.hide()
-        this.$emit('confirm')
+        this.$emit('confirm', this.refresh)
       }
     }
   }

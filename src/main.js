@@ -6,7 +6,7 @@ import VueRouter from 'vue-router'
 import App from './App'
 import routes from './router'
 import fastclick from 'fastclick'
-import { routerMode } from './config/env'
+import { routerMode } from './config/env'  // 打包项目要把mode: history注释掉
 import './config/rem'
 import VueLazyload from 'vue-lazyload'
 
@@ -23,7 +23,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes,
-  mode: routerMode,
+  mode: routerMode, // 打包项目要把mode: history注释掉
   strict: process.env.NODE_ENV !== 'production',
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {
