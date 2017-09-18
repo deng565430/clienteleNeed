@@ -148,7 +148,7 @@ export default {
       })
     },
     alocked (item, index) {
-      if (!item.state) {
+      if (item.state) {
         this.ids.push(item.id)
         this.checkednum.push(index)
       } else {
@@ -248,7 +248,7 @@ export default {
       height: 60px
       width: 100%
       background: #eee
-      z-index: 11111
+      z-index: 111
       display: flex
       align-items: center
       .submits
