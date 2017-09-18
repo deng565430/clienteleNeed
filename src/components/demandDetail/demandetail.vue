@@ -34,7 +34,7 @@
           <div class="listTitle">
             <div>{{item.title}}</div>
             <div v-if="estate != 1">
-              <input type="checkbox" class="checkbos" ref="checkboxs" :disabled="item.belong" :id="item.id" v-model="item.state"  @click="alocked(item, index)"/>
+              <input type="checkbox" class="checkbos" ref="checkboxs" :disabled="item.belong" :id="item.id" v-model="item.state"  @change="alocked(item, index)"/>
             </div>
           </div>
           <img height="150" width="100%"  v-lazy="'http://sofmanager.fangsir007.com/image/' + item.img"  @click="details(item.id)"/>
@@ -148,6 +148,7 @@ export default {
       })
     },
     alocked (item, index) {
+      console.log(item.state)
       if (item.state) {
         this.ids.push(item.id)
         this.checkednum.push(index)
@@ -159,6 +160,7 @@ export default {
           }
         })
       }
+      console.log(this.ids)
     },
     submit () {
       console.log(this.checkednum)
@@ -176,8 +178,9 @@ export default {
             this.text = '添加成功'
             this.$refs.confirm.showFlag = true
             this.checkednum.forEach((i) => {
-              this.$refs.checkboxs[i].disabled = true
-              console.log(this.$refs.checkboxs[i].disabled)
+              console.log(i)
+              this.scrolldata[i].belong = true
+              // this.$refs.checkboxs[i].disabled = true
             })
           } else {
             this.text = '添加失败'
