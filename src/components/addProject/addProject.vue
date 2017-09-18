@@ -50,7 +50,11 @@
               <div>
                 <label>客户数量:
                   <span>  </span><br/>
+<<<<<<< Updated upstream
                   <input type="text" name="" v-model="clientcount"  placeholder="填写人数"> 人
+=======
+                  <input type="text/submit/hidden/button/etc" name="" v-model="clientcount"  placeholder="填写人数"> 人
+>>>>>>> Stashed changes
                 </label>
               </div>
             </div>
@@ -58,11 +62,19 @@
           <div class="item-bg">
             <div class="item-100">
               <div>
+<<<<<<< Updated upstream
                 <div class="item-area">总面积:
                   <span> * </span>
                   <div class="item-input">
                     <input type="text" name="startArea" v-model="startArea"  placeholder="输入数字">  平方米 ~
                     <input type="text" name="startArea" v-model="endArea" placeholder="输入数字">  平方米
+=======
+                <label>总面积:
+                  <span> * </span>
+                  <div class="item-input">
+                    <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="startArea"  placeholder="平方">  平方米 ~
+                    <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="endArea" placeholder="平方">  平方米
+>>>>>>> Stashed changes
                   </div>
                 </div>
               </div>
@@ -73,7 +85,11 @@
               <div>
                 <label>最高预算:
                   <span> * </span><br/>
+<<<<<<< Updated upstream
                   <input type="text" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额">  万元
+=======
+                  <input type="text/submit/hidden/button/etc" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额">  万元
+>>>>>>> Stashed changes
                 </label>
               </div>
             </div>
@@ -191,7 +207,11 @@
     </scroll>
   </div>
   <div>
+<<<<<<< Updated upstream
     <confirm ref="confirm" :text="confirmText" :refresh="refresh" @confirm="confirm"></confirm>
+=======
+    <confirm ref="confirm" :text="confirmText"></confirm>
+>>>>>>> Stashed changes
   </div>
 </div>
 </template>
@@ -238,7 +258,10 @@ export default {
         value: '100'
       }],
       disabled: true,
+<<<<<<< Updated upstream
       refresh: false,
+=======
+>>>>>>> Stashed changes
       province: '全部',
       provinceList: [],
       city: '全部',
@@ -249,7 +272,11 @@ export default {
       startArea: '',
       endArea: '',
       theHeightBudget: '',
+<<<<<<< Updated upstream
       tenementType: '',
+=======
+      tenementType: '全部',
+>>>>>>> Stashed changes
       tenementTypeList: [],
       proportion: '',
       houseHome: '',
@@ -276,12 +303,20 @@ export default {
         this.$refs.confirm.show()
         return
       }
+<<<<<<< Updated upstream
       if (this._trim(this.startArea) === '') {
+=======
+      if (this.startArea === '') {
+>>>>>>> Stashed changes
         this.confirmText = '请输入总面积范围'
         this.$refs.confirm.show()
         return
       }
+<<<<<<< Updated upstream
       if (this._trim(this.endArea) === '') {
+=======
+      if (this.endArea === '') {
+>>>>>>> Stashed changes
         this.confirmText = '请输入总面积范围'
         this.$refs.confirm.show()
         return
@@ -296,8 +331,13 @@ export default {
         city: this.city,
         district: this.district ? this.district : null,
         clientcount: this.clientcount ? this.clientcount : null,
+<<<<<<< Updated upstream
         start_area: this._trim(this.startArea) ? this._trim(this.startArea) : null,
         end_area: this._trim(this.endArea) ? this._trim(this.endArea) : null,
+=======
+        tart_area: this.startArea ? this.startArea : null,
+        end_area: this.endArea ? this.endArea : null,
+>>>>>>> Stashed changes
         price: this.theHeightBudget ? this.theHeightBudget : null,
         type: this.tenementType ? this.tenementType : null,
         scale: this.proportion ? this.proportion : null,
@@ -310,14 +350,23 @@ export default {
       }
       sendProject(data).then(res => {
         if (res.code === 0) {
+<<<<<<< Updated upstream
           this.refresh = true
           this.confirmText = '添加成功'
           this.$refs.confirm.show()
+=======
+          this.confirmText = '成功, 三秒之后跳到需求列表！'
+          this.$refs.confirm.show()
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 3000)
+>>>>>>> Stashed changes
         } else {
           this.confirmText = res.msg ? res.msg : '服务器内部错误！'
           this.$refs.confirm.show()
         }
       })
+<<<<<<< Updated upstream
     },
     confirm (data) {
       console.log(data)
@@ -328,10 +377,17 @@ export default {
           window.location.reload()
         }, 20)
       }
+=======
+      console.log(data)
+>>>>>>> Stashed changes
     },
     confirmClear() {},
     confirmBtnText() {},
     selectProvince() {
+<<<<<<< Updated upstream
+=======
+      console.log(this.province)
+>>>>>>> Stashed changes
       this.city = '全部'
       this.district = '全部'
       this.cityList = []
@@ -341,6 +397,7 @@ export default {
       getCitylist(this.province).then(res => {
         this.cityList = res.data
       })
+<<<<<<< Updated upstream
     },
     selectCity () {
       this.districtList = []
@@ -366,6 +423,30 @@ export default {
     },
     _trim(str) {
       return str.replace(/(^\s+)|(\s+$)/g, '')
+=======
+    },
+    selectCity () {
+      this.districtList = []
+      this.district = '全部'
+      if (this.city === '全部') {
+        return
+      }
+      getDistirctlist(this.province, this.city).then(res => {
+        this.districtList = res.data
+      })
+    },
+    selectDistrict () {},
+    beforeScroll () {},
+    _getProvincelist () {
+      getProvincelist().then(res => {
+        this.provinceList = res.data
+      })
+    },
+    _getTypeList () {
+      getTypeList().then(res => {
+        this.tenementTypeList = res.data
+      })
+>>>>>>> Stashed changes
     }
   },
   components: {
@@ -428,6 +509,7 @@ export default {
               .select
                 width: 100%
                 height: 30px
+<<<<<<< Updated upstream
                 border-radius: 4px
                 border: 1px solid #ccc
                 color: #666
@@ -453,6 +535,8 @@ export default {
               .select
                 width: 100%
                 height: 30px
+=======
+>>>>>>> Stashed changes
                 border-radius: 4px
                 border: 1px solid #ccc
                 color: #666

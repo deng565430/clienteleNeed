@@ -2,11 +2,16 @@
   <div id="app" @touchmove.prevent>
   	<transition name="router-fade" mode="out-in">
       <keep-alive>
+<<<<<<< Updated upstream
           <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
     </transition>
     <transition name="router-fade" mode="out-in">
       <router-view v-if="!$route.meta.keepAlive"></router-view>
+=======
+        <router-view></router-view>
+      </keep-alive>
+>>>>>>> Stashed changes
     </transition>
   </div>
 </template>
