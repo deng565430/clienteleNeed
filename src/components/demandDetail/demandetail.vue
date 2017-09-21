@@ -29,6 +29,12 @@
             <span class="tags" v-if="needs.decoration">{{needs.decoration}}</span>
           </div>
         </div>
+        <div class="demand bezhu">
+          <div class="titles">备注信息：</div>
+          <div class="dcontent">
+            {{needs.msg}}
+          </div>
+        </div>
         <h2><span class="icon"></span>推荐楼盘</h2>
         <div  class="lists"  v-for="(item, index) in scrolldata" >
           <div class="listTitle">
@@ -292,8 +298,7 @@ export default {
           display: flex
           background: #fff
           padding: 10px 0
-          border-bottom: 1px solid #d4d3d2 
-          margin-bottom: 10px
+          border-bottom: 1px solid #d4d3d2
           .dcontent
             padding-right:12px
             flex: 2.7
@@ -317,6 +322,15 @@ export default {
               background-size:100% 100%
               margin-right: 12px
               vertical-align: middle
+
+        .bezhu
+          margin-top: 0 
+          margin-bottom: 10px
+          line-height:25px
+          display: flex
+          background: #fff
+          padding: 10px 0
+          border-bottom: 1px solid #d4d3d2
         .bottoms
           text-align:center
           line-height: 30px
