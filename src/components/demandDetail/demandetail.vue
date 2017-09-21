@@ -24,7 +24,7 @@
             <span class="tags" v-if="needs.scale">首付{{needs.scale}}%</span>
             <span class="tags"> <span  v-if="needs.room">{{needs.room}}室</span><span v-if="needs.hall">{{needs.hall}}厅</span></span>
             <span class="tags" v-if="needs.census">{{needs.census}}</span>
-            <span class="tags" v-if="needs.floor">{{needs.floor}}楼</span>
+            <span class="tags" v-if="needs.floor">{{needs.floor}}</span>
             <span class="tags" v-if="needs.ensure">{{needs.ensure}}</span>
             <span class="tags" v-if="needs.decoration">{{needs.decoration}}</span>
           </div>
