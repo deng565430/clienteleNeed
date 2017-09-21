@@ -5,7 +5,7 @@
         <ul class="item">
           <li v-for="(item, index) in projectList">
             <div class="title">
-              <p>需求单编号：<span> {{item.needsid}} </span></p>
+              <p>编号：<span> {{item.needsid}} </span></p>
               <p>共有<span> {{item.user_count == null ? '0' : item.user_count}} </span>人响应<span> {{item.project_count == null ? '0' : item.project_count}} </span>个项目</p>
             </div>
             <div class="top">
@@ -130,6 +130,7 @@
           border-bottom: 1px solid #eee
           p
             line-height: 30px
+            no-wrap()
           .color
             color: #e5672c
       .middle

@@ -182,6 +182,14 @@
                 </label>
               </div>
             </div>
+            <div class="item-100">
+              <div>
+                <label>备注:
+                  <span>  </span><br/>
+                  <textarea name="" v-model="textarea" class="textarea" placeholder="备注信息" rows = "3"></textarea>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
         <div class="user-send">
@@ -257,7 +265,8 @@ export default {
       register: '',
       floor: '',
       social: '',
-      fitment: ''
+      fitment: '',
+      textarea: ''
     }
   },
   created () {
@@ -306,7 +315,8 @@ export default {
         census: this.register ? this.register : null,
         floor: this.floor ? this.floor : null,
         ensure: this.social ? this.social : null,
-        decoration: this.fitment ? this.fitment : null
+        decoration: this.fitment ? this.fitment : null,
+        msg: this.textarea ? this.textarea : null
       }
       sendProject(data).then(res => {
         if (res.code === 0) {
@@ -475,6 +485,9 @@ export default {
           width: 100%
           box-sizing: border-box
           padding: 10px
+          .textarea
+            width: 95%
+            margin-top: 10px
           >div
             width: 100%
             border-radius: 3px

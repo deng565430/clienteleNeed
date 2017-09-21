@@ -4,7 +4,7 @@
     <confirm ref="confirm" :text="confirmText"></confirm>
   </div>
   <div class="title">
-    <my-title :title="'需求列表'"></my-title>
+    <my-title :title="'需求列表'" class="title-top"></my-title>
     <div ref="itemSelectTitle" class="title-all-sclect">
       <ul class="item-list-show xiangying-top">
         <li v-for="(item, index) in itemTop" :key="index" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
@@ -679,12 +679,14 @@ export default {
       color: white
       top: 0
       background: #eee
+      .title-top
+        height: 50px
       .title-all-sclect
         position: relative
       .item-list-show
         display: flex
         background: #fff
-        padding: 8px 0
+        height: 37px
         li
           color: black
           font-size: $font-size-medium
