@@ -7,12 +7,7 @@ export function getlist (needsId, status, start, length) {
 }
 
 export function addResponse (needsId, projectId, status) {
-  const url = '/responseForm/addResponseForm'
+  const url = `/responseForm/addResponseForm?needsId=${needsId}&projectId=${projectId}&status=${status}`
 
-  const data = {
-    needsId,
-    projectId,
-    status
-  }
-  return $api.get(url, data)
+  return $api.get(url)
 }

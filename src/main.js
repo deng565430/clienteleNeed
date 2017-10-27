@@ -12,6 +12,12 @@ import VueLazyload from 'vue-lazyload'
 
 import 'common/stylus/index.styl'
 
+// 移动调试
+/* eslint-disable no-unused-vars */
+// import vConsole from 'vconsole'
+
+console.log('text')
+
 // 解决移动端300毫秒的延迟
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {

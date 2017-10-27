@@ -4,9 +4,9 @@
     <my-title :title="'详情页'"></my-title>
   </div>
   <div class="scrolls">
-    <scroll 
-    ref="scroll" 
-    class="list" 
+    <scroll
+    ref="scroll"
+    class="list"
     :data="scrolldata"
     :pullup="pullup"
     @scrollToEnd="scrollToEnd">
@@ -24,7 +24,7 @@
             <span class="tags" v-if="needs.scale">首付{{needs.scale}}%</span>
             <span class="tags"> <span  v-if="needs.room">{{needs.room}}室</span><span v-if="needs.hall">{{needs.hall}}厅</span></span>
             <span class="tags" v-if="needs.census">{{needs.census}}</span>
-            <span class="tags" v-if="needs.floor">{{needs.floor}}</span>
+            <span class="tags" v-if="needs.floor">楼层要求：{{needs.floor}}</span>
             <span class="tags" v-if="needs.ensure">{{needs.ensure}}</span>
             <span class="tags" v-if="needs.decoration">{{needs.decoration}}</span>
           </div>
@@ -47,7 +47,7 @@
           <div class="listfoot" v-if="!item.username">
             <div class="left">
               <div class="leftt lefttop">
-                <span v-if="item.area">{{item.area}}</span> 
+                <span v-if="item.area">{{item.area}}</span>
                 <span v-if="item.price">{{item.price}}万</span>
                 <span v-if="item.type"> | {{item.type}}</span>
               </div>
@@ -62,7 +62,7 @@
             <div class="pright">电话：<a :href="'tel:' + item.phone">{{item.phone}}</a></div>
           </div>
         </div>
-        
+
        <div v-if="lodaingicon">
          <Loading></Loading>
        </div>
@@ -81,7 +81,7 @@
       <Confirm :text="text" ref="confirm"></Confirm>
     </div>
   </div>
-  
+
 </div>
 </template>
 
@@ -135,11 +135,11 @@ export default {
     _getlist () {
       var that = this
       getlist(this.id, this.estate, this.pagenum, 10).then((res) => {
-        if (res.code === 0) {
+        if (res.data.code === 0) {
           that.lodaingicon = false
-          if (res.data) {
-            that.scrolldata = res.data.list
-            that.needs = res.data.needs
+          if (res.data.data) {
+            that.scrolldata = res.data.data.list
+            that.needs = res.data.data.needs
           } else {
             this.results = true
           }
@@ -180,7 +180,8 @@ export default {
         this.$refs.confirm.showFlag = true
       } else {
         addResponse(this.id, this.ids, this.estate).then((res) => {
-          if (res.code === 0) {
+          console.log(this.id, this.ids, this.estate)
+          if (res.data.code === 0) {
             this.text = '添加成功'
             this.$refs.confirm.showFlag = true
             this.checkednum.forEach((i) => {
@@ -208,11 +209,11 @@ export default {
       var that = this
       this.lodaingicon = true
       getlist(this.id, this.estate, this.pagenum + 1, 10).then((res) => {
-        if (res.code === 0) {
+        if (res.data.code === 0) {
           that.lodaingicon = false
-          if (res.data) {
-            for (var i = 0; i < res.data.list.length; i++) {
-              that.scrolldata.push(res.data.list[i])
+          if (res.data.data) {
+            for (var i = 0; i < res.data.data.list.length; i++) {
+              that.scrolldata.push(res.data.data.list[i])
             }
             that.pagenum++
           } else {
@@ -324,7 +325,7 @@ export default {
               vertical-align: middle
 
         .bezhu
-          margin-top: 0 
+          margin-top: 0
           margin-bottom: 10px
           line-height:25px
           display: flex
