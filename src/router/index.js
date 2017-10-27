@@ -27,7 +27,7 @@ export default [
     meta: { keepAlive: true },
     name: 'recommendList'
   }, {
-    path: '/addProject',
+    path: '/addProject/:id',
     name: 'addProject',
     component: AddProject
   }, {

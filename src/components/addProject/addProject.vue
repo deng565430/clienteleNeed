@@ -7,7 +7,7 @@
     <scroll ref="scroll" class="list" :beforeScroll="true" @beforeScroll="beforeScroll">
       <div>
         <div class="select-list">
-          <div class="sof-hint">
+          <div class="sof-hint" v-if="!isDisable">
             <p>温馨提示： 带 <span> * </span> 号是必填项</p>
           </div>
           <div class="item-bg">
@@ -15,10 +15,11 @@
               <div>
                 <label>省:
                   <span> * </span><br/>
-                  <select name="" class="select" v-model="province" @change="selectProvince">
+                  <select name="" class="select" v-model="province" @change="selectProvince" v-if="!isDisable">
                     <option value="全部" selected="selected">全部</option>
                     <option :value="item" v-for="item in provinceList">{{item}}</option>
                   </select>
+                  <input v-else type="text" name="" v-model="province" :disabled="isDisable">
                 </label>
               </div>
             </div>
@@ -26,10 +27,11 @@
               <div>
                 <label>市:
                   <span> * </span><br/>
-                  <select name="" class="select" v-model="city" @change="selectCity">
+                  <select name="" class="select" v-model="city" @change="selectCity" v-if="!isDisable">
                     <option value="全部" selected="selected">全部</option>
                     <option :value="item" v-for="item in cityList">{{item}}</option>
                   </select>
+                  <input v-else type="text" name="" v-model="city" :disabled="isDisable">
                 </label>
               </div>
             </div>
@@ -39,10 +41,11 @@
               <div>
                 <label>区:
                   <span>  </span><br/>
-                  <select name="" class="select" v-model="district" @change="selectDistrict">
+                  <select name="" class="select" v-model="district" @change="selectDistrict" v-if="!isDisable">
                     <option value="全部" selected="selected">全部</option>
                     <option :value="item" v-for="item in districtList">{{item}}</option>
                   </select>
+                  <input v-else type="text" name="" v-model="district" :disabled="isDisable">
                 </label>
               </div>
             </div>
@@ -50,7 +53,17 @@
               <div>
                 <label>客户数量:
                   <span>  </span><br/>
-                  <input type="text" name="" v-model="clientcount"  placeholder="填写人数"> 人
+                  <input type="text" name="" v-model="clientcount"  placeholder="填写人数" :disabled="isDisable"> 人
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="item-bg">
+            <div class="item-100">
+              <div>
+                <label class="needName">需求单名称:
+                  <span>  </span><br/>
+                  <input type="text" name="" v-model="needName"  placeholder="此条需求的简称！（限5个字）"  :disabled="isDisable"/>
                 </label>
               </div>
             </div>
@@ -61,8 +74,8 @@
                 <div class="item-area">总面积:
                   <span> * </span>
                   <div class="item-input">
-                    <input type="text" name="startArea" v-model="startArea"  placeholder="输入数字">  平方米 ~
-                    <input type="text" name="startArea" v-model="endArea" placeholder="输入数字">  平方米
+                    <input type="text" name="startArea" v-model="startArea"  placeholder="输入数字" :disabled="isDisable">  平方米 ~
+                    <input type="text" name="startArea" v-model="endArea" placeholder="输入数字" :disabled="isDisable">  平方米
                   </div>
                 </div>
               </div>
@@ -73,7 +86,7 @@
               <div>
                 <label>最高预算:
                   <span> * </span><br/>
-                  <input type="text" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额">  万元
+                  <input type="text" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额" :disabled="isDisable">  万元
                 </label>
               </div>
             </div>
@@ -81,7 +94,7 @@
               <div>
                 <label>物业类型:
                   <span> * </span><br/>
-                  <select name="" class="select" v-model="tenementType">
+                  <select name="" class="select" v-model="tenementType" :disabled="isDisable">
                     <option value="全部">全部</option>
                     <option :value="item" v-for="item in tenementTypeList">{{item}}</option>
                   </select>
@@ -94,7 +107,7 @@
               <div>
                 <label>首付比例:
                   <span> </span><br/>
-                  <select name="" class="select" v-model="proportion">
+                  <select name="" class="select" v-model="proportion" :disabled="isDisable">
                     <option :value ="item.value" v-for="(item, index) in ratio" :key="index">{{item.value}} %</option>
                   </select>
                 </label>
@@ -104,7 +117,7 @@
               <div>
                 <div class="item-houseHome">户型:
                   <span>  </span><br/>
-                  <select name="" class="select-50" v-model="houseHome">
+                  <select name="" class="select-50" v-model="houseHome" :disabled="isDisable">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -115,7 +128,7 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                   </select> 室 &nbsp;
-                  <select name="" class="select-50" v-model="houseHall">
+                  <select name="" class="select-50" v-model="houseHall" :disabled="isDisable">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -135,8 +148,8 @@
               <div>
                 <p>户籍:</p>
                 <div class="radio">
-                  <label><span class="pay_list_c1 on"><input name="Fruit1" type="radio" value="1" class="radioclass" v-model="register"/></span>&nbsp; 本地 </label>
-                  <label><input name="Fruit1" type="radio" value="2"  v-model="register"/>&nbsp; 外地 </label>
+                  <label><span class="pay_list_c1 on"><input name="Fruit1" type="radio" value="1" class="radioclass"  :disabled="isDisable" v-model="register"/></span>&nbsp; 本地 </label>
+                  <label><input name="Fruit1" type="radio" value="2"  v-model="register"  :disabled="isDisable"/>&nbsp; 外地 </label>
                 </div>
               </div>
             </div>
@@ -146,10 +159,10 @@
               <div>
                 <p>楼层:</p>
                 <div class="radio">
-                  <label><input name="Fruit" type="radio" value="10001"  v-model="floor"/>&nbsp; 无要求 </label>
-                  <label><input name="Fruit" type="radio" value="10002"  v-model="floor"/>&nbsp; 低层 </label>
-                  <label><input name="Fruit" type="radio" value="10003"  v-model="floor"/>&nbsp; 中层 </label>
-                  <label><input name="Fruit" type="radio" value="10004" v-model="floor"/>&nbsp; 高层 </label>
+                  <label><input name="Fruit" type="radio" value="10001"  v-model="floor" :disabled="isDisable"/>&nbsp; 无要求 </label>
+                  <label><input name="Fruit" type="radio" value="10002"  v-model="floor" :disabled="isDisable"/>&nbsp; 低层 </label>
+                  <label><input name="Fruit" type="radio" value="10003"  v-model="floor" :disabled="isDisable"/>&nbsp; 中层 </label>
+                  <label><input name="Fruit" type="radio" value="10004" v-model="floor" :disabled="isDisable"/>&nbsp; 高层 </label>
                 </div>
               </div>
             </div>
@@ -159,7 +172,7 @@
               <div>
                 <label>社保:
                   <span> </span><br/>
-                  <select name="" class="select" v-model="social">
+                  <select name="" class="select" v-model="social" :disabled="isDisable">
                     <option value="0">无</option>
                     <option value="1">1年</option>
                     <option value="2">2年</option>
@@ -174,7 +187,7 @@
               <div>
                 <label>装修:
                   <span>  </span><br/>
-                  <select name="" class="select" v-model="fitment">
+                  <select name="" class="select" v-model="fitment" :disabled="isDisable">
                     <option value="1">毛坯</option>
                     <option value="2">简装</option>
                     <option value="3">精装</option>
@@ -186,14 +199,14 @@
               <div>
                 <label>备注:
                   <span>  </span><br/>
-                  <textarea name="" v-model="textarea" class="textarea" placeholder="备注信息" rows = "3"></textarea>
+                  <textarea name="" v-model="textarea" class="textarea" placeholder="备注信息" rows = "3" :disabled="isDisable"></textarea>
                 </label>
               </div>
             </div>
           </div>
         </div>
-        <div class="user-send">
-          <a type="button" class="btn send"  :disabled="!disabled" :class="disabled === true ? 'btn' : 'disabled'" @click.stop.prevent="send">提交</a>
+        <div class="user-send" v-if="!isDisable">
+          <button type="button" class="btn send"  :disabled="!disabled" :class="disabled === true ? 'btn' : 'disabled'" @click.stop.prevent="send">提交</button>
         </div>
       </div>
     </scroll>
@@ -205,7 +218,7 @@
 </template>
 
 <script>
-import { getProvincelist, getDistirctlist, getCitylist, getTypeList, sendProject } from 'api/addProject'
+import { getProvincelist, getDistirctlist, getCitylist, getTypeList, sendProject, getProject } from 'api/addProject'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
 import Confirm from 'base/confirm/confirm'
@@ -214,6 +227,8 @@ export default {
   data () {
     return {
       confirmText: '请填写完整',
+      id: this.$route.params.id,
+      isDisable: false,
       ratio: [{
         label: '10',
         value: '10'
@@ -253,6 +268,7 @@ export default {
       cityList: [],
       district: '全部',
       districtList: [],
+      needName: '',
       clientcount: '',
       startArea: '',
       endArea: '',
@@ -272,6 +288,7 @@ export default {
   created () {
     this._getProvincelist()
     this._getTypeList()
+    this._getProject()
   },
   methods: {
     send (e) {
@@ -300,6 +317,12 @@ export default {
         this.$refs.confirm.show()
         return
       }
+      if (this.needName.length > 5) {
+        this.confirmText = '需求单名称已超过长度！'
+        this.$refs.confirm.show()
+        return
+      }
+      this.disabled = false
       const data = {
         prov: this.province,
         city: this.city,
@@ -316,15 +339,16 @@ export default {
         floor: this.floor ? this.floor : null,
         ensure: this.social ? this.social : null,
         decoration: this.fitment ? this.fitment : null,
-        msg: this.textarea ? this.textarea : null
+        msg: this.textarea ? this.textarea : null,
+        needs_name: this.needName ? this.needName : null
       }
       sendProject(data).then(res => {
-        if (res.code === 0) {
+        if (res.data.code === 0) {
           this.refresh = true
           this.confirmText = '添加成功'
           this.$refs.confirm.show()
         } else {
-          this.confirmText = res.msg ? res.msg : '服务器内部错误！'
+          this.confirmText = res.data.msg ? res.data.msg : '服务器内部错误！'
           this.$refs.confirm.show()
         }
       })
@@ -342,36 +366,66 @@ export default {
     confirmClear() {},
     confirmBtnText() {},
     selectProvince() {
+      console.log(this.province)
       this.city = '全部'
       this.district = '全部'
       this.cityList = []
-      if (this.province === '' || this.province == null) {
-        return
-      }
       getCitylist(this.province).then(res => {
-        this.cityList = res.data
+        this.cityList = res.data.data
       })
     },
     selectCity () {
-      this.districtList = []
       this.district = '全部'
       if (this.city === '全部') {
         return
       }
+      this.districtList = []
       getDistirctlist(this.province, this.city).then(res => {
-        this.districtList = res.data
+        this.districtList = res.data.data
       })
     },
     selectDistrict () {},
     beforeScroll () {},
     _getProvincelist () {
       getProvincelist().then(res => {
-        this.provinceList = res.data
+        this.provinceList = res.data.data
       })
     },
     _getTypeList () {
       getTypeList().then(res => {
-        this.tenementTypeList = res.data
+        this.tenementTypeList = res.data.data
+      })
+    },
+    _getProject () {
+      if (!/^[SOF]/.test(this.id)) {
+        return
+      }
+      getProject(this.id).then(res => {
+        this.isDisable = true
+        if (res.data.code === 0) {
+          if (res.data.data == null) {
+            this.confirmText = '参数错误'
+            this.$refs.confirm.show()
+            return
+          }
+          this.province = res.data.data.prov
+          this.city = res.data.data.city ? res.data.data.city : '全部'
+          this.district = res.data.data.district ? res.data.data.district : '全部'
+          this.clientcount = res.data.data.clientcount
+          this.startArea = res.data.data.start_area
+          this.endArea = res.data.data.end_area
+          this.theHeightBudget = res.data.data.price
+          this.tenementType = res.data.data.type
+          this.proportion = res.data.data.scale
+          this.houseHome = res.data.data.room
+          this.houseHall = res.data.data.hall
+          this.register = res.data.data.census
+          this.floor = res.data.data.floor
+          this.social = res.data.data.ensure
+          this.fitment = res.data.data.decoration
+          this.textarea = res.data.data.msg
+          this.needName = res.data.data.needs_name
+        }
       })
     },
     _trim(str) {
@@ -485,6 +539,16 @@ export default {
           width: 100%
           box-sizing: border-box
           padding: 10px
+          .needName
+            input
+              width: 97%
+              margin-top: 10px
+              border: 1px solid #ccc
+              height: 30px
+              border-radius: 4px
+              &::placeholder
+                padding-left: 10px
+                font-size: $font-size-small
           .textarea
             width: 95%
             margin-top: 10px

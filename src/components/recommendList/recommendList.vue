@@ -1,30 +1,27 @@
 <template>
 <div id="componentList">
 <div>
-    <confirm ref="confirm" :text="confirmText"></confirm>
+    <confirm ref="confirm" :text="confirmText" @confirm="isConfirm"></confirm>
   </div>
   <div class="title">
     <my-title :title="'需求列表'" class="title-top"></my-title>
+    <div class="condition" @click="selectCondition"><img :src="selectConditionImg" alt="">{{conditionText}}</div>
     <div ref="itemSelectTitle" class="title-all-sclect">
       <ul class="item-list-show xiangying-top">
-        <li v-for="(item, index) in itemTop" :key="index" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item}}</li>
+        <li v-for="(item, index) in itemTop" :key="index" :class="itemTopActive === index ? 'top-active' : ''" @click="selectTop(item, index)">{{item.type}} ({{item.count}})</li>
       </ul>
-      <ul class="item-list-show xiangying-center">
-        <li v-for="(item,index) in itemTopText" :key="index">
-          <p>{{item.name}}</p>
-          <p>{{item.count}}</p>
-        </li>
-      </ul>
-      <div class="item-center">
-        <ul>
-          <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" v-for="(i, index) in itemCenter">{{i.type}}</li>
-        </ul>
-        <span ref="itemCenterActiveSpan"></span>
-      </div>
-      <div class="item-bottom">
+      <div style="display: none" ref="topSelect">
+        <div class="item-center">
           <ul>
-            <li v-for="(item, index) in itemSelectType" :class="itemSelectTypeActive === index ? 'active' : ''" @click="selectTypeList(item, index)"><span>{{item.type}}</span> <i :class="[itemSelectTypeActive === index ? 'icon-back-down': 'icon-back-up']"></i></li>
+            <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" v-for="(i, index) in itemCenter">{{i.type}} <span> &nbsp;{{i.count}}</span></li>
           </ul>
+          <span ref="itemCenterActiveSpan"></span>
+        </div>
+        <div class="item-bottom">
+            <ul>
+              <li v-for="(item, index) in itemSelectType" :class="itemSelectTypeActive === index ? 'active' : ''" @click="selectTypeList(item, index)"><span>{{item.type}}</span> <i :class="[itemSelectTypeActive === index ? 'icon-back-down': 'icon-back-up']"></i></li>
+            </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -105,7 +102,7 @@
     </scroll>
   </div>
   <div class="add-needs" v-if="userId === 2">
-    <router-link to="/addProject" class="add">添加需求</router-link>
+    <router-link to="/addProject/add" class="add">添加需求</router-link>
   </div>
 </div>
 </template>
@@ -123,12 +120,14 @@ export default {
     return {
       userId: -1,
       hasMore: false,
+      selectConditionImg: require('common/image/shaix.png'),
       btnDefault: '',
+      conditionText: '更多',
       noResultWrapper: '',
       confirmText: '',
-      userShowEvent: '未响应',
-      itemCenter: ['我的响应', '已响应', '未响应'],
-      itemTop: ['今日响应', '本周响应', '本月响应'],
+      userShowEvent: '未推荐',
+      itemCenter: ['我的推荐', '所有推荐', '未推荐'],
+      itemTop: [],
       itemTopIndex: 1,
       itemTopText: [],
       itemTopActive: 0,
@@ -182,40 +181,76 @@ export default {
       }],
       selectTypeIndex: -1,
       jurisdictiont: -1,
-      needsName: 2,
+      needsName: 66,
       start: 0,
       length: 10,
-      showProjectList: []
+      showProjectList: [],
+      stopTuijian: {},
+      itemTopArr: [],
+      isExecuteEnd: true,
+      defaultReplycode: 66
     }
   },
   created () {
     this._getUserbyid()
     this._getJurisdictiont()
     this._getProvincelist()
-    this._getTypeList()/*
-    if (window.localStorage) {
-      console.log(window.localStorage.getItem('isRefresh'))
-    }
-    console.log(this.$route) */
+    this._getTypeList()
   },
   methods: {
     recommendScroll (pos) {
       // console.log(pos)
     },
+    // 是否展开更多选择
+    selectCondition () {
+      this.showCitysList = false
+      this.showTypeList = false
+      if (this.conditionText === '更多') {
+        this.$refs.topSelect.style.display = 'block'
+        this.$refs.scroll.$el.style.top = '130px'
+        this.$refs.scroll.refresh()
+        this.conditionText = '收起'
+      } else {
+        this.$refs.topSelect.style.display = 'none'
+        this.$refs.scroll.$el.style.top = '45px'
+        this.$refs.scroll.refresh()
+        this.conditionText = '更多'
+      }
+      this.start = 0
+      this.needsName = this.itemCenter[this.itemCenterActive].code
+      this._setNeedsItem(this.moreSelectData(this.start))
+    },
+    // 下拉获取更多
     searchMore () {
       this.start++
       this._getAllSelectNeedsItem(this.start)
     },
     stop (data) {
       console.log(data)
-      stopNeeds(data.path).then(res => {
-        if (res.code === 0) {
-          this.confirmText = res.msg
-          this.$refs.confirm.show()
-        }
-      })
+      this.confirmText = '确定停止推荐？'
+      this.$refs.confirm.show()
+      this.stopTuijian = data
+    },
+    // 是否确定停止推荐。 然后重新获取总条数
+    async isConfirm () {
+      if (this.confirmText === '确定停止推荐？') {
+        await stopNeeds(this.stopTuijian.path).then(res => {
+          if (res.data.code === 0) {
+            console.log(this.showProjectList[this.stopTuijian.index])
+            this.showProjectList[this.stopTuijian.index].isstop = 1
+            this.confirmText = res.data.msg
+            this.$refs.confirm.show()
+          }
+        })
+        console.log(this.itemTopArr)
+        this._setMoreTuijian()
+      }
     },
     itemActive (val, index) {
+      if (!this.isExecuteEnd) {
+        return
+      }
+      this.isExecuteEnd = false
       this.itemSelectType = [{
         type: '区域'
       }, {
@@ -223,6 +258,7 @@ export default {
       }, {
         type: '物业类型'
       }]
+      console.log(val)
       this.allPricemin = ''
       this.allPricemax = ''
       this.type = ''
@@ -238,25 +274,21 @@ export default {
       this.showTypeList = false
       this.start = 0
       this.itemCenterActive = index
-      const data = {
-        timecode: this.itemTopIndex,
-        start: 0,
-        length: this.length,
-        replycode: this.needsName
-      }
-      this._setNeedsItem(data)
+      this._setMoreTuijian()
+      this._setNeedsItem(this.moreSelectData(this.start))
     },
+    // 选择每天 每周 每月数据
     selectTop (val, index) {
+      if (!this.isExecuteEnd) {
+        return
+      }
+      this.isExecuteEnd = false
       this.itemTopIndex = index + 1
+      this.noResultWrapper = ''
       this._getTimeData(this.itemTopIndex)
       this.itemTopActive = index
       this.start = 0
-      const data = {
-        timecode: this.itemTopIndex,
-        start: 0,
-        length: this.length,
-        replycode: this.needsName
-      }
+      this._setNeedsItem(this.moreSelectData(this.start))
       this.itemSelectType = [{
         type: '区域'
       }, {
@@ -264,7 +296,7 @@ export default {
       }, {
         type: '物业类型'
       }]
-      this._setNeedsItem(data)
+      this._setMoreTuijian()
     },
     selectTypeList (val, index) {
       this.itemSelectTypeActive = index
@@ -286,6 +318,7 @@ export default {
     },
     showCityList () {},
     showPopBox () {},
+    // 选择省 市 区
     selectProvince(item, index) {
       if (this.provinceActive === item.name) {
         return
@@ -363,7 +396,7 @@ export default {
       this._getProjectList()
       this.showCitysList = false
       this.projectMsg = false
-      this._setNeedsItem()
+      this._setNeedsItem(this.moreSelectData(this.start))
     },
     selectType (item, index) {
       console.log(this.itemSelectTypeActive)
@@ -397,7 +430,7 @@ export default {
       this.projectName = 'all'
       this.projectMsg = false
       this.showProjectList = []
-      this._setNeedsItem()
+      this._setNeedsItem(this.moreSelectData(this.start))
       setTimeout(() => {
         this.showTypeList = false
         this.selectTypeIndex = -1
@@ -406,14 +439,14 @@ export default {
     },
     _getJurisdictiont () {
       getJurisdictiont().then(res => {
-        if (res.code === 0) {
-          this.jurisdictiont = res.data.user.roleid
+        if (res.data.code === 0) {
+          this.jurisdictiont = res.data.data.user.roleid
         }
       })
     },
     _getTypeList () {
       getTypeList().then(res => {
-        res.data.forEach((item, i) => {
+        res.data.data.forEach((item, i) => {
           this.typeListWuye.push({
             name: item,
             type: item
@@ -430,10 +463,10 @@ export default {
         return
       }
       getProvincelist().then(res => {
-        for (let i in res.data) {
+        for (let i in res.data.data) {
           this.provincelist.push({
-            name: res.data[i],
-            provinceType: res.data[i]
+            name: res.data.data[i],
+            provinceType: res.data.data[i]
           })
         }
       })
@@ -444,7 +477,7 @@ export default {
         return
       }
       getCitylist(this.province).then(res => {
-        this.childCitylist = res.data
+        this.childCitylist = res.data.data
         this.childCitylist.unshift('全部')
       })
     },
@@ -453,61 +486,27 @@ export default {
         return
       }
       getDistirctlist(this.province, this.city).then(res => {
-        this.districtList = res.data
+        this.districtList = res.data.data
         this.districtList.unshift('全部')
       })
     },
     _getProjectList () {},
     async _getUserbyid () {
       await getUserbyid().then(res => {
-        this.userId = res.data.user.roleid
-        if (this.userId === 1) { // 源泽
-          this.btnDefault = '未响应'
-          this.itemCenter = [{
-            type: '未响应',
-            code: 2
-          }, {
-            type: '我的响应',
-            code: 4
-          }, {
-            type: '所有响应',
-            code: 5
-          }]
-        } else if (this.userId === 2) { // 经纪人
-          this.btnDefault = '未响应'
-          this.itemCenter = [{
-            type: '未响应',
-            code: 2
-          }, {
-            type: '已响应',
-            code: 1
-          }, {
-            type: '已停止',
-            code: 3
-          }]
-        } else { // 0 案场
-          this.btnDefault = '去响应'
-          this.itemCenter = [{
-            type: '未响应',
-            code: 2
-          }, {
-            type: '我的响应',
-            code: 4
-          }]
+        console.log(res)
+        if (res.data.code === 0) {
+          this.userId = res.data.data.user.roleid
+        } else {
+          window.location.href = '/'
         }
       })
-      const data = {
-        timecode: this.itemTopIndex,
-        start: this.start,
-        length: this.length,
-        replycode: 2
-      }
-      this._setNeedsItem(data)
+      this._setNeedsItem(this.moreSelectData(this.start))
+      this._setMoreTuijian()
       this._getTimeData(this.itemTopIndex)
     },
     _getTimeData (index) {
       getTimeData(index).then(res => {
-        this.itemTopText = res.data
+        this.itemTopText = res.data.data
       })
     },
     _setNeedsItem (data) {
@@ -528,15 +527,30 @@ export default {
         }
       }
       setNeedsItem(data).then(res => {
-        if (res.code === 0) {
+        if (res.data.code === 0) {
           const userEvent = this._setUserEvent()
-          res.data.forEach((item, index) => {
-            res.data[index].addProject = userEvent.addProject
-            res.data[index].addProjectUrl = userEvent.addProjectUrl
-            res.data[index].selectBtn = userEvent.selectBtn
-            res.data[index].selectBtnUrl = userEvent.selectBtnUrl
+          res.data.data.forEach((item, index) => {
+            if (res.data.data[index].projects == null) {
+              if (this.userId === 1) { // 源泽
+                res.data.data[index].addProject = '去推荐'
+                res.data.data[index].addProjectUrl = 2
+              } else if (this.userId === 2) { // 经纪人
+                res.data.data[index].addProject = '停止推荐'
+                res.data.data[index].addProjectUrl = ''
+              } else { // 案场
+                res.data.data[index].addProject = '去推荐'
+                res.data.data[index].addProjectUrl = 2
+              }
+              res.data.data[index].selectBtn = ''
+              res.data.data[index].selectBtnUrl = ''
+            } else {
+              res.data.data[index].addProject = userEvent.addProject
+              res.data.data[index].addProjectUrl = userEvent.addProjectUrl
+              res.data.data[index].selectBtn = userEvent.selectBtn
+              res.data.data[index].selectBtnUrl = userEvent.selectBtnUrl
+            }
           })
-          this.showProjectList = res.data
+          this.showProjectList = res.data.data
         }
       })
     },
@@ -546,37 +560,128 @@ export default {
         return
       }
       this.hasMore = true
-      const data = {
-        timecode: this.itemTopIndex,
-        replycode: this.needsName,
-        prov: this.provinceActive === '全部' ? '' : this.provinceActive,
-        city: this.cityActive === '全部' ? '' : this.cityActive,
-        district: this.districtlistActive === '全部' ? '' : this.districtlistActive,
-        minprice: this.allPricemin === '全部' ? '' : this.allPricemin,
-        maxprice: this.allPricemax === '全部' ? '' : this.allPricemax,
-        type: this.type === '全部' ? '' : this.type,
-        start: start,
-        length: this.length
-      }
-      setNeedsItem(data).then(res => {
-        if (res.code === 0) {
+      setNeedsItem(this.moreSelectData(start)).then(res => {
+        if (res.data.code === 0) {
           this.hasMore = false
-          if (res.data.length < 10) {
+          if (res.data.data.length < 10) {
             this.noResultWrapper = '没有更多了'
           }
-          if (res.data.length === 0) {
+          if (res.data.data.length === 0) {
             return
           }
           const userEvent = this._setUserEvent()
-          res.data.forEach((item, index) => {
-            res.data[index].addProject = userEvent.addProject
-            res.data[index].addProjectUrl = userEvent.addProjectUrl
-            res.data[index].selectBtn = userEvent.selectBtn
-            res.data[index].selectBtnUrl = userEvent.selectBtnUrl
+          res.data.data.forEach((item, index) => {
+            if (res.data.data[index].projects == null) {
+              if (this.userId === 1) { // 源泽
+                res.data.data[index].addProject = '去推荐'
+                res.data.data[index].addProjectUrl = 2
+              } else if (this.userId === 2) { // 经纪人
+                res.data.data[index].addProject = '停止推荐'
+                res.data.data[index].addProjectUrl = ''
+              } else { // 案场
+                res.data.data[index].addProject = '去推荐'
+                res.data.data[index].addProjectUrl = 2
+              }
+              res.data.data[index].selectBtn = ''
+              res.data.data[index].selectBtnUrl = ''
+            } else {
+              res.data.data[index].addProject = userEvent.addProject
+              res.data.data[index].addProjectUrl = userEvent.addProjectUrl
+              res.data.data[index].selectBtn = userEvent.selectBtn
+              res.data.data[index].selectBtnUrl = userEvent.selectBtnUrl
+            }
           })
-          this.showProjectList = this.showProjectList.concat(res.data)
+          this.showProjectList = this.showProjectList.concat(res.data.data)
         }
       })
+    },
+    // 根据是否展开更多筛选来获取数据
+    moreSelectData (start) {
+      let data
+      if (this.conditionText === '更多') {
+        this.needsName = 66
+        data = {
+          timecode: this.itemTopIndex,
+          replycode: this.defaultReplycode,
+          start: start,
+          length: this.length
+        }
+      } else {
+        data = {
+          timecode: this.itemTopIndex,
+          replycode: this.needsName,
+          prov: this.provinceActive === '全部' ? '' : this.provinceActive,
+          city: this.cityActive === '全部' ? '' : this.cityActive,
+          district: this.districtlistActive === '全部' ? '' : this.districtlistActive,
+          minprice: this.allPricemin === '全部' ? '' : this.allPricemin,
+          maxprice: this.allPricemax === '全部' ? '' : this.allPricemax,
+          type: this.type === '全部' ? '' : this.type,
+          start: start,
+          length: this.length
+        }
+      }
+      return data
+    },
+    async _setMoreTuijian () {
+      this.itemTopArr = []
+      for (let i = 1; i < 4; i++) {
+        await getTimeData(i).then(res => {
+          this.itemTopArr.push(res.data.data)
+        })
+      }
+      this.itemTop = [{
+        type: '今日',
+        count: this.itemTopArr[0][0].count
+      }, {
+        type: '本周',
+        count: this.itemTopArr[1][0].count
+      }, {
+        type: '本月',
+        count: this.itemTopArr[2][0].count
+      }]
+      if (this.userId === 1) { // 源泽
+        this.btnDefault = '未推荐'
+        this.itemCenter = [{
+          type: '我已推荐',
+          code: 4,
+          count: this.itemTopArr[this.itemTopActive][2].count
+        }, {
+          type: '我未推荐',
+          code: 2,
+          count: this.itemTopArr[this.itemTopActive][3].count
+        }, {
+          type: '所有人已推荐',
+          code: 5,
+          count: this.itemTopArr[this.itemTopActive][1].count
+        }]
+      } else if (this.userId === 2) { // 经纪人
+        this.btnDefault = '未推荐'
+        this.itemCenter = [{
+          type: '已荐需求',
+          code: 1,
+          count: this.itemTopArr[this.itemTopActive][1].count
+        }, {
+          type: '未荐需求',
+          code: 2,
+          count: this.itemTopArr[this.itemTopActive][2].count
+        }, {
+          type: '止荐需求',
+          code: 3,
+          count: this.itemTopArr[this.itemTopActive][3].count
+        }]
+      } else { // 0 案场
+        this.btnDefault = '去推荐'
+        this.itemCenter = [{
+          type: '我已推荐',
+          code: 4,
+          count: this.itemTopArr[this.itemTopActive][1].count
+        }, {
+          type: '我未推荐',
+          code: 2,
+          count: this.itemTopArr[this.itemTopActive][2].count
+        }]
+      }
+      this.isExecuteEnd = true
     },
     _setUserEvent () {
       let addProject = ''
@@ -584,42 +689,56 @@ export default {
       let selectBtn = ''
       let selectBtnUrl = 0
       if (this.userId === 1) { // 源泽
-        if (this.needsName === 2) { // 未响应
-          addProject = '去响应'
+        if (this.needsName === 2) { // 未推荐
+          addProject = '去推荐'
           addProjectUrl = 2
           selectBtn = ''
-        } else if (this.needsName === 4) { // 我的响应
-          addProject = '追加响应'
+        } else if (this.needsName === 4) { // 我的推荐
+          addProject = '追加推荐'
           addProjectUrl = 3
-          selectBtn = '查看响应'
+          selectBtn = '查看推荐'
           selectBtnUrl = 1
         } else if (this.needsName === 5) { // 所有响应
-          addProject = '追加响应'
+          addProject = '追加推荐'
           addProjectUrl = 3
-          selectBtn = '查看响应'
+          selectBtn = '查看推荐'
+          selectBtnUrl = 1
+        } else {
+          addProject = '追加推荐'
+          addProjectUrl = 3
+          selectBtn = '查看推荐'
           selectBtnUrl = 1
         }
       } else if (this.userId === 2) { // 经纪人
         if (this.needsName === 2) {
-          addProject = '停止'
+          addProject = '停止推荐'
           selectBtn = ''
         } else if (this.needsName === 1) {
-          addProject = '停止'
-          selectBtn = '查看响应'
+          addProject = '停止推荐'
+          selectBtn = '查看推荐'
           selectBtnUrl = 1
         } else if (this.needsName === 3) {
           addProject = ''
           selectBtn = ''
+        } else {
+          addProject = '停止推荐'
+          selectBtn = '查看推荐'
+          selectBtnUrl = 1
         }
       } else {
         if (this.needsName === 2) { // 案场
-          addProject = '去响应'
+          addProject = '去推荐'
           addProjectUrl = 2
           selectBtn = ''
         } else if (this.needsName === 4) {
-          addProject = '追加响应'
+          addProject = '追加推荐'
           addProjectUrl = 3
-          selectBtn = '查看响应'
+          selectBtn = '查看推荐'
+          selectBtnUrl = 1
+        } else {
+          addProject = '追加推荐'
+          addProjectUrl = 3
+          selectBtn = '查看推荐'
           selectBtnUrl = 1
         }
       }
@@ -681,8 +800,22 @@ export default {
       background: #eee
       .title-top
         height: 50px
+      .condition
+        position: fixed
+        top: 10px
+        right: 10px
+        border: 1px solid #fff
+        padding: 8px 12px 5px
+        border-radius: 15px
+        color: #fff
+        font-size: 16px
+        img
+          width: 15px
+          vertical-align: top
+          margin-right: 5px
       .title-all-sclect
         position: relative
+        box-shadow: 3px 3px 10px #999
       .item-list-show
         display: flex
         background: #fff
@@ -703,7 +836,6 @@ export default {
       .xiangying-top
         background: #f28666
         padding:0 5px 5px 5px
-        margin-top: -7px
         li
           line-height: 35px
           border: 1px solid #fff
@@ -721,14 +853,6 @@ export default {
         .top-active
           background: #fff
           color: #f28666
-      .xiangying-center
-        display: flex
-        justify-content: space-around
-        li
-          border: none
-          height: 25px
-          p
-            height: 17px
       .item-center
         position: relative
         ul
@@ -827,8 +951,8 @@ export default {
         color: white
     .list
       position: fixed
-      top: 155px
-      bottom: 130px
+      top: 45px
+      bottom: 110px
       width: 100%
       padding-top: 50px
       .no-result-wrapper

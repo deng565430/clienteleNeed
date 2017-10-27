@@ -34,3 +34,10 @@ export function sendProject (data) {
 
   return $api.post(url, data)
 }
+
+export function getProject (id) {
+  const url = `/needs/getneedById?needsid=${id}`
+
+  return $api.get(url)
+}
+
