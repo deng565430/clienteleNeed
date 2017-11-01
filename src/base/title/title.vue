@@ -35,6 +35,7 @@
         width: 50px
         line-height: 50px
         font-size: 20px
+        font-weight: 900
         color: white
       h1
         width: 75%
