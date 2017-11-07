@@ -84,7 +84,7 @@
           <div class="item-bg">
             <div class="item-50">
               <div>
-                <label>最高预算:
+                <label>总价预算:
                   <span> * </span><br/>
                   <input type="text" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额" :disabled="isDisable">  万元
                 </label>
@@ -105,11 +105,9 @@
           <div class="item-bg">
             <div class="item-50">
               <div>
-                <label>首付比例:
+                <label>首付预算:
                   <span> </span><br/>
-                  <select name="" class="select" v-model="proportion" :disabled="isDisable">
-                    <option :value ="item.value" v-for="(item, index) in ratio" :key="index">{{item.value}} %</option>
-                  </select>
+                  <input type="text" ref="userInput5" name="" v-model="proportion"  placeholder="金额" :disabled="isDisable">  万元
                 </label>
               </div>
             </div>
@@ -493,8 +491,9 @@ export default {
                 width: 100%
                 height: 30px
                 border-radius: 4px
+                font-weight: 600
                 border: 1px solid #ccc
-                color: #666
+                color: black
               .select-50
                 width: 30%
                 height: 30px
@@ -506,6 +505,7 @@ export default {
                 width:70%
                 height: 30px
                 border-radius: 4px
+                font-weight: 600
                 &::placeholder
                   padding-left: 10px
                   font-size: $font-size-small
@@ -524,13 +524,15 @@ export default {
                 width: 30%
                 height: 30px
                 border-radius: 4px
+                font-weight: 600
                 border: 1px solid #ccc
-                color: #666
+                color: black
               >input
                 border: 1px solid #ccc
                 width:70%
                 height: 30px
                 border-radius: 4px
+                font-weight: 600
                 &::placeholder
                   padding-left: 10px
                   font-size: $font-size-small
@@ -546,11 +548,13 @@ export default {
               border: 1px solid #ccc
               height: 30px
               border-radius: 4px
+              font-weight: 600
               &::placeholder
                 padding-left: 10px
                 font-size: $font-size-small
           .textarea
             width: 95%
+            font-weight: 600
             margin-top: 10px
           >div
             width: 100%
@@ -563,7 +567,8 @@ export default {
                 vertical-align:middle
                 margin-right: 5px
                 box-sizing: border-box
-                color: #666
+                color: black
+                font-weight: 600
                 input[type=radio]
                   display: inline-block
                   vertical-align: middle
@@ -603,6 +608,7 @@ export default {
                   border: 1px solid #ccc
                   height: 30px
                   border-radius: 4px
+                  font-weight: 600
                   &::placeholder
                     padding-left: 10px
                     font-size: $font-size-small

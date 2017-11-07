@@ -3,8 +3,9 @@
     <div>
       <div class="project-list" v-if="!!projectList.length">
         <ul class="item">
-          <li v-for="(item, index) in projectList" @click="checkNeed(item.needsid)" :style="item.flag ? bgImg : ''">
+          <li v-for="(item, index) in projectList" @click="checkNeed(item.needsid, item.ismy)" :style="item.flag ? bgImg : ''">
             <div class="title">
+              <img v-if="item.ismy" :src="isMy" class="is-my-img" alt="">
               <p v-if="!item.needs_name">编号：<span> {{item.needsid}} </span></p>
               <p v-else>需求名称：<span> {{item.needs_name}} </span></p>
               <p>共有<span> {{item.user_count == null ? '0' : item.user_count}} </span>人推荐<span> {{item.project_count == null ? '0' : item.project_count}} </span>个项目</p>
@@ -34,13 +35,15 @@
               <p>发布时间：<span>{{item.createtime}}</span></p>
             </div>
             <div class="middle-cent" v-if="userId === 1">
-              <p>发布人：<span>{{item.username}}</span></p>
+              <p>发布人：<span>{{item.username}}</span> <span> {{ item.manager}}</span></p>
               <p @click.stop="callPhone(item.phone)">电话：<a>{{item.phone}}</a></p>
             </div>
-            <div class="bottom">
-              <a class="btn add" v-if="item.isstop === 0" @click.stop="goUrlPath(item.needsid, index, item.addProjectUrl, item.addProject)" :class="item.addProject === '' ? 'noshow' : (item.isstop === 0 ? '' : 'noshow')">{{item.addProject}}</a>
-              <a v-else class="stop">已停止推荐</a>
-              <a class="btn"  v-if="item.isstop === 0" @click.stop="showPath(item.needsid, item.selectBtnUrl)" :class="item.selectBtn === '' ? 'noshow' : ''">{{item.selectBtn}}</a>
+            <div>
+              <div class="bottom">
+                <a class="btn add" v-if="item.isstop === 0" @click.stop="goUrlPath(item.needsid, index, item.addProjectUrl, item.addProject)" :class="item.addProject === '' ? 'noshow' : (item.isstop === 0 ? '' : 'noshow')">{{item.addProject}}</a>
+                <a v-else class="stop">已停止推荐</a>
+                <a class="btn"  v-if="item.isstop === 0" @click.stop="showPath(item.needsid, item.selectBtnUrl)" :class="item.selectBtn === '' ? 'noshow' : ''">{{item.selectBtn}}</a>
+              </div>
             </div>
           </li>
         </ul>
@@ -74,6 +77,7 @@
         selectBtn: '',
         addProjectUrl: 1,
         selectBtnUrl: 1,
+        isMy: require('common/image/ismy.png'),
         bgImg: {
           background: `#fff url(${require('common/image/yituijian.png')}) no-repeat 90% 54%`,
           backgroundSize: '85px'
@@ -96,7 +100,13 @@
       callPhone (phone) {
         window.location.href = `tel:${phone}`
       },
-      checkNeed (id) {
+      checkNeed (id, ismy) {
+        if (this.userId === 2) {
+          if (!ismy) {
+            this.$emit('notMy')
+            return
+          }
+        }
         this.$router.push(`/addProject/${id}`)
       }
     }
@@ -119,14 +129,17 @@
         border-radius: 4px
         margin-bottom: 10px
         overflow: hidden
-        box-shadow: 3px 3px 10px #999
       .title
-        padding: 0 10px
-        background: #dcdcdc
-        line-height: 30px
-        height: 30px
+        padding: 0 15px
+        background: #d7d7d7
+        line-height: 40px
+        height: 40px
         box-sizing: border-box
         display: flex
+        .is-my-img
+          position: absolute
+          left: 8px
+          width: 40px
         p
           text-align: left
           width: 50%
@@ -180,7 +193,6 @@
       .bottom
         text-align: right
         padding: 0 10px 10px
-        height: 30px
         .btn
           display: inline-block
           text-align: center

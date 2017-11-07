@@ -1,7 +1,7 @@
 <template>
 <div id="componentList">
 <div>
-    <confirm ref="confirm" :text="confirmText" @confirm="isConfirm"></confirm>
+    <confirm ref="confirm" :text="confirmText" @cancel="cancel" @confirm="isConfirm"></confirm>
   </div>
   <div class="title">
     <my-title :title="'需求列表'" class="title-top"></my-title>
@@ -93,7 +93,7 @@
       :data="showProjectList"
       @scrollToEnd="searchMore">
       <div>
-        <RecommendList :projectList="showProjectList" :userId="userId" :userShowEvent="userShowEvent" @stop="stop" :btnDefault="btnDefault"></RecommendList>
+        <RecommendList @notMy="notMy" :projectList="showProjectList" :userId="userId" :userShowEvent="userShowEvent" @stop="stop" :btnDefault="btnDefault"></RecommendList>
         <loading v-show="hasMore" title=""></loading>
         <div v-show="!hasMore" class="no-result-wrapper">
           <p>{{noResultWrapper}}</p>
@@ -201,6 +201,11 @@ export default {
     recommendScroll (pos) {
       // console.log(pos)
     },
+    // 是不是我的需求
+    notMy () {
+      this.confirmText = '需求信息已被保护，快来发布自己的需求吧!'
+      this.$refs.confirm.show()
+    },
     // 是否展开更多选择
     selectCondition () {
       this.showCitysList = false
@@ -231,6 +236,11 @@ export default {
       this.$refs.confirm.show()
       this.stopTuijian = data
     },
+    cancel () {
+      if (this.confirmText === '您还未注册，现在就去注册吧！' || this.confirmText === '您还未登录，现在就去登录吧！') {
+        window.location.href = '/registration'
+      }
+    },
     // 是否确定停止推荐。 然后重新获取总条数
     async isConfirm () {
       if (this.confirmText === '确定停止推荐？') {
@@ -244,6 +254,12 @@ export default {
         })
         console.log(this.itemTopArr)
         this._setMoreTuijian()
+      }
+      if (this.confirmText === '您还未注册，现在就去注册吧！' || this.confirmText === '您还未登录，现在就去登录吧！') {
+        window.location.href = '/registration'
+      }
+      if (this.confirmText === '需求信息已被保护，快来发布自己的需求吧!') {
+        this.$router.push('addProject/add')
       }
     },
     itemActive (val, index) {
@@ -496,8 +512,13 @@ export default {
         console.log(res)
         if (res.data.code === 0) {
           this.userId = res.data.data.user.roleid
+        } else if (res.data.code === 1) {
+          this.confirmText = '您还未注册，现在就去注册吧！'
+          this.$refs.confirm.show()
+          // window.location.href = '/'
         } else {
-          window.location.href = '/'
+          this.confirmText = '您还未登录，现在就去登录吧！'
+          this.$refs.confirm.show()
         }
       })
       this._setNeedsItem(this.moreSelectData(this.start))
@@ -528,29 +549,11 @@ export default {
       }
       setNeedsItem(data).then(res => {
         if (res.data.code === 0) {
-          const userEvent = this._setUserEvent()
           res.data.data.forEach((item, index) => {
-            if (res.data.data[index].projects == null) {
-              if (this.userId === 1) { // 源泽
-                res.data.data[index].addProject = '去推荐'
-                res.data.data[index].addProjectUrl = 2
-              } else if (this.userId === 2) { // 经纪人
-                res.data.data[index].addProject = '停止推荐'
-                res.data.data[index].addProjectUrl = ''
-              } else { // 案场
-                res.data.data[index].addProject = '去推荐'
-                res.data.data[index].addProjectUrl = 2
-              }
-              res.data.data[index].selectBtn = ''
-              res.data.data[index].selectBtnUrl = ''
-            } else {
-              res.data.data[index].addProject = userEvent.addProject
-              res.data.data[index].addProjectUrl = userEvent.addProjectUrl
-              res.data.data[index].selectBtn = userEvent.selectBtn
-              res.data.data[index].selectBtnUrl = userEvent.selectBtnUrl
-            }
+            this._setUserProperty(res.data.data, index)
           })
           this.showProjectList = res.data.data
+          console.log(this.showProjectList)
         }
       })
     },
@@ -569,27 +572,8 @@ export default {
           if (res.data.data.length === 0) {
             return
           }
-          const userEvent = this._setUserEvent()
           res.data.data.forEach((item, index) => {
-            if (res.data.data[index].projects == null) {
-              if (this.userId === 1) { // 源泽
-                res.data.data[index].addProject = '去推荐'
-                res.data.data[index].addProjectUrl = 2
-              } else if (this.userId === 2) { // 经纪人
-                res.data.data[index].addProject = '停止推荐'
-                res.data.data[index].addProjectUrl = ''
-              } else { // 案场
-                res.data.data[index].addProject = '去推荐'
-                res.data.data[index].addProjectUrl = 2
-              }
-              res.data.data[index].selectBtn = ''
-              res.data.data[index].selectBtnUrl = ''
-            } else {
-              res.data.data[index].addProject = userEvent.addProject
-              res.data.data[index].addProjectUrl = userEvent.addProjectUrl
-              res.data.data[index].selectBtn = userEvent.selectBtn
-              res.data.data[index].selectBtnUrl = userEvent.selectBtnUrl
-            }
+            this._setUserProperty(res.data.data, index)
           })
           this.showProjectList = this.showProjectList.concat(res.data.data)
         }
@@ -682,6 +666,49 @@ export default {
         }]
       }
       this.isExecuteEnd = true
+    },
+    _setUserProperty (data, index) {
+      const userEvent = this._setUserEvent()
+      if (data[index].projects == null) {
+        if (this.userId === 1) { // 源泽
+          data[index].addProject = '去推荐'
+          data[index].addProjectUrl = 2
+        } else if (this.userId === 2) { // 经纪人
+          if (data[index].ismy) {
+            data[index].addProject = '停止推荐'
+            data[index].addProjectUrl = ''
+          } else {
+            data[index].addProject = ''
+            data[index].addProjectUrl = ''
+            data[index].selectBtn = ''
+            data[index].selectBtnUrl = ''
+          }
+        } else { // 案场
+          data[index].addProject = '去推荐'
+          data[index].addProjectUrl = 2
+        }
+        data[index].selectBtn = ''
+        data[index].selectBtnUrl = ''
+      } else {
+        if (this.userId === 2) {
+          if (data[index].ismy) {
+            data[index].addProject = '停止推荐'
+            data[index].addProjectUrl = ''
+            data[index].selectBtn = userEvent.selectBtn
+            data[index].selectBtnUrl = userEvent.selectBtnUrl
+          } else {
+            data[index].addProject = ''
+            data[index].addProjectUrl = ''
+            data[index].selectBtn = ''
+            data[index].selectBtnUrl = ''
+          }
+        } else {
+          data[index].addProject = userEvent.addProject
+          data[index].addProjectUrl = userEvent.addProjectUrl
+          data[index].selectBtn = userEvent.selectBtn
+          data[index].selectBtnUrl = userEvent.selectBtnUrl
+        }
+      }
     },
     _setUserEvent () {
       let addProject = ''
@@ -815,7 +842,6 @@ export default {
           margin-right: 5px
       .title-all-sclect
         position: relative
-        box-shadow: 3px 3px 10px #999
       .item-list-show
         display: flex
         background: #fff

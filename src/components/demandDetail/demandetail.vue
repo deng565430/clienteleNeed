@@ -19,9 +19,9 @@
             <span class="tags" v-if="needs.district">{{needs.district}}</span>
             <span class="tags" v-if="needs.clientcount">客户数量{{needs.clientcount}}人</span>
             <span class="tags" v-if="needs.start_area">{{needs.start_area}}-{{needs.end_area}}㎡</span>
-            <span class="tags" v-if="needs.price">{{needs.price}}万元</span>
+            <span class="tags" v-if="needs.price">总价{{needs.price}}万元</span>
             <span class="tags" v-if="needs.type">{{needs.type}}</span>
-            <span class="tags" v-if="needs.scale">首付{{needs.scale}}%</span>
+            <span class="tags" v-if="needs.scale">首付{{needs.scale}}万元</span>
             <span class="tags"> <span  v-if="needs.room">{{needs.room}}室</span><span v-if="needs.hall">{{needs.hall}}厅</span></span>
             <span class="tags" v-if="needs.census">{{needs.census}}</span>
             <span class="tags" v-if="needs.floor">楼层要求：{{needs.floor}}</span>
