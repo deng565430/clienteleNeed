@@ -32,7 +32,7 @@
               <p>推荐项目名：<span>{{item.projects}}</span></p>
             </div>
             <div class="middle">
-              <p>发布时间：<span>{{item.createtime}}</span></p>
+              <p>发布时间：<span>{{timeFormat('yyyy-MM-dd hh-mm', new Date(item.createtime))}}</span></p>
             </div>
             <div class="middle-cent" v-if="userId === 1">
               <p>发布人：<span>{{item.username}}</span> <span> {{ item.manager}}</span></p>
@@ -55,7 +55,8 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
+  import { timeFormat } from 'common/js/util.js'
   export default {
     props: {
       projectList: {
@@ -73,6 +74,7 @@
     },
     data () {
       return {
+        timeFormat: timeFormat,
         addProject: '',
         selectBtn: '',
         addProjectUrl: 1,
