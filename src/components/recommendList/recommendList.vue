@@ -101,7 +101,7 @@
       </div>
     </scroll>
   </div>
-  <div class="add-needs" v-if="userId === 2">
+  <div class="add-needs">
     <router-link to="/addProject/add" class="add">添加需求</router-link>
   </div>
 </div>

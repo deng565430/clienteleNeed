@@ -91,6 +91,8 @@ import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 import Confirm from 'base/confirm/confirm'
+import TYPE from 'common/js/buryingpointType'
+import { addLog } from 'api/buryingpoint'
 export default {
   data () {
     return {
@@ -200,6 +202,7 @@ export default {
       }
     },
     baobei (val) {
+      addLog(TYPE.TUIJIANXIANGQINGPAGE, '', TYPE.TUIJIANBTN, TYPE.BAOBEIPAGE, window.USERMSG)
       window.location.href = '/recommend?id=' + val
     },
     details (val) {

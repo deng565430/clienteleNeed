@@ -12,6 +12,9 @@ import VueLazyload from 'vue-lazyload'
 
 import 'common/stylus/index.styl'
 
+/* eslint-disble no-unused-vars */
+import 'common/js/usermsg.js'
+
 // 移动调试
 /* eslint-disable no-unused-vars */
 // import vConsole from 'vconsole'
