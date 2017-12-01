@@ -13,6 +13,7 @@ export function shuffle(arr) {
   return _arr
 }
 
+// 稀释
 export function debounce(func, delay) {
   let timer
 
@@ -53,4 +54,18 @@ export function timeFormat (fmt, time) {
     }
   }
   return fmt
+}
+
+// 去除空格
+export function trims(str) {
+  return str.replace(/(^\s+)|(\s+$)/g, '')
+}
+
+// 验证是否是数字
+export function checkNumber(theObj) {
+  var reg = /^[0-9]+.?[0-9]*$/
+  if (reg.test(theObj)) {
+    return true
+  }
+  return false
 }

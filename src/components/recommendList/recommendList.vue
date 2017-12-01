@@ -13,13 +13,13 @@
       <div style="display: none" ref="topSelect">
         <div class="item-center">
           <ul>
-            <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" v-for="(i, index) in itemCenter">{{i.type}} <span> &nbsp;{{i.count}}</span></li>
+            <li :class="itemCenterActive === index ? 'active': ''" @click="itemActive(i, index)" :key="index" v-for="(i, index) in itemCenter">{{i.type}} <span> &nbsp;{{i.count}}</span></li>
           </ul>
           <span ref="itemCenterActiveSpan"></span>
         </div>
         <div class="item-bottom">
             <ul>
-              <li v-for="(item, index) in itemSelectType" :class="itemSelectTypeActive === index ? 'active' : ''" @click="selectTypeList(item, index)"><span>{{item.type}}</span> <i :class="[itemSelectTypeActive === index ? 'icon-back-down': 'icon-back-up']"></i></li>
+              <li :key="index" v-for="(item, index) in itemSelectType" :class="itemSelectTypeActive === index ? 'active' : ''" @click="selectTypeList(item, index)"><span>{{item.type}}</span> <i :class="[itemSelectTypeActive === index ? 'icon-back-down': 'icon-back-up']"></i></li>
             </ul>
         </div>
       </div>
@@ -33,14 +33,14 @@
                     <div  class="pop-city-height">
                       <scroll class="pop-city-scroll" v-if="provincelist.length" :data="provincelist">
                         <ul>
-                          <li v-for="(item, index) in provincelist" :class="[provinceActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectProvince(item, index)">{{item.name}}</li>
+                          <li :key="index" v-for="(item, index) in provincelist" :class="[provinceActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectProvince(item, index)">{{item.name}}</li>
                         </ul>
                       </scroll>
                     </div>
                     <div  class="pop-city-height">
                       <scroll class="pop-city-scroll" v-if="childCitylist.length" :data="childCitylist">
                         <ul ref="citys">
-                          <li v-for="(item, index) in childCitylist" :class="[cityActive === item ? 'cityActive': '']" @touchstart.prevent="selectCity(item, index)">{{item}}</li>
+                          <li :key="index" v-for="(item, index) in childCitylist" :class="[cityActive === item ? 'cityActive': '']" @touchstart.prevent="selectCity(item, index)">{{item}}</li>
                         </ul>
                       </scroll>
                       <div v-else>
@@ -53,7 +53,7 @@
                     <div  class="pop-city-height">
                       <scroll class="pop-city-scroll" ref="scrollCity" v-if="districtList.length" :data="districtList">
                         <ul ref="district">
-                          <li ref="districtList" v-for="(item, index) in districtList" :class="[districtlistActive === item ? 'cityActive': '']" @touchstart.prevent="selectdistrictlist(item, index)">{{item}}</li>
+                          <li ref="districtList" :key="index" v-for="(item, index) in districtList" :class="[districtlistActive === item ? 'cityActive': '']" @touchstart.prevent="selectdistrictlist(item, index)">{{item}}</li>
                         </ul>
                       </scroll>
                       <div v-else>
@@ -73,7 +73,7 @@
     <pop-box v-if="showTypeList" :typeList="typeList" @showPopBox="showPopBox">
           <div>
             <ul class="pop-list-child" v-if="typeList.length">
-              <li v-for="(item, index) in typeList" :class="[index === selectTypeIndex ? 'select-type-index' : '']" @click.stop.prevent="selectType(item, index)">
+              <li :key="index" v-for="(item, index) in typeList" :class="[index === selectTypeIndex ? 'select-type-index' : '']" @click.stop.prevent="selectType(item, index)">
                 {{item.name}}
               </li>
             </ul>
@@ -201,11 +201,8 @@ export default {
     recommendScroll (pos) {
       // console.log(pos)
     },
-    // 是不是我的需求
-    notMy () {
-      this.confirmText = '需求信息已被保护，快来发布自己的需求吧!'
-      this.$refs.confirm.show()
-    },
+    // 是不是当前客户的需求
+    notMy () {},
     // 是否展开更多选择
     selectCondition () {
       this.showCitysList = false
@@ -231,14 +228,13 @@ export default {
       this._getAllSelectNeedsItem(this.start)
     },
     stop (data) {
-      console.log(data)
       this.confirmText = '确定停止推荐？'
       this.$refs.confirm.show()
       this.stopTuijian = data
     },
     cancel () {
-      if (this.confirmText === '您还未注册，现在就去注册吧！' || this.confirmText === '您还未登录，现在就去登录吧！') {
-        window.location.href = '/registration'
+      if (this.confirmText === '您还未注册，现在就去注册吧！') {
+        window.location.href = '/'
       }
     },
     // 是否确定停止推荐。 然后重新获取总条数
@@ -246,20 +242,15 @@ export default {
       if (this.confirmText === '确定停止推荐？') {
         await stopNeeds(this.stopTuijian.path).then(res => {
           if (res.data.code === 0) {
-            console.log(this.showProjectList[this.stopTuijian.index])
             this.showProjectList[this.stopTuijian.index].isstop = 1
             this.confirmText = res.data.msg
             this.$refs.confirm.show()
           }
         })
-        console.log(this.itemTopArr)
         this._setMoreTuijian()
       }
-      if (this.confirmText === '您还未注册，现在就去注册吧！' || this.confirmText === '您还未登录，现在就去登录吧！') {
-        window.location.href = '/registration'
-      }
-      if (this.confirmText === '需求信息已被保护，快来发布自己的需求吧!') {
-        this.$router.push('addProject/add')
+      if (this.confirmText === '您还未注册，现在就去注册吧！') {
+        window.location.href = '/'
       }
     },
     itemActive (val, index) {
@@ -274,7 +265,6 @@ export default {
       }, {
         type: '物业类型'
       }]
-      console.log(val)
       this.allPricemin = ''
       this.allPricemax = ''
       this.type = ''
@@ -375,9 +365,6 @@ export default {
       this.district = item === '全部' ? 'all' : item
     },
     selectProvinceList () {
-      console.log(this.provinceActive)
-      console.log(this.cityActive)
-      console.log(this.districtlistActive)
       if (this.districtlistActive !== '') {
         if (this.districtlistActive === '全部') {
           this.itemSelectType[this.itemSelectTypeActive].type = this.cityActive
@@ -415,7 +402,6 @@ export default {
       this._setNeedsItem(this.moreSelectData(this.start))
     },
     selectType (item, index) {
-      console.log(this.itemSelectTypeActive)
       if (item.name === '全部') {
         if (this.itemSelectTypeActive === 1) {
           this.itemSelectType[this.itemSelectTypeActive].type = '总价'
@@ -437,9 +423,6 @@ export default {
       if (item.type) {
         this.type = item.type
       }
-      console.log(this.allPricemin)
-      console.log(this.allPricemax)
-      console.log(this.type)
       this.projectList = []
       this.start = 0
       this.query = ''
@@ -509,15 +492,10 @@ export default {
     _getProjectList () {},
     async _getUserbyid () {
       await getUserbyid().then(res => {
-        console.log(res)
         if (res.data.code === 0) {
           this.userId = res.data.data.user.roleid
         } else if (res.data.code === 1) {
           this.confirmText = '您还未注册，现在就去注册吧！'
-          this.$refs.confirm.show()
-          // window.location.href = '/'
-        } else {
-          this.confirmText = '您还未登录，现在就去登录吧！'
           this.$refs.confirm.show()
         }
       })
@@ -553,7 +531,6 @@ export default {
             this._setUserProperty(res.data.data, index)
           })
           this.showProjectList = res.data.data
-          console.log(this.showProjectList)
         }
       })
     },
@@ -699,8 +676,8 @@ export default {
           } else {
             data[index].addProject = ''
             data[index].addProjectUrl = ''
-            data[index].selectBtn = ''
-            data[index].selectBtnUrl = ''
+            data[index].selectBtn = userEvent.selectBtn
+            data[index].selectBtnUrl = userEvent.selectBtnUrl
           }
         } else {
           data[index].addProject = userEvent.addProject

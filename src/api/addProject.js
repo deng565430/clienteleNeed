@@ -40,4 +40,8 @@ export function getProject (id) {
 
   return $api.get(url)
 }
+export function secondHandSource(data) {
+  const url = '/secondhand/addclientsource'
 
+  return $api.post(url, data)
+}

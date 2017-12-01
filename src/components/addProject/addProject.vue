@@ -53,7 +53,7 @@
               <div>
                 <label>客户数量:
                   <span>  </span><br/>
-                  <input type="text" name="" v-model="clientcount"  placeholder="填写人数" :disabled="isDisable"> 人
+                  <input type="number" step="0.00001" name="" v-model="clientcount"  placeholder="填写人数" :disabled="isDisable"> 人
                 </label>
               </div>
             </div>
@@ -74,8 +74,8 @@
                 <div class="item-area">总面积:
                   <span> * </span>
                   <div class="item-input">
-                    <input type="text" name="startArea" v-model="startArea"  placeholder="输入数字" :disabled="isDisable">  平方米 ~
-                    <input type="text" name="startArea" v-model="endArea" placeholder="输入数字" :disabled="isDisable">  平方米
+                    <input type="number" step="0.00001" name="startArea" v-model="startArea"  placeholder="输入数字" :disabled="isDisable">  平方米 ~
+                    <input type="number" step="0.00001" name="startArea" v-model="endArea" placeholder="输入数字" :disabled="isDisable">  平方米
                   </div>
                 </div>
               </div>
@@ -86,7 +86,7 @@
               <div>
                 <label>总价预算:
                   <span> * </span><br/>
-                  <input type="text" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额" :disabled="isDisable">  万元
+                  <input type="number" step="0.00001" ref="userInput5" name="" v-model="theHeightBudget"  placeholder="金额" :disabled="isDisable">  万元
                 </label>
               </div>
             </div>
@@ -107,7 +107,7 @@
               <div>
                 <label>首付预算:
                   <span> </span><br/>
-                  <input type="text" ref="userInput5" name="" v-model="proportion"  placeholder="金额" :disabled="isDisable">  万元
+                  <input type="number" step="0.00001" ref="userInput5" name="" v-model="proportion"  placeholder="金额" :disabled="isDisable">  万元
                 </label>
               </div>
             </div>
@@ -125,7 +125,7 @@
                     <option value="7">7</option>
                     <option value="8">8</option>
                     <option value="9">9</option>
-                  </select> 室 &nbsp;
+                  </select> 室 
                   <select name="" class="select-50" v-model="houseHall" :disabled="isDisable">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -144,7 +144,7 @@
           <div class="item-bg">
             <div class="item-100">
               <div>
-                <p>户籍:</p>
+                <p>户籍:<span style="color: red;"> * </span></p>
                 <div class="radio">
                   <label><span class="pay_list_c1 on"><input name="Fruit1" type="radio" value="1" class="radioclass"  :disabled="isDisable" v-model="register"/></span>&nbsp; 本地 </label>
                   <label><input name="Fruit1" type="radio" value="2"  v-model="register"  :disabled="isDisable"/>&nbsp; 外地 </label>
@@ -216,8 +216,9 @@
 </template>
 
 <script>
-import { getProvincelist, getDistirctlist, getCitylist, getTypeList, sendProject, getProject } from 'api/addProject'
+import { getProvincelist, getDistirctlist, secondHandSource, getCitylist, getTypeList, sendProject, getProject } from 'api/addProject'
 import MyTitle from 'base/title/title'
+import { trims, checkNumber } from 'common/js/util'
 import Scroll from 'base/scroll/scroll'
 import Confirm from 'base/confirm/confirm'
 export default {
@@ -290,6 +291,7 @@ export default {
   },
   methods: {
     send (e) {
+      console.log(checkNumber('38495'))
       if (this.province === '全部') {
         this.confirmText = '请选择 省'
         this.$refs.confirm.show()
@@ -300,20 +302,37 @@ export default {
         this.$refs.confirm.show()
         return
       }
-      if (this._trim(this.startArea) === '') {
+      if (trims(this.startArea) === '' || trims(this.endArea) === '') {
         this.confirmText = '请输入总面积范围'
         this.$refs.confirm.show()
         return
       }
-      if (this._trim(this.endArea) === '') {
-        this.confirmText = '请输入总面积范围'
+      if (!checkNumber(this.startArea) || !checkNumber(this.endArea)) {
+        this.confirmText = '请输入合法的面积范围'
         this.$refs.confirm.show()
         return
       }
       if (this.theHeightBudget === '') {
-        this.confirmText = '输入最高预算'
+        this.confirmText = '输入总价预算'
         this.$refs.confirm.show()
         return
+      }
+      if (!checkNumber(this.theHeightBudget)) {
+        this.confirmText = '请输入合法的总价预算'
+        this.$refs.confirm.show()
+        return
+      }
+      if (this.register === '') {
+        this.confirmText = '请选择户籍'
+        this.$refs.confirm.show()
+        return
+      }
+      if (this.proportion !== '') {
+        if (!checkNumber(this.proportion)) {
+          this.confirmText = '请输入合法的首付预算'
+          this.$refs.confirm.show()
+          return
+        }
       }
       if (this.needName.length > 5) {
         this.confirmText = '需求单名称已超过长度！'
@@ -326,8 +345,8 @@ export default {
         city: this.city,
         district: this.district ? this.district : null,
         clientcount: this.clientcount ? this.clientcount : null,
-        start_area: this._trim(this.startArea) ? this._trim(this.startArea) : null,
-        end_area: this._trim(this.endArea) ? this._trim(this.endArea) : null,
+        start_area: trims(this.startArea) ? trims(this.startArea) : null,
+        end_area: trims(this.endArea) ? trims(this.endArea) : null,
         price: this.theHeightBudget ? this.theHeightBudget : null,
         type: this.tenementType ? this.tenementType : null,
         scale: this.proportion ? this.proportion : null,
@@ -340,25 +359,50 @@ export default {
         msg: this.textarea ? this.textarea : null,
         needs_name: this.needName ? this.needName : null
       }
+      // 二手房客源数据
+      const secondData = {
+        name: null,
+        face: null,
+        type: this.tenementType ? this.tenementType : null,
+        floor: this.floor ? this.floor : null,
+        concreteFloor: null,
+        price: null,
+        totalPrice: this.theHeightBudget ? this.theHeightBudget : null,
+        area: trims(this.endArea) ? trims(this.endArea) : null,
+        minarea: trims(this.startArea) ? trims(this.startArea) : null,
+        roomAge: null,
+        decoration: null,
+        elevator: null,
+        propertyCosts: null,
+        prov: this.province,
+        city: this.city,
+        district: this.district ? this.district : null,
+        room: this.houseHome ? this.houseHome : '0',
+        hall: this.houseHall ? this.houseHall : '0',
+        greenRate: null,
+        census: this.register ? this.register : null,
+        social: this.social ? this.social : null,
+        downPayment: null,
+        clientCount: this.clientcount ? this.clientcount : '1',
+        remark: this.textarea ? this.textarea : null
+      }
       sendProject(data).then(res => {
         if (res.data.code === 0) {
           this.refresh = true
-          this.confirmText = '添加成功'
+          this.confirmText = '您的信息已发布,并同步到二手需求市场'
           this.$refs.confirm.show()
         } else {
           this.confirmText = res.data.msg ? res.data.msg : '服务器内部错误！'
           this.$refs.confirm.show()
         }
       })
+      secondHandSource(secondData).then(res => {
+        console.log(res)
+      })
     },
     confirm (data) {
-      console.log(data)
-      if (data) {
-        this.refresh = false
+      if (this.confirmText === '提交成功' || this.confirmText === '您的信息已发布,并同步到二手需求市场') {
         this.$router.push('/')
-        /* setTimeout(() => {
-          window.location.reload()
-        }, 20) */
       }
     },
     confirmClear() {},

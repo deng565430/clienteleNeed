@@ -203,7 +203,7 @@ export default {
       window.location.href = '/recommend?id=' + val
     },
     details (val) {
-      window.location.href = '/recommendList#/detail/' + val
+      window.location.href = '/detail?id=' + val
     },
     scrollToEnd () {
       var that = this

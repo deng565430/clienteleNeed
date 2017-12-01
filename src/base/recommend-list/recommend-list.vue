@@ -3,7 +3,7 @@
     <div>
       <div class="project-list" v-if="!!projectList.length">
         <ul class="item">
-          <li v-for="(item, index) in projectList" @click="checkNeed(item.needsid, item.ismy)" :style="item.flag ? bgImg : ''">
+          <li :key="index" v-for="(item, index) in projectList" @click="checkNeed(item.needsid, item.ismy)" :style="item.flag ? bgImg : ''">
             <div class="title">
               <img v-if="item.ismy" :src="isMy" class="is-my-img" alt="">
               <p v-if="!item.needs_name">编号：<span> {{item.needsid}} </span></p>
@@ -32,7 +32,7 @@
               <p>推荐项目名：<span>{{item.projects}}</span></p>
             </div>
             <div class="middle">
-              <p>发布时间：<span>{{timeFormat('yyyy-MM-dd hh-mm', new Date(item.createtime))}}</span></p>
+              <p>发布时间：<span>{{timeFormat('yyyy-MM-dd hh:mm', new Date(item.createtime))}}</span></p>
             </div>
             <div class="middle-cent" v-if="userId === 1">
               <p>发布人：<span>{{item.username}}</span> <span> {{ item.manager}}</span></p>
@@ -103,12 +103,13 @@
         window.location.href = `tel:${phone}`
       },
       checkNeed (id, ismy) {
-        if (this.userId === 2) {
+        // 判断是不是我的项目
+        /* if (this.userId === 2) {
           if (!ismy) {
             this.$emit('notMy')
             return
           }
-        }
+        } */
         this.$router.push(`/addProject/${id}`)
       }
     }
