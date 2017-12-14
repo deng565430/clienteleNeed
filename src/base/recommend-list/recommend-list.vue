@@ -57,6 +57,8 @@
 
 <script>
   import { timeFormat } from 'common/js/util.js'
+  import TYPE from 'common/js/buryingpointType'
+  import { addLog } from 'api/buryingpoint'
   export default {
     props: {
       projectList: {
@@ -97,6 +99,7 @@
         this.$router.push(`/demandetail/${path}/${url}`)
       },
       showPath (path, url) {
+        addLog(TYPE.BACKPAGE, '', TYPE.CHAKANTUIJIANBTN, TYPE.XIANGQINGPAGE, window.USERMSG)
         this.$router.push(`/demandetail/${path}/${url}`)
       },
       callPhone (phone) {
@@ -110,6 +113,7 @@
             return
           }
         } */
+        addLog(TYPE.BACKPAGE, '', TYPE.XIANGQINGBTN, TYPE.TUIJIANLISTPAGE, window.USERMSG)
         this.$router.push(`/addProject/${id}`)
       }
     }

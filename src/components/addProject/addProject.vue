@@ -210,7 +210,7 @@
     </scroll>
   </div>
   <div>
-    <confirm ref="confirm" :text="confirmText" :refresh="refresh" @confirm="confirm"></confirm>
+    <confirm ref="confirm" :flag="isShowCancel" :text="confirmText" :refresh="refresh" @confirm="confirm"></confirm>
   </div>
 </div>
 </template>
@@ -228,6 +228,7 @@ export default {
       confirmText: '请填写完整',
       id: this.$route.params.id,
       isDisable: false,
+      isShowCancel: true,
       ratio: [{
         label: '10',
         value: '10'
@@ -339,68 +340,73 @@ export default {
         this.$refs.confirm.show()
         return
       }
-      this.disabled = false
-      const data = {
-        prov: this.province,
-        city: this.city,
-        district: this.district ? this.district : null,
-        clientcount: this.clientcount ? this.clientcount : null,
-        start_area: trims(this.startArea) ? trims(this.startArea) : null,
-        end_area: trims(this.endArea) ? trims(this.endArea) : null,
-        price: this.theHeightBudget ? this.theHeightBudget : null,
-        type: this.tenementType ? this.tenementType : null,
-        scale: this.proportion ? this.proportion : null,
-        room: this.houseHome ? this.houseHome : null,
-        hall: this.houseHall ? this.houseHall : null,
-        census: this.register ? this.register : null,
-        floor: this.floor ? this.floor : null,
-        ensure: this.social ? this.social : null,
-        decoration: this.fitment ? this.fitment : null,
-        msg: this.textarea ? this.textarea : null,
-        needs_name: this.needName ? this.needName : null
-      }
-      // 二手房客源数据
-      const secondData = {
-        name: null,
-        face: null,
-        type: this.tenementType ? this.tenementType : null,
-        floor: this.floor ? this.floor : null,
-        concreteFloor: null,
-        price: null,
-        totalPrice: this.theHeightBudget ? this.theHeightBudget : null,
-        area: trims(this.endArea) ? trims(this.endArea) : null,
-        minarea: trims(this.startArea) ? trims(this.startArea) : null,
-        roomAge: null,
-        decoration: null,
-        elevator: null,
-        propertyCosts: null,
-        prov: this.province,
-        city: this.city,
-        district: this.district ? this.district : null,
-        room: this.houseHome ? this.houseHome : '0',
-        hall: this.houseHall ? this.houseHall : '0',
-        greenRate: null,
-        census: this.register ? this.register : null,
-        social: this.social ? this.social : null,
-        downPayment: null,
-        clientCount: this.clientcount ? this.clientcount : '1',
-        remark: this.textarea ? this.textarea : null
-      }
-      sendProject(data).then(res => {
-        if (res.data.code === 0) {
-          this.refresh = true
-          this.confirmText = '您的信息已发布,并同步到二手需求市场'
-          this.$refs.confirm.show()
-        } else {
-          this.confirmText = res.data.msg ? res.data.msg : '服务器内部错误！'
-          this.$refs.confirm.show()
-        }
-      })
-      secondHandSource(secondData).then(res => {
-        console.log(res)
-      })
+      this.confirmText = '确定发布'
+      this.$refs.confirm.show()
     },
     confirm (data) {
+      this.isShowCancel = true
+      if (this.confirmText === '确定发布') {
+        this.isShowCancel = false
+        const data = {
+          prov: this.province,
+          city: this.city,
+          district: this.district ? this.district : null,
+          clientcount: this.clientcount ? this.clientcount : null,
+          start_area: trims(this.startArea) ? trims(this.startArea) : null,
+          end_area: trims(this.endArea) ? trims(this.endArea) : null,
+          price: this.theHeightBudget ? this.theHeightBudget : null,
+          type: this.tenementType ? this.tenementType : null,
+          scale: this.proportion ? this.proportion : null,
+          room: this.houseHome ? this.houseHome : null,
+          hall: this.houseHall ? this.houseHall : null,
+          census: this.register ? this.register : null,
+          floor: this.floor ? this.floor : null,
+          ensure: this.social ? this.social : null,
+          decoration: this.fitment ? this.fitment : null,
+          msg: this.textarea ? this.textarea : null,
+          needs_name: this.needName ? this.needName : null
+        }
+        // 二手房客源数据
+        const secondData = {
+          name: null,
+          face: null,
+          type: this.tenementType ? this.tenementType : null,
+          floor: this.floor ? this.floor : null,
+          concreteFloor: null,
+          price: null,
+          totalPrice: this.theHeightBudget ? this.theHeightBudget : null,
+          area: trims(this.endArea) ? trims(this.endArea) : null,
+          minarea: trims(this.startArea) ? trims(this.startArea) : null,
+          roomAge: null,
+          decoration: null,
+          elevator: null,
+          propertyCosts: null,
+          prov: this.province,
+          city: this.city,
+          district: this.district ? this.district : null,
+          room: this.houseHome ? this.houseHome : '0',
+          hall: this.houseHall ? this.houseHall : '0',
+          greenRate: null,
+          census: this.register ? this.register : null,
+          social: this.social ? this.social : null,
+          downPayment: null,
+          clientCount: this.clientcount ? this.clientcount : '1',
+          remark: this.textarea ? this.textarea : null
+        }
+        sendProject(data).then(res => {
+          if (res.data.code === 0) {
+            this.refresh = true
+            this.confirmText = '您的信息已发布,并同步到二手需求市场'
+            this.$refs.confirm.show()
+          } else {
+            this.confirmText = res.data.msg ? res.data.msg : '服务器内部错误！'
+            this.$refs.confirm.show()
+          }
+        })
+        secondHandSource(secondData).then(res => {
+          console.log(res)
+        })
+      }
       if (this.confirmText === '提交成功' || this.confirmText === '您的信息已发布,并同步到二手需求市场') {
         this.$router.push('/')
       }

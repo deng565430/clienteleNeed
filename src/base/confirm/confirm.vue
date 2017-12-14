@@ -5,7 +5,7 @@
         <div class="confirm-content">
           <p class="text">{{text}}</p>
           <div class="operate">
-            <div @click="cancel" class="operate-btn left">{{cancelBtnText}}</div>
+            <div v-if="flag" @click="cancel" class="operate-btn left">{{cancelBtnText}}</div>
             <div @click="confirm" class="operate-btn">{{confirmBtnText}}</div>
           </div>
         </div>
@@ -20,6 +20,10 @@
       text: {
         type: String,
         default: ''
+      },
+      flag: {
+        type: Boolean,
+        default: true
       },
       confirmBtnText: {
         type: String,
