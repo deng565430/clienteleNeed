@@ -38,8 +38,12 @@
               <p>发布人：<span>{{item.username}}</span> <span> {{ item.manager}}</span></p>
               <p @click.stop="callPhone(item.phone)">电话：<a>{{item.phone}}</a></p>
             </div>
-            <div>
-              <div class="bottom">
+            <div class='bottom'>
+              <div class="bottom-left">
+                <p v-if="item.isstop===0&&!item.projects">努力推荐中...</p>
+              </div>
+              <div class="bottom-right">
+                
                 <a class="btn add" v-if="item.isstop === 0" @click.stop="goUrlPath(item.needsid, index, item.addProjectUrl, item.addProject)" :class="item.addProject === '' ? 'noshow' : (item.isstop === 0 ? '' : 'noshow')">{{item.addProject}}</a>
                 <a v-else class="stop">已停止推荐</a>
                 <a class="btn"  v-if="item.isstop === 0" @click.stop="showPath(item.needsid, item.selectBtnUrl)" :class="item.selectBtn === '' ? 'noshow' : ''">{{item.selectBtn}}</a>
@@ -198,6 +202,15 @@
             margin-right: 5px
             text-decoration:underline
       .bottom
+        display:flex
+        div
+          width: 50%
+      .bottom-left
+        line-height: 35px 
+        padding-left: 10px
+        p
+          color: red     
+      .bottom-right
         text-align: right
         padding: 0 10px 10px
         .btn
