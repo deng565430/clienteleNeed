@@ -40,7 +40,7 @@
                     <div  class="pop-city-height">
                       <scroll class="pop-city-scroll" v-if="childCitylist.length" :data="childCitylist">
                         <ul ref="citys">
-                          <li :key="index" v-for="(item, index) in childCitylist" :class="[cityActive === item ? 'cityActive': '']" @touchstart.prevent="selectCity(item, index)">{{item}}</li>
+                          <li :key="index" v-for="(item, index) in childCitylist" :class="[cityActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectCity(item, index)">{{item.name}}</li>
                         </ul>
                       </scroll>
                       <div v-else>
@@ -53,7 +53,7 @@
                     <div  class="pop-city-height">
                       <scroll class="pop-city-scroll" ref="scrollCity" v-if="districtList.length" :data="districtList">
                         <ul ref="district">
-                          <li ref="districtList" :key="index" v-for="(item, index) in districtList" :class="[districtlistActive === item ? 'cityActive': '']" @touchstart.prevent="selectdistrictlist(item, index)">{{item}}</li>
+                          <li ref="districtList" :key="index" v-for="(item, index) in districtList" :class="[districtlistActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectdistrictlist(item, index)">{{item.name}}</li>
                         </ul>
                       </scroll>
                       <div v-else>
@@ -108,7 +108,8 @@
 </template>
 
 <script>
-import { getProvincelist, getDistirctlist, getCitylist, getJurisdictiont, getTypeList, getUserbyid, getTimeData, setNeedsItem, stopNeeds } from 'api/recommendList'
+import { getJurisdictiont, getTypeList, getUserbyid, getTimeData, setNeedsItem, stopNeeds } from 'api/recommendList'
+import { getProvincelist, getDistirctlist, getCitylist } from 'api/getCity'
 import Loading from 'base/loading/loading'
 import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
@@ -346,23 +347,23 @@ export default {
       this._getCitylist()
     },
     selectCity (item, index) {
-      if (this.cityActive === item) {
+      if (this.cityActive === item.name) {
         return
       }
       if (item === '全部') {
         this.districtListHasMore = false
         this.districtListHasMoreTxt = ''
       }
-      this.cityActive = item
-      this.city = item === '全部' ? 'all' : item
+      this.cityActive = item.name
+      this.city = item.name === '全部' ? 'all' : item.provinceType
       this.districtList = []
       this.district = 'all'
       this.districtlistActive = ''
       this._getdistrictlist()
     },
     selectdistrictlist (item, index) {
-      this.districtlistActive = item
-      this.district = item === '全部' ? 'all' : item
+      this.districtlistActive = item.name
+      this.district = item.name === '全部' ? 'all' : item.name
     },
     selectProvinceList () {
       if (this.districtlistActive !== '') {
@@ -464,8 +465,8 @@ export default {
       getProvincelist().then(res => {
         for (let i in res.data.data) {
           this.provincelist.push({
-            name: res.data.data[i],
-            provinceType: res.data.data[i]
+            name: res.data.data[i].value,
+            provinceType: res.data.data[i].key
           })
         }
       })
@@ -476,8 +477,16 @@ export default {
         return
       }
       getCitylist(this.province).then(res => {
-        this.childCitylist = res.data.data
-        this.childCitylist.unshift('全部')
+        this.childCitylist = [{
+          name: '全部',
+          provinceType: 'all'
+        }]
+        for (let i in res.data.data) {
+          this.childCitylist.push({
+            name: res.data.data[i].value,
+            provinceType: res.data.data[i].key
+          })
+        }
       })
     },
     _getdistrictlist () {
@@ -485,8 +494,16 @@ export default {
         return
       }
       getDistirctlist(this.province, this.city).then(res => {
-        this.districtList = res.data.data
-        this.districtList.unshift('全部')
+        this.districtList = [{
+          name: '全部',
+          provinceType: 'all'
+        }]
+        for (let i in res.data.data) {
+          this.districtList.push({
+            name: res.data.data[i].value,
+            provinceType: res.data.data[i].key
+          })
+        }
       })
     },
     _getProjectList () {},

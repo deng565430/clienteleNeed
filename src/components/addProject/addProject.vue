@@ -17,7 +17,7 @@
                   <span> * </span><br/>
                   <select name="" class="select" v-model="province" @change="selectProvince" v-if="!isDisable">
                     <option value="全部" selected="selected">全部</option>
-                    <option :value="item" v-for="item in provinceList">{{item}}</option>
+                    <option :value="item" :key="item.key" v-for="item in provinceList">{{item.value}}</option>
                   </select>
                   <input v-else type="text" name="" v-model="province" :disabled="isDisable">
                 </label>
@@ -29,7 +29,7 @@
                   <span> * </span><br/>
                   <select name="" class="select" v-model="city" @change="selectCity" v-if="!isDisable">
                     <option value="全部" selected="selected">全部</option>
-                    <option :value="item" v-for="item in cityList">{{item}}</option>
+                    <option :value="item" :key="item.key"  v-for="item in cityList">{{item.value}}</option>
                   </select>
                   <input v-else type="text" name="" v-model="city" :disabled="isDisable">
                 </label>
@@ -43,7 +43,7 @@
                   <span>  </span><br/>
                   <select name="" class="select" v-model="district" @change="selectDistrict" v-if="!isDisable">
                     <option value="全部" selected="selected">全部</option>
-                    <option :value="item" v-for="item in districtList">{{item}}</option>
+                    <option :value="item" :key="item.key"  v-for="item in districtList">{{item.value}}</option>
                   </select>
                   <input v-else type="text" name="" v-model="district" :disabled="isDisable">
                 </label>
@@ -96,7 +96,7 @@
                   <span> * </span><br/>
                   <select name="" class="select" v-model="tenementType" :disabled="isDisable">
                     <option value="全部">全部</option>
-                    <option :value="item" v-for="item in tenementTypeList">{{item}}</option>
+                    <option :value="item" :key="item" v-for="item in tenementTypeList">{{item}}</option>
                   </select>
                 </label>
               </div>
@@ -125,7 +125,7 @@
                     <option value="7">7</option>
                     <option value="8">8</option>
                     <option value="9">9</option>
-                  </select> 室 
+                  </select> 室
                   <select name="" class="select-50" v-model="houseHall" :disabled="isDisable">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -216,7 +216,8 @@
 </template>
 
 <script>
-import { getProvincelist, getDistirctlist, secondHandSource, getCitylist, getTypeList, sendProject, getProject } from 'api/addProject'
+import { secondHandSource, getTypeList, sendProject, getProject } from 'api/addProject'
+import { getProvincelist, getDistirctlist, getCitylist } from 'api/getCity'
 import MyTitle from 'base/title/title'
 import { trims, checkNumber } from 'common/js/util'
 import Scroll from 'base/scroll/scroll'
@@ -348,9 +349,9 @@ export default {
       if (this.confirmText === '确定发布') {
         this.isShowCancel = false
         const data = {
-          prov: this.province,
-          city: this.city,
-          district: this.district ? this.district : null,
+          prov: this.province.value,
+          city: this.city.value,
+          district: this.district && this.district.value ? this.district.value : null,
           clientcount: this.clientcount ? this.clientcount : null,
           start_area: trims(this.startArea) ? trims(this.startArea) : null,
           end_area: trims(this.endArea) ? trims(this.endArea) : null,
@@ -381,9 +382,9 @@ export default {
           decoration: null,
           elevator: null,
           propertyCosts: null,
-          prov: this.province,
-          city: this.city,
-          district: this.district ? this.district : null,
+          prov: this.province.value,
+          city: this.city.value,
+          district: this.district && this.district.value ? this.district.value : null,
           room: this.houseHome ? this.houseHome : '0',
           hall: this.houseHall ? this.houseHall : '0',
           greenRate: null,
@@ -418,7 +419,7 @@ export default {
       this.city = '全部'
       this.district = '全部'
       this.cityList = []
-      getCitylist(this.province).then(res => {
+      getCitylist(this.province.key).then(res => {
         this.cityList = res.data.data
       })
     },
@@ -428,7 +429,7 @@ export default {
         return
       }
       this.districtList = []
-      getDistirctlist(this.province, this.city).then(res => {
+      getDistirctlist(this.province.key, this.city.key).then(res => {
         this.districtList = res.data.data
       })
     },

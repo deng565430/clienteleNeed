@@ -19,7 +19,7 @@ import 'common/js/usermsg.js'
 /* eslint-disable no-unused-vars */
 // import vConsole from 'vconsole'
 
-console.log('text')
+// console.log('text')
 
 // 解决移动端300毫秒的延迟
 if ('addEventListener' in document) {

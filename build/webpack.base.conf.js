@@ -23,8 +23,19 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
+  externals: {
+    'vue': 'Vue',
+    'vue-router': 'VueRouter',
+    'vue-lazyload': 'VueLazyload',
+    'axios': 'axios',
+    'babel-polyfill': 'window'
+  },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
+    modules: [
+      resolve('src'),
+      resolve('node_modules')
+    ],
     alias: {
       '@': resolve('src'),
       'common': resolve('src/common'),
@@ -51,7 +62,8 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?cacheDirectory=true',
+        exclude: /node_modules/,
         include: [resolve('src'), resolve('test')]
       },
       {

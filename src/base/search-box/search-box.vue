@@ -84,5 +84,5 @@
       width: 30px
       height: 100%
       line-height: 37px
-      text-align: center  
+      text-align: center
 </style>
