@@ -116,6 +116,8 @@ import Scroll from 'base/scroll/scroll'
 import PopBox from 'base/pop-box/pop-box'
 import RecommendList from 'base/recommend-list/recommend-list'
 import Confirm from 'base/confirm/confirm'
+import TYPE from 'common/js/buryingpointType'
+import { addLog } from 'api/buryingpoint'
 export default {
   data () {
     return {
@@ -193,6 +195,9 @@ export default {
     }
   },
   created () {
+    setTimeout(() => {
+      addLog(TYPE.BACKPAGE, '', '', '', window.USERMSG)
+    }, 1500)
     this._getUserbyid()
     this._getJurisdictiont()
     this._getProvincelist()

@@ -222,6 +222,8 @@ import MyTitle from 'base/title/title'
 import { trims, checkNumber } from 'common/js/util'
 import Scroll from 'base/scroll/scroll'
 import Confirm from 'base/confirm/confirm'
+import TYPE from 'common/js/buryingpointType'
+import { addLog } from 'api/buryingpoint'
 export default {
   name: 'addProject',
   data () {
@@ -287,6 +289,12 @@ export default {
     }
   },
   created () {
+    // 记录查看需求详情的时候发送
+    if (this.$route.params.id !== 'add') {
+      setTimeout(() => {
+        addLog(TYPE.LOOKADDPAGE, '', '', '', window.USERMSG)
+      }, 1500)
+    }
     this._getProvincelist()
     this._getTypeList()
     this._getProject()

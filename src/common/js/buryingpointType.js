@@ -16,5 +16,7 @@ export default {
   // 查看推荐按钮
   'CHAKANTUIJIANBTN': 'B027',
   // 查看推荐下级页面
-  'TUIJIANLISTPAGE': 'P023'
+  'TUIJIANLISTPAGE': 'P023',
+  // 添加需求查看页面
+  'LOOKADDPAGE': 'P022'
 }

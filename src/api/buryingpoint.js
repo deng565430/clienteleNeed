@@ -4,7 +4,7 @@ export function addLog(currPageId, listPageId, btnId, nextPageId, userMsg) {
   const url = `/log/add`
   const data = {
     // 用户设备信息
-    front_ua: userMsg.userAgent,
+    front_ua: userMsg.userAgent || '',
     // ip地址
     front_ip: window.returnCitySN['cip'],
     // 当前页面id
