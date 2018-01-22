@@ -500,7 +500,6 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   #addProject
-    font-size: $font-size-large
     position: fixed
     width: 100%
     bottom: 0

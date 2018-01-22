@@ -6,7 +6,7 @@
           <li :key="index" v-for="(item, index) in projectList" @click="checkNeed(item.needsid, item.ismy)" :style="item.flag ? bgImg : ''">
             <div class="title">
               <img v-if="item.ismy" :src="isMy" class="is-my-img" alt="">
-              <p v-if="!item.needs_name">编号：<span> {{item.needsid}} </span></p>
+              <p v-if="!item.needs_name">编号：<span> {{item.needsid.substring(15)}} </span></p>
               <p v-else>需求名称：<span> {{item.needs_name}} </span></p>
               <p>共有<span> {{item.user_count == null ? '0' : item.user_count}} </span>人推荐<span> {{item.project_count == null ? '0' : item.project_count}} </span>个项目</p>
             </div>
@@ -17,11 +17,11 @@
               </div>
               <div>
                 <p>面积</p>
-                <p class="color">{{item.area}}平米</p>
+                <p class="color">{{item.area}}平</p>
               </div>
               <div>
                 <p>预算</p>
-                <p class="color">{{item.price}}万元</p>
+                <p class="color">{{item.price}}万</p>
               </div>
               <div>
                 <p>物业类型</p>
@@ -32,7 +32,7 @@
               <p>推荐项目名：<span>{{item.projects}}</span></p>
             </div>
             <div class="middle">
-              <p>发布时间：<span>{{timeFormat('yyyy-MM-dd hh:mm', new Date(item.createtime))}}</span></p>
+              <p>发布时间：<span>{{timeFormat(new Date(item.createtime))}}</span></p>
             </div>
             <div class="middle-cent" v-if="userId === 1">
               <p>发布人：<span>{{item.username}}</span> <span> {{ item.manager}}</span></p>
@@ -43,7 +43,7 @@
                 <p v-if="item.isstop===0&&!item.projects">努力推荐中...</p>
               </div>
               <div class="bottom-right">
-                
+
                 <a class="btn add" v-if="item.isstop === 0" @click.stop="goUrlPath(item.needsid, index, item.addProjectUrl, item.addProject)" :class="item.addProject === '' ? 'noshow' : (item.isstop === 0 ? '' : 'noshow')">{{item.addProject}}</a>
                 <a v-else class="stop">已停止推荐</a>
                 <a class="btn"  v-if="item.isstop === 0" @click.stop="showPath(item.needsid, item.selectBtnUrl)" :class="item.selectBtn === '' ? 'noshow' : ''">{{item.selectBtn}}</a>
@@ -118,7 +118,7 @@
           }
         } */
         addLog(TYPE.BACKPAGE, '', TYPE.XIANGQINGBTN, TYPE.TUIJIANLISTPAGE, window.USERMSG)
-        this.$router.push(`/addProject/${id}`)
+        this.$router.push(`/lookProject/${id}`)
       }
     }
   }
@@ -206,10 +206,10 @@
         div
           width: 50%
       .bottom-left
-        line-height: 35px 
+        line-height: 35px
         padding-left: 10px
         p
-          color: red     
+          color: red
       .bottom-right
         text-align: right
         padding: 0 10px 10px

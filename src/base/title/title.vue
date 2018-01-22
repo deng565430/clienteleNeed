@@ -29,7 +29,7 @@
       text-align: center
       height: 50px
       line-height: 50px
-      background: rgba(243, 107, 67, .8)
+      background-image:linear-gradient(left,#ed6252,#f77428)
       display: flex
       i
         width: 50px

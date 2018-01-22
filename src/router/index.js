@@ -5,7 +5,13 @@ const RecommendList = (resolve) => {
 }
 
 const AddProject = (resolve) => {
-  import('components/addProject/addProject').then((module) => {
+  import('components/addProject/addSelectList').then((module) => {
+    resolve(module)
+  })
+}
+
+const LookProject = (resolve) => {
+  import('components/lookProjectDetail/lookProjectDetail').then((module) => {
     resolve(module)
   })
 }
@@ -30,6 +36,10 @@ export default [
     path: '/addProject/:id',
     name: 'addProject',
     component: AddProject
+  }, {
+    path: '/lookProject/:id',
+    name: 'lookProject',
+    component: LookProject
   }, {
     path: '/demandetail/:id/:status',
     name: 'demandetail',

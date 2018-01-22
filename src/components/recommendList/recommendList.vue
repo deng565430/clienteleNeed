@@ -859,7 +859,7 @@ export default {
           &:last-child
             border-right: none
       .xiangying-top
-        background: #f28666
+        background-image:linear-gradient(left,#ed6252,#f77428)
         padding:0 5px 5px 5px
         li
           line-height: 35px
