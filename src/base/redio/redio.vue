@@ -1,6 +1,6 @@
 <template>
   <div class="redio">
-    <span  @click="checked(item, index)" class="label" :class="item.isChecked ? 'checked-style' : 'no-checked-style'" :key="item" v-for="(item, index) in data">
+    <span :style="width"  @click="checked(item, index)" class="label" :class="item.isChecked ? 'checked-style' : 'no-checked-style'" :key="item" v-for="(item, index) in data">
       {{item.value}}
     </span>
   </div>
@@ -33,6 +33,12 @@
           }
         ]
       },
+      width: {
+        type: Object,
+        default: {
+          width: '3.4rem'
+        }
+      },
       dataName: {
         type: String,
         default: ''
@@ -63,7 +69,6 @@
     .label
       display: inline-block;
       font-size: 12px
-      width: 3.5rem
       line-height: 30px
       border-radius: 20px
       text-align: center

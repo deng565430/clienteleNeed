@@ -11,10 +11,13 @@
           <p class="right">{{needsid}}</p>
         </div>
         <div class="middle">
+          <p class="needs-name" v-if="needName">
+            {{needName}}
+          </p>
           <div class="middle-t">
             <div>
               <p>区域</p>
-              <p>{{`${province}${'-'+city}${district ? '-' + district: ''}`}}</p>
+              <p>{{`${city}${district ? '-' + district: ''}`}}</p>
             </div>
             <div>
               <p>总价</p>
@@ -79,7 +82,7 @@ export default {
       msg: '',
       createtime: '',
       username: '',
-      needName: '',
+      needName: null,
       needsid: ''
     }
   },
@@ -111,7 +114,7 @@ export default {
           this.ensure = res.data.data.ensure || '(未填)'
           this.decoration = res.data.data.decoration || '(未填)'
           this.msg = res.data.data.msg
-          this.needName = res.data.data.needs_name || '(未填)'
+          this.needName = res.data.data.needs_name || null
           this.createtime = timeFormat('yyyy-MM-dd', new Date(res.data.data.createtime))
           this.username = res.data.data.username
           this.needsid = res.data.data.needsid.substring(15)
@@ -171,6 +174,9 @@ export default {
         background: #fff
         p
           color: #a7a7a7
+      .needs-name
+        text-align: center
+        line-height: 40px
       .middle-t
         display:flex
         padding: 10px 0

@@ -10,8 +10,8 @@
             <img :src="topImg" alt="">
           </div>
           <div class="top">
-            <div class="left"><span>*</span>用途</div>
-            <div class="right"><redio @checkedVal="checkedVal" :data="type" :dataName="'type'"/></div>
+            <div class="left" style="width: 2.5rem; min-width: 2.5rem"><span style="color: red">*</span>用途</div>
+            <div class="right"><redio :width="{width: '2.7rem'}" @checkedVal="checkedVal" :data="type" :dataName="'type'"/></div>
           </div>
         </div>
         <div class="item">
@@ -44,10 +44,10 @@
             <redio @checkedVal="checkedVal" :data="area" :dataName="'area'" />
           </div>
            <div class="wanshanxinxi" v-if="wanshanFlag" @click="showMore">
-            <p><img :src="upDownIcon" alt=""> 完善信息 (推荐填写)</p>
+            <p><img :src="pullDownIcon" alt=""> 完善信息 (推荐填写)</p>
           </div>
         </div>
-          <div class="item" v-if="!wanshanFlag">
+        <div class="item" v-if="!wanshanFlag">
           <div class="img">
             <img :src="wanshanxinxi" alt="">
           </div>
@@ -57,36 +57,43 @@
           </div>
           <div class="top">
             <div class="left">户型</div>
-            <div><redio @checkedVal="checkedVal" :data="huxing" :dataName="'huxing'"/></div>
+            <div><redio :width="{width: '2.7rem'}" @checkedVal="checkedVal" :data="huxing" :dataName="'huxing'"/></div>
           </div>
           <div class="top">
             <div class="left">楼层</div>
-            <div><redio @checkedVal="checkedVal" :data="floor" :dataName="'floor'"/></div>
+            <div><redio :width="{width: '2.7rem'}" @checkedVal="checkedVal" :data="floor" :dataName="'floor'"/></div>
           </div>
           <div class="top">
             <div class="left">装修</div>
-            <div><redio @checkedVal="checkedVal" :data="decoration" :dataName="'decoration'"/></div>
+            <div><redio :width="{width: '2.7rem'}" @checkedVal="checkedVal" :data="decoration" :dataName="'decoration'"/></div>
           </div>
           <div class="top">
             <div class="left">社保</div>
-            <div><redio @checkedVal="checkedVal" :data="social" :dataName="'social'"/></div>
+            <div><redio :width="{width: '2.7rem'}" @checkedVal="checkedVal" :data="social" :dataName="'social'"/></div>
           </div>
           <div class="top">
             <div class="left">户籍</div>
-            <div><redio @checkedVal="checkedVal" :data="hujiData" :dataName="'huji'"/></div>
+            <div><redio :width="{width: '2.7rem'}" @checkedVal="checkedVal" :data="hujiData" :dataName="'huji'"/></div>
+          </div>
+          <div class="wanshanxinxi" v-if="!wanshanFlag" @click="hidemore">
+            <p><img :src="pullUpIcon" alt=""> 收起</p>
           </div>
         </div>
         <div class="item">
           <div class="top">
             <div class="left">备注:</div>
-            <div class="right"><textarea v-model="textarea" class="textarea" name="" id="" cols="30" rows="10"></textarea></div>
+            <div class="right"><textarea v-model="textarea" placeholder="推荐填写(限制50字以内)" class="textarea" name="" id="" cols="30" rows="10"></textarea></div>
           </div>
-        </div>
-         <div class="item" @click="sendProject">
-          <img :src="sendbtn" alt="">
+          <div class="top">
+            <div class="left" style="width: 4rem; min-width: 4rem">需求单名称</div>
+            <div class="input-name"><input placeholder="方便查找,推荐填写（限10字以内）" v-model="needsName" class="text-input" type="text" name="" id=""></div>
+          </div>
         </div>
       </div>
     </scroll>
+    <div class="btn" @click="sendProject">
+      <img :src="sendbtn" alt="">
+    </div>
     <div >
       <modal ref="modal" @modal="modal" @cancel="cancel" :title="'其他区域'">
         <div class="item-bg">
@@ -141,9 +148,10 @@
         mainali: require('common/image/mainali.png'),
         maiduoda: require('common/image/maiduoda.png'),
         wanshanxinxi: require('common/image/wanshanxinxi.png'),
-        upDownIcon: require('common/image/updown.png'),
+        pullDownIcon: require('common/image/pulldown.png'),
+        pullUpIcon: require('common/image/pullup.png'),
         zongyusuan: require('common/image/zongyusuan.png'),
-        sendbtn: require('common/image/sendbtn.png'),
+        sendbtn: require('common/image/send-btn.png'),
         wanshanFlag: true,
         timer: null,
         confirmText: '',
@@ -190,6 +198,8 @@
         census: '',
         // 备注
         textarea: '',
+        // 需求单名称
+        needsName: '',
         hujiData: [
           {
             isChecked: false,
@@ -243,6 +253,18 @@
           this.$refs.confirm.show()
           return
         }
+        // 填写的备注是否超过限制
+        if (this.textarea.length > 50) {
+          this.confirmText = '填写备注长度已超过限制'
+          this.$refs.confirm.show()
+          return
+        }
+        // 填写的需求名称是否超过限制
+        if (this.needsName.length > 10) {
+          this.confirmText = '填写需求单名称长度已超过限制'
+          this.$refs.confirm.show()
+          return
+        }
         const data = {
           prov,
           city,
@@ -259,7 +281,8 @@
           floor: this.slectFloor ? this.slectFloor : null,
           ensure: this.ensure ? this.ensure : null,
           decoration: this.slectDecoration ? this.slectDecoration : null,
-          msg: this.textarea ? this.textarea : null
+          msg: this.textarea ? this.textarea : null,
+          needs_name: this.needsName ? this.needsName : null
         }
         if (this.timer) {
           clearTimeout(this.timer)
@@ -372,6 +395,12 @@
         setTimeout(() => {
           this.$refs.scroll.refresh()
         }, 200)
+      },
+      hidemore() {
+        this.wanshanFlag = true
+        setTimeout(() => {
+          this.$refs.scroll.refresh()
+        }, 0)
       },
       // 选择其他区域
       selectOther() {
@@ -494,9 +523,10 @@
   .list
     position: fixed
     top: 0
-    bottom: 55px
+    bottom: 114px
     width: 100%
     padding-top: 50px
+    transform: all .3s
   .img
     padding: 18px 15%
     img
@@ -504,9 +534,7 @@
   .item
     background: #fff
     padding: 10px 0
-    margin-bottom: 5px
-    img
-      width: 100%
+    margin-bottom: 1px
     .other
       display: inline-block;
       font-size: $font-size-medium-x
@@ -523,25 +551,36 @@
       border: 1px solid #ff5d00
       background: #ff5d00
       color: #fff
+  .btn
+    position: fixed
+    bottom: -2px
+    img
+      width: 100%
   .top
     display: flex
     font-size: $font-size-medium-x
     margin: 10px 0
     .left
       padding-top: 10px
-      text-align: right
-      width: 2.8rem
-      min-width: 2.8rem
+      text-align: center
+      width: 3rem
+      min-width: 3rem
+    .input-name
+      width: 70%
+      input
+        border: 1px solid #ccc
+        height: 30px
+        width: 100%
     .right
       width: 80%
       flex-wrap: wrap
   .wanshanxinxi
     p
-      font-size: 22px
+      font-size: 16px
       text-align: center
       line-height: 50px
       img
-        width: 18px
+        width: 13px
   .textarea
     border: 1px solid #ccc
     height: 50px
