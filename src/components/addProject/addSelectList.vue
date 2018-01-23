@@ -53,7 +53,7 @@
           </div>
           <div class="top">
             <div class="left">首付预算</div>
-            <div class="input-item"><input placeholder="输入数字" v-model="proportion" class="text-input" type="text" name="" id=""> 万</div>
+            <div class="input-item"><input ref="shoufuyusuan" placeholder="输入数字" v-model="proportion" class="text-input" type="text" name="" id=""> 万</div>
           </div>
           <div class="top">
             <div class="left">户型</div>
@@ -82,11 +82,11 @@
         <div class="item">
           <div class="top">
             <div class="left" style="width: 3.6rem; min-width: 3.6rem">备注:</div>
-            <div class="right"><textarea v-model="textarea" placeholder="推荐填写(限制50字以内)" class="textarea" name="" id="" cols="30" rows="10"></textarea></div>
+            <div class="right"><textarea ref="textareas" v-model="textarea" placeholder="推荐填写(限制50字以内)" class="textarea" name="" id="" cols="30" rows="10"></textarea></div>
           </div>
           <div class="top">
             <div class="left" style="width: 4rem; min-width: 4rem">需求名称</div>
-            <div class="right"><input placeholder="方便查找,推荐填写（限10字以内）" v-model="needsName" class="text-input" type="text" name="" id=""></div>
+            <div class="right"><input ref="needsnames" placeholder="方便查找,推荐填写（限10字以内）" v-model="needsName" class="text-input" type="text" name="" id=""></div>
           </div>
         </div>
       </div>
@@ -390,6 +390,13 @@
           ]
         }
       },
+      beforeScroll() {
+        if (this.$refs.textareas) {
+          this.$refs.textareas.blur()
+          this.$refs.needsnames.blur()
+          this.$refs.shoufuyusuan.blur()
+        }
+      },
       showMore() {
         this.wanshanFlag = false
         setTimeout(() => {
@@ -537,7 +544,7 @@
     margin-bottom: 1px
     .other
       display: inline-block;
-      font-size: $font-size-medium-x
+      font-size: 12px
       line-height: 30px
       border-radius: 20px
       padding: 0 .6rem

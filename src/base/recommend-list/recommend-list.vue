@@ -87,7 +87,7 @@
         selectBtnUrl: 1,
         isMy: require('common/image/ismy.png'),
         bgImg: {
-          background: `#fff url(${require('common/image/yituijian.png')}) no-repeat 90% 54%`,
+          background: `url(${require('common/image/yituijian.png')}) no-repeat 90% 54%`,
           backgroundSize: '85px'
         }
       }
@@ -217,7 +217,7 @@
           display: inline-block
           text-align: center
           line-height: 36px
-          width: 80px
+          width: 74px
           height: 35px
           border-radius: 4px
           color: #e5672c

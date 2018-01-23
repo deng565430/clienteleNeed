@@ -49,7 +49,7 @@
           </div>
           <div class="bottom-b">
             <p>发布于：<span>{{createtime}}</span></p>
-            <p>发布人：<span>{{username}}</span></p>
+            <p></p>
           </div>
         </div>
       </div>
