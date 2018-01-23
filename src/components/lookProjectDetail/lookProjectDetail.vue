@@ -214,10 +214,10 @@ export default {
       .bottom-b
         display: flex
         p
-          line-height: 50px
           width: 50%
           color: #a7a7a7
           &:last-child
+            line-height: 35px
             text-align: right
           span
             color: #6c6c6c

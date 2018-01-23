@@ -81,12 +81,12 @@
         </div>
         <div class="item">
           <div class="top">
-            <div class="left">备注:</div>
+            <div class="left" style="width: 3.6rem; min-width: 3.6rem">备注:</div>
             <div class="right"><textarea v-model="textarea" placeholder="推荐填写(限制50字以内)" class="textarea" name="" id="" cols="30" rows="10"></textarea></div>
           </div>
           <div class="top">
-            <div class="left" style="width: 4rem; min-width: 4rem">需求单名称</div>
-            <div class="input-name"><input placeholder="方便查找,推荐填写（限10字以内）" v-model="needsName" class="text-input" type="text" name="" id=""></div>
+            <div class="left" style="width: 4rem; min-width: 4rem">需求名称</div>
+            <div class="right"><input placeholder="方便查找,推荐填写（限10字以内）" v-model="needsName" class="text-input" type="text" name="" id=""></div>
           </div>
         </div>
       </div>
@@ -198,7 +198,7 @@
         census: '',
         // 备注
         textarea: '',
-        // 需求单名称
+        // 需求名称
         needsName: '',
         hujiData: [
           {
@@ -261,7 +261,7 @@
         }
         // 填写的需求名称是否超过限制
         if (this.needsName.length > 10) {
-          this.confirmText = '填写需求单名称长度已超过限制'
+          this.confirmText = '填写需求名称长度已超过限制'
           this.$refs.confirm.show()
           return
         }
@@ -565,15 +565,15 @@
       text-align: center
       width: 3rem
       min-width: 3rem
-    .input-name
-      width: 70%
-      input
-        border: 1px solid #ccc
-        height: 30px
-        width: 100%
     .right
       width: 80%
       flex-wrap: wrap
+      .text-input
+        border: 1px solid #ccc
+        height: 30px
+        width: 84%
+        &::placeholder
+          font-size: 12px
   .wanshanxinxi
     p
       font-size: 16px
@@ -592,6 +592,9 @@
     .text-input
       border: 1px solid #ccc
       height: 30px
+      width: 84%
+      &::placeholder
+        font-size: 12px
   .item-bg
     background: #fff
     margin-bottom: 5px
