@@ -73,3 +73,15 @@ export function checkNumber(theObj) {
   }
   return false
 }
+
+export function resize(scroll, windowInnerHeight, lastY, nextY) {
+  window.addEventListener('resize', function() {
+    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+      if (windowInnerHeight - window.innerHeight > 0) {
+        scroll.scrollTo(0, nextY)
+      } else {
+        scroll.scrollTo(0, lastY)
+      }
+    }
+  })
+}

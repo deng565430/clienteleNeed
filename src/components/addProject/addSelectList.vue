@@ -3,7 +3,7 @@
     <div class="title">
       <my-title :title="'客户需求'"></my-title>
     </div>
-    <scroll ref="scroll" class="list" :data="price" :beforeScroll="true" @beforeScroll="beforeScroll">
+    <scroll ref="scroll" class="list"  :data="price" :listenScroll="true" @scroll="scroll" :beforeScroll="true" @beforeScroll="beforeScroll">
       <div>
         <div class="item">
           <div class="img">
@@ -52,8 +52,8 @@
             <img :src="wanshanxinxi" alt="">
           </div>
           <div class="top">
-            <div class="left">首付预算</div>
-            <div class="input-item"><input ref="shoufuyusuan" placeholder="输入数字" v-model="proportion" class="text-input" type="text" name="" id=""> 万</div>
+            <div class="left" style="line-height: 25px">首付预算</div>
+            <div class="input-item"><input ref="shoufuyusuan" placeholder="输入数字" v-model="proportion" class="text-input" type="text" name="" id="shoufuyusuan"> 万</div>
           </div>
           <div class="top">
             <div class="left">户型</div>
@@ -82,7 +82,7 @@
         <div class="item">
           <div class="top">
             <div class="left" style="width: 3.6rem; min-width: 3.6rem">备注:</div>
-            <div class="right"><textarea ref="textareas" v-model="textarea" placeholder="推荐填写(限制50字以内)" class="textarea" name="" id="" cols="30" rows="10"></textarea></div>
+            <div class="right"><textarea @blur="textareasBlur" @focus="textareasFocus" ref="textareas" v-model="textarea" placeholder="推荐填写(限制50字以内)" class="textarea" name="" id="" cols="30" rows="10"></textarea></div>
           </div>
           <div class="top">
             <div class="left" style="width: 4rem; min-width: 4rem">需求名称</div>
@@ -200,6 +200,8 @@
         textarea: '',
         // 需求名称
         needsName: '',
+        // 软键盘高度
+
         hujiData: [
           {
             isChecked: false,
@@ -211,13 +213,37 @@
             key: '2',
             value: '外地'
           }
-        ]
+        ],
+        // window窗口高度
+        windowInnerHeight: window.innerHeight
       }
     },
     created () {
       this._getaddoptions()
+      const self = this
+      // 监听软键盘事件
+      window.addEventListener('resize', function () {
+        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+          if (self.windowInnerHeight - window.innerHeight > 0) {
+            if (!self.wanshanFlag) {
+              if (document.activeElement.getAttribute('id') === 'shoufuyusuan') {
+                self.$refs.scroll.scrollTo(0, -800)
+              } else {
+                self.$refs.scroll.scrollTo(0, -1300)
+              }
+            } else {
+              self.$refs.scroll.scrollTo(0, -800)
+            }
+          } else {
+            self.$refs.scroll.scrollTo(0, self.scrollY)
+          }
+        }
+      })
     },
     methods: {
+      scroll(pos) {
+        this.scrollY = pos.y
+      },
       sendProject() {
         let prov, city, district
         if (!this.other) {
@@ -393,7 +419,11 @@
       beforeScroll() {
         if (this.$refs.textareas) {
           this.$refs.textareas.blur()
+        }
+        if (this.$refs.needsnames) {
           this.$refs.needsnames.blur()
+        }
+        if (this.$refs.shoufuyusuan) {
           this.$refs.shoufuyusuan.blur()
         }
       },
@@ -533,7 +563,6 @@
     bottom: 114px
     width: 100%
     padding-top: 50px
-    transform: all .3s
   .img
     padding: 18px 15%
     img

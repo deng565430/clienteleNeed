@@ -181,6 +181,7 @@ export default {
         display:flex
         padding: 10px 0
         border-top: 1px solid #ccc
+        border-bottom: 1px solid #ccc
         >div
           width: 33%
           border-right: 1px solid #ccc
@@ -194,7 +195,6 @@ export default {
               color: #f77428
       .middle-m
         display:flex
-        border-top: 1px solid #ccc
         padding: 0 10px
         p
           width: 33%
