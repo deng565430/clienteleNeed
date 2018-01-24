@@ -29,17 +29,17 @@
             </div>
           </div>
           <div class="middle-m">
-            <p>户型：<span>{{room}}</span></p>
-            <p>用途：<span>{{type}}</span></p>
-            <p>装修：<span>{{decoration}}</span></p>
+            <p>户型：<span :class="room !== '(未填)' ? 'store' : ''">{{room}}</span></p>
+            <p>用途：<span :class="type !== '(未填)' ? 'store' : ''">{{type}}</span></p>
+            <p>装修：<span :class="decoration !== '(未填)' ? 'store' : ''">{{decoration}}</span></p>
           </div>
           <div class="middle-m">
-            <p>楼层：<span>{{floor}}</span></p>
-            <p>首付：<span>{{scale}}</span></p>
+            <p>楼层：<span :class="floor !== '(未填)' ? 'store' : ''">{{floor}}</span></p>
+            <p>首付：<span :class="scale !== '(未填)' ? 'store' : ''">{{scale}}</span></p>
           </div>
           <div class="middle-m">
-            <p>社保：<span>{{ensure}}</span></p>
-            <p>户籍：<span>{{census}}</span></p>
+            <p>社保：<span :class="ensure !== '(未填)' ? 'store' : ''">{{ensure}}</span></p>
+            <p>户籍：<span :class="census !== '(未填)' ? 'store' : ''">{{census}}</span></p>
           </div>
         </div>
         <div class="bottom">
@@ -201,6 +201,9 @@ export default {
           line-height: 50px
           span
             color: #6c6c6c
+          .store
+            color: #000
+            font-weight: 800
       .bottom-t, .bottom-b
         margin: 10px 0
         padding: 10px 10px
