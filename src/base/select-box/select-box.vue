@@ -1,6 +1,6 @@
 <template>
   <transition name="pop-list">
-    <div class="pop" v-if="showCitysList" @click="hideSelectBox">
+    <div class="pop" ref="showType" v-if="showCitysList" @click="hideSelectBox">
     <div class="show-type-list" ref="showType">
         <scroll :pullup="true" class="list" :data="provincelist">
           <div class="pop-city-list" ref="cityList">
@@ -9,14 +9,14 @@
                     <div  class="pop-city-height">
                       <scroll class="pop-city-scroll" v-if="provincelist.length" :data="provincelist">
                         <ul>
-                          <li v-for="(item, index) in provincelist" :class="[provinceActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectProvince(item, index)">{{item.name}}</li>
+                          <li :key="item.name" v-for="(item, index) in provincelist" :class="[provinceActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectProvince(item, index)">{{item.name}}</li>
                         </ul>
                       </scroll>
                     </div>
                     <div  class="pop-city-height">
                       <scroll class="pop-city-scroll" v-if="childCitylist.length" :data="childCitylist">
                         <ul ref="citys">
-                          <li v-for="(item, index) in childCitylist" :class="[cityActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectCity(item, index)">{{item.name}}</li>
+                          <li :key="item.name" v-for="(item, index) in childCitylist" :class="[cityActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectCity(item, index)">{{item.name}}</li>
                         </ul>
                       </scroll>
                       <div v-else>
@@ -29,7 +29,7 @@
                     <div  class="pop-city-height">
                       <scroll class="pop-city-scroll" ref="scrollCity" v-if="districtList.length" :data="districtList">
                         <ul ref="district">
-                          <li ref="districtList" v-for="(item, index) in districtList" :class="[districtlistActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectdistrictlist(item, index)">{{item.name}}</li>
+                          <li ref="districtList" :key="item.name" v-for="(item, index) in districtList" :class="[districtlistActive === item.name ? 'cityActive': '']" @touchstart.prevent="selectdistrictlist(item, index)">{{item.name}}</li>
                         </ul>
                       </scroll>
                       <div v-else>
@@ -52,11 +52,15 @@
 </template>
 <script type="text/ecmascript-6">
 import { getProvincelist, getDistirctlist, getCitylist } from 'api/getCity'
-import PopBox from 'base/pop-box/pop-box'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 export default {
-  props: {},
+  props: {
+    posTop: {
+      type: Number,
+      default: 131
+    }
+  },
   data() {
     return {
       showCitysList: true,
@@ -82,7 +86,9 @@ export default {
   created() {
     this._getProvincelist()
   },
-  mounted() {},
+  mounted() {
+    this.$refs.showType.style.top = this.posTop + 'px'
+  },
   methods: {
     showCityList () {},
     hideSelectBox () {
@@ -123,7 +129,6 @@ export default {
       } else {
         this.city = item.provinceType
       }
-      console.log(this.city)
       this.cityActive = item.name
       this.districtList = []
       this.district = null
@@ -132,8 +137,8 @@ export default {
     },
     selectdistrictlist (item, index) {
       this.districtlistActive = item.name
-      console.log(item)
       this.district = item.name === '全部' ? null : item.provinceType
+      console.log(this.district)
     },
     selectProvinceList () {
       this.districtListHasMore = false
@@ -145,7 +150,21 @@ export default {
       this.projectName = 'all'
       this.showCitysList = false
       this.projectMsg = false
-      this.$emit('showCitysListEvent', {provinceActive: this.provinceActive, cityActive: this.cityActive, districtlistActive: this.districtlistActive})
+      const data = {
+        prov: {
+          value: this.provinceActive,
+          code: this.province
+        },
+        city: {
+          value: this.cityActive,
+          code: this.city
+        },
+        district: {
+          value: this.districtlistActive,
+          code: this.district
+        }
+      }
+      this.$emit('showCitysListEvent', data)
     },
     _getProvincelist() {
       if (this.provincelist.length > 1) {
@@ -159,7 +178,6 @@ export default {
           })
         }
       })
-      getDistirctlist()
     },
     _getCitylist () {
       if (this.provinceActive === '全部') {
@@ -198,7 +216,6 @@ export default {
   },
   components: {
     Scroll,
-    PopBox,
     Loading
   }
 }
@@ -226,13 +243,11 @@ export default {
           width: 100%
           height: 100%
           z-index: 999
-          height: 100%
           background: white
           .pop-city-btn
             height: 50px
             background: $color-highlight-background
             a
-              display: inline-block
               background #13CE66
               color: white
               padding: 10px 20px
@@ -255,7 +270,7 @@ export default {
                 top: 0
                 bottom: 0
                 width: 100%
-                height: 160px
+                height: 150px
                 overflow: hidden
             li
               line-height: 35px

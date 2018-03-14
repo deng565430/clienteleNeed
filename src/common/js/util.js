@@ -36,9 +36,6 @@ export function timeFormat (fmt, time) {
     time = fmt
     fmt = 'yyyy-MM-dd hh:mm'
   }
-  if (isNaN(time)) {
-    return '填写时间'
-  }
   // 格式。'yyyy-MM-dd hh:mm:ss'
   let o = {
     'M+': time.getMonth() + 1,

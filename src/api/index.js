@@ -15,9 +15,10 @@ import axios from 'axios'
 import { baseUrl } from '../config/env.js'
 
 export default {
-  get: function(url) {
+  get: function(url, data = null) {
     var result = axios({
       method: 'get',
+      params: data,
       url: baseUrl + url,
       withCredentials: true
     })

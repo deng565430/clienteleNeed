@@ -1,9 +1,9 @@
 import $api from './index'
 
-export function getlist (needsId, status, start, length) {
-  const url = '/responseForm/getResponseDetailList?needsId=' + needsId + '&status=' + status + '&start=' + start + '&length=' + length
+export function getlist (data) {
+  const url = '/responseForm/getResponseDetailList'
 
-  return $api.get(url)
+  return $api.get(url, data)
 }
 
 export function addResponse (needsId, projectId, status) {

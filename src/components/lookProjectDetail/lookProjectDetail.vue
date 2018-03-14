@@ -106,7 +106,7 @@ export default {
           this.endArea = res.data.data.end_area
           this.price = res.data.data.price
           this.type = res.data.data.type
-          this.scale = res.data.data.scale || '(未填)'
+          this.scale = res.data.data.scale ? res.data.data.scale + '万' : '(未填)'
           this.room = res.data.data.room || '(未填)'
           this.hall = res.data.data.hall || '(未填)'
           this.census = res.data.data.census || '(未填)'

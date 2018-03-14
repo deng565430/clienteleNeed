@@ -2,6 +2,7 @@
 <div id="demandetail">
   <div class="title">
     <my-title :title="'详情页'"></my-title>
+    <selectList @getSelectData="getSelectData"></selectList>
   </div>
   <div class="scrolls">
     <scroll
@@ -66,11 +67,8 @@
        <div v-if="lodaingicon">
          <Loading></Loading>
        </div>
-       <div v-if="bottoms" class="bottoms">
-         已经到底部啦
-       </div>
        <div v-if="results" class="bottoms">
-         暂无查询结果
+         {{resultMsg}}
        </div>
       </div>
     </scroll>
@@ -91,6 +89,7 @@ import MyTitle from 'base/title/title'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 import Confirm from 'base/confirm/confirm'
+import SelectList from 'base/selectList/selectList'
 import TYPE from 'common/js/buryingpointType'
 import { addLog } from 'api/buryingpoint'
 export default {
@@ -100,6 +99,7 @@ export default {
       ids: [],
       msg: '',
       needs: '',
+      resultMsg: '暂无查询结果',
       stas: 0,
       id: this.$route.params.id,
       estate: this.$route.params.status,
@@ -110,14 +110,21 @@ export default {
       results: false,
       text: '',
       confirms: false,
-      checkednum: []
+      checkednum: [],
+      needsData: {
+        needsId: this.$route.params.id,
+        status: this.$route.params.status,
+        start: 0,
+        length: 10
+      }
     }
   },
   components: {
     MyTitle,
     Scroll,
     Loading,
-    Confirm
+    Confirm,
+    SelectList
   },
   watch: {
     $route () {
@@ -129,21 +136,34 @@ export default {
   },
   created () {
     this._getlist()
-    console.log(this.estate)
   },
   mounted () {
   },
   methods: {
+    // 获取筛选条件
+    getSelectData(data) {
+      this.needsData.start = 0
+      this.needsData = Object.assign(this.needsData, data)
+      this.results = false
+      this.scrolldata = []
+      this._getlist(data)
+    },
     _getlist () {
       var that = this
-      getlist(this.id, this.estate, this.pagenum, 10).then((res) => {
+      getlist(this.needsData).then((res) => {
         if (res.data.code === 0) {
           that.lodaingicon = false
           if (res.data.data) {
-            that.scrolldata = res.data.data.list
+            that.scrolldata = that.scrolldata.concat(res.data.data.list)
             that.needs = res.data.data.needs
           } else {
-            this.results = true
+            if (that.needsData.start === 0) {
+              that.resultMsg = '暂无查询结果'
+            } else {
+              that.resultMsg = '已经到底部啦~'
+            }
+            that.results = true
+            that.pullup = false
           }
         } else {
           that.lodaingicon = false
@@ -209,24 +229,12 @@ export default {
       window.location.href = '/detail?id=' + val
     },
     scrollToEnd () {
-      var that = this
+      if (this.results) {
+        return
+      }
       this.lodaingicon = true
-      getlist(this.id, this.estate, this.pagenum + 1, 10).then((res) => {
-        if (res.data.code === 0) {
-          that.lodaingicon = false
-          if (res.data.data) {
-            for (var i = 0; i < res.data.data.list.length; i++) {
-              that.scrolldata.push(res.data.data.list[i])
-            }
-            that.pagenum++
-          } else {
-            that.bottoms = true
-            this.pullup = false
-          }
-        } else {
-        }
-      }).catch(() => {
-      })
+      this.needsData.start++
+      this._getlist()
     }
   }
 }
@@ -292,7 +300,7 @@ export default {
           vertical-align: middle
       .list
         position: fixed
-        top: 0
+        top: 40px
         bottom: 105px
         width: 100%
         padding-top: 0

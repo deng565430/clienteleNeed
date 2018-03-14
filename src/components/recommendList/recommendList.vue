@@ -19,7 +19,7 @@
         </div>
         <div class="item-bottom">
             <ul>
-              <li :key="index" v-for="(item, index) in itemSelectType" :class="itemSelectTypeActive === index ? 'active' : ''" @click="selectTypeList(item, index)"><span>{{item.type}}</span> <i :class="[itemSelectTypeActive === index ? 'icon-back-down': 'icon-back-up']"></i></li>
+              <li :key="index" v-for="(item, index) in itemSelectType" :class="itemSelectTypeActive === index ? 'active' : ''" @click="selectTypeList(item, index)"><span>{{item.type}}</span> <i :class="[itemSelectTypeActive === index ? 'icon-back-up': 'icon-back-down']"></i></li>
             </ul>
         </div>
       </div>

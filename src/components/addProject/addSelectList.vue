@@ -200,8 +200,8 @@
         textarea: '',
         // 需求名称
         needsName: '',
-        // 软键盘高度
-
+        // 是否连续点击
+        isQuickClick: false,
         hujiData: [
           {
             isChecked: false,
@@ -291,6 +291,10 @@
           this.$refs.confirm.show()
           return
         }
+        if (this.isQuickClick) {
+          return
+        }
+        this.isQuickClick = true
         const data = {
           prov,
           city,
@@ -310,28 +314,25 @@
           msg: this.textarea ? this.textarea : null,
           needs_name: this.needsName ? this.needsName : null
         }
-        if (this.timer) {
-          clearTimeout(this.timer)
-        }
-        this.timer = setTimeout(() => {
-          sendProject(data).then(res => {
-            if (res.data.code === 0) {
-              this.confirmText = '添加成功！'
-              this.$refs.confirm.show()
-              prov = null
-              city = null
-              district = null
-              this.defaultProvince = null
-              this.defaultCity = null
-              this.defaultDistrict = null
-              this.tenementType = null
-              this.selectPrice = null
-              this.defaultProvince = null
-              this.minArea = null
-              this.maxArea = null
-            }
-          })
-        }, 200)
+        sendProject(data).then(res => {
+          if (res.data.code === 0) {
+            this.isSendFlag = false
+            this.confirmText = '添加成功！'
+            this.$refs.confirm.show()
+            prov = null
+            city = null
+            district = null
+            this.defaultProvince = null
+            this.defaultCity = null
+            this.defaultDistrict = null
+            this.tenementType = null
+            this.selectPrice = null
+            this.defaultProvince = null
+            this.minArea = null
+            this.maxArea = null
+            this.isQuickClick = false
+          }
+        })
       },
       checkedVal (val) {
         console.log(val)

@@ -20,3 +20,10 @@ export function getDistirctlist(province, city) {
 
   return $api.get(url)
 }
+
+// 物业类型
+export function getTypeList() {
+  const url = '/projectnewest/getwuye'
+
+  return $api.get(url)
+}

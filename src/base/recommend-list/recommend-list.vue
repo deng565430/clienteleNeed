@@ -32,7 +32,7 @@
               <p>推荐项目名：<span>{{item.projects}}</span></p>
             </div>
             <div class="middle">
-              <p>发布时间：<span>{{timeFormat(new Date(item.createtime))}}</span></p>
+              <p>发布时间：<span>{{item.createtime}}</span></p>
             </div>
             <div class="middle-cent" v-if="userId === 1">
               <p>发布人：<span>{{item.username}}</span> <span> {{ item.manager}}</span></p>
@@ -87,7 +87,7 @@
         selectBtnUrl: 1,
         isMy: require('common/image/ismy.png'),
         bgImg: {
-          background: `url(${require('common/image/yituijian.png')}) no-repeat 90% 54%`,
+          background: `#fff url(${require('common/image/yituijian.png')}) no-repeat 90% 54%`,
           backgroundSize: '85px'
         }
       }
@@ -204,7 +204,7 @@
       .bottom
         display:flex
         div
-          width: 50%
+          width: 70%
       .bottom-left
         line-height: 35px
         padding-left: 10px
@@ -212,7 +212,7 @@
           color: red
       .bottom-right
         text-align: right
-        padding: 0 10px 10px
+        padding: 0 10px 10px 0
         .btn
           display: inline-block
           text-align: center
